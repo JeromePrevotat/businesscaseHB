@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,8 +71,8 @@ public class Utilisateur {
     @Column(name="iban")
     private String iban;
 
-    // @Column(name="owned_vehicules")
-    // private List<Vehicule> ownedVehicules;
+    @Column(name="owned_vehicules")
+    private List<Vehicule> ownedVehicules;
 
     @NotNull
     private boolean banned;
@@ -91,7 +93,7 @@ public class Utilisateur {
         this.iban = iban;
         
         this.role = RoleUtilisateur.REGISTERED;
-        // this.ownedVehicules = null;
+        this.ownedVehicules = new ArrayList<>();
     }
     
 }
