@@ -1,13 +1,18 @@
 package com.humanbooster.buisinessCase.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,4 +60,21 @@ public class Borne {
     @NotEmpty
     @Column(name="wired")
     private boolean wired;
+
+    @OneToMany(targetEntity=Reservation.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @Column(name="reservation_list")
+    private List<Reservation> reservationList;
+    
+    @NotNull
+    @OneToMany(targetEntity=Lieu.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @Column(name="lieu_list")
+    private List<Lieu> lieuList;
+
+    @NotNull
+    @OneToMany(targetEntity=Media.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @Column(name="media_list")
+    private List<Media> mediaList;
 }

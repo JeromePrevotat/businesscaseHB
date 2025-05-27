@@ -7,8 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,4 +42,15 @@ public class Reservation {
     @NotEmpty
     @Column(name="hourly_price_log")
     private double hourlyPriceLog;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name="id_utilisateur")
+    private int id_utilisateur;
+    
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name="id_borne")
+    private int id_borne;
+    
 }

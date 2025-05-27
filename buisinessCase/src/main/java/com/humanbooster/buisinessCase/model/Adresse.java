@@ -1,12 +1,19 @@
 package com.humanbooster.buisinessCase.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,4 +58,14 @@ public class Adresse {
     @NotBlank
     @Column(name="floor")
     private int floor;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name="id_utilisateur")
+    private int id_utilisateur;
+
+    @OneToMany(targetEntity=Lieu.class, mappedBy="id_adresse", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @Column(name="id_lieu")
+    private List<Lieu> lieu;
 }
