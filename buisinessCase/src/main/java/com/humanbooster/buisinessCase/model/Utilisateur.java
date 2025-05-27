@@ -13,9 +13,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Table(name="utilisateurs")
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name="utilisateurs")
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -69,8 +75,6 @@ public class Utilisateur {
     @NotNull
     private boolean banned;
 
-    public Utilisateur(){}
-
     public Utilisateur(String username,
             String firstName,
             String lastName,
@@ -89,89 +93,5 @@ public class Utilisateur {
         this.role = RoleUtilisateur.REGISTERED;
         // this.ownedVehicules = null;
     }
-
-    // GETTER
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public RoleUtilisateur getRole() {
-        return role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public boolean isBanned() {
-        return banned;
-    }
-
-    // SETTER
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(RoleUtilisateur role) {
-        this.role = role;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
-    }
-
-    public void setBanned(boolean banned) {
-        this.banned = banned;
-    }
-    
-    
     
 }
