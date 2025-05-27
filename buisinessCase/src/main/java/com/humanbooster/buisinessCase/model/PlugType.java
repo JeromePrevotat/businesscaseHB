@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="plug_type")
+@Table(name="plug_types")
 public class PlugType {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
