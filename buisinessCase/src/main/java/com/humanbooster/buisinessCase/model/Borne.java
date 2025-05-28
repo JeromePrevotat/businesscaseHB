@@ -61,19 +61,19 @@ public class Borne {
     @Column(name="wired")
     private boolean wired;
 
-    @OneToMany(targetEntity=Reservation.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="reservation_list")
     private List<Reservation> reservationList;
     
     @NotNull
-    @OneToMany(targetEntity=Lieu.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="lieu_list")
     private List<Lieu> lieuList;
 
     @NotNull
-    @OneToMany(targetEntity=Media.class, mappedBy="id_borne", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Media.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="media_list")
     private List<Media> mediaList;

@@ -80,20 +80,25 @@ public class Utilisateur {
     @Column(name="banned")
     private boolean banned;
     
-    @OneToMany(targetEntity=Adresse.class, mappedBy="id_utilisateur", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Adresse.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="adresse_list")
     private List<Adresse> adresseList;
 
-    @OneToMany(targetEntity=Lieu.class, mappedBy="id_utilisateur", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="lieu_list")
     private List<Lieu> lieuList;
 
-    @OneToMany(targetEntity=Reservation.class, mappedBy="id_utilisateur", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="reservation_list")
     private List<Reservation> reservationList;
+    
+    @OneToMany(targetEntity=Vehicule.class, mappedBy="id", fetch = FetchType.LAZY)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @Column(name="reservation_list")
+    private List<Vehicule> vehiculeList;
 
     public Utilisateur(String username,
             String firstName,

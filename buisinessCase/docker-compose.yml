@@ -1,17 +1,43 @@
 services:
     mysql:
         image: mysql:8.3
-        container_name: mysql-bc
+        container_name: mysql
 
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: db
-            MYSQL_USER: root
-            MYSQL_PASSWORD: root
-        ports:
-            - "3306:3306"
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+        # ports:
+        #   - "3306:3306"
         volumes:
             - mysql_data:/var/lib/mysql
+
+    app:
+        build: ./
+        container_name: app
+        depends_on:
+            - mysql
+        restart: on-failure
+        environment:
+            DB_HOST: mysql
+            DB_PORT: 3306
+            DB_NAME: db
+            DB_USER: user
+            DB_PASSWORD: password
+
+        # mysql client container for testing
+    mysql-client:
+        image: mysql:8.3
+        container_name: mysql-client
+        depends_on:
+            - mysql
+        entrypoint: ["mysql", "-h", "mysql", "-u", "user", "-p", "password"]
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
 
 volumes:
     mysql_data:
