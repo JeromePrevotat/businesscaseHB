@@ -29,11 +29,11 @@ public class Lieu {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="adresse_id")
     private Adresse adresse;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
 }
