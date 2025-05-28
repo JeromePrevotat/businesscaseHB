@@ -61,11 +61,11 @@ public class Adresse {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
 
     @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="id")
+    @Column(name="lieu_id")
     private List<Lieu> lieu;
 }

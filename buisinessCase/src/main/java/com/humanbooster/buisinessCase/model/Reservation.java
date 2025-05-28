@@ -45,12 +45,12 @@ public class Reservation {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
     
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="borne_id")
     private Borne borne;
     
 }

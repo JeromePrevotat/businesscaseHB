@@ -48,6 +48,6 @@ public class Media {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="id")
+    @JoinColumn(name="borne_id")
     private Borne bborne;
 }

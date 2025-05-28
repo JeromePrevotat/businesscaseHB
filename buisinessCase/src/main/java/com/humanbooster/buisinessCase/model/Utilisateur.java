@@ -25,6 +25,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -99,8 +102,8 @@ public class Utilisateur {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name="utilisateur_vehicule",
-        joinColumns= @JoinColumn(name="id") ,
-        inverseJoinColumns= @JoinColumn(name="id")
+        joinColumns= @JoinColumn(name="utilisateur_id") ,
+        inverseJoinColumns= @JoinColumn(name="vehicule_id")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name="vehicule_list")
