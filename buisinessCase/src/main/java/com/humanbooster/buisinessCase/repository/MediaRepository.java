@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.humanbooster.buisinessCase.model.Media;
 
 @Repository
-public interface MediaRepository extends JpaRepository<Media, Integer>{
+public interface MediaRepository extends JpaRepository<Media, Long>{
 
 }

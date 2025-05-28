@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.humanbooster.buisinessCase.model.PlugType;
 
 @Repository
-public interface PlugTypeRepository extends JpaRepository<PlugType, Integer>{
+public interface PlugTypeRepository extends JpaRepository<PlugType, Long>{
 
 }

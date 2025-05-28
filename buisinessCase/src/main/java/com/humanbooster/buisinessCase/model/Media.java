@@ -25,7 +25,7 @@ public class Media {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private long id;
 
     @NotBlank
     @Column(name="url")
@@ -49,5 +49,5 @@ public class Media {
     @NotNull
     @ManyToOne
     @JoinColumn(name="borne_id")
-    private Borne bborne;
+    private Borne borne;
 }

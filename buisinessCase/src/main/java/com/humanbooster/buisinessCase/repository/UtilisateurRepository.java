@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.humanbooster.buisinessCase.model.Utilisateur;
 
 @Repository
-public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer>{
+public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>{
 
 }

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.humanbooster.buisinessCase.model.Borne;
 
 @Repository
-public interface BorneRepository extends JpaRepository<Borne, Integer>{
+public interface BorneRepository extends JpaRepository<Borne, Long>{
 
 }

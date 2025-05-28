@@ -22,7 +22,7 @@ public class Lieu {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private int id;
+    private long id;
 
     @Column(name="instruction")
     private String instruction;
