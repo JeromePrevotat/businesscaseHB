@@ -22,11 +22,11 @@ public class PlugTypeService {
     }
 
     @Transactional
-    public void saveAdresse(PlugType plugType){
+    public void savePlugType(PlugType plugType){
         plugTypeRepository.save(plugType);
     }
 
-    public List<PlugType> getAllPlugType(){
+    public List<PlugType> getAllPlugTypes(){
         return plugTypeRepository.findAll();
     }
 

@@ -26,7 +26,7 @@ public class AdresseService{
         adresseRepository.save(adresse);
     }
 
-    public List<Adresse> getAllAdresse(){
+    public List<Adresse> getAllAdresses(){
         return adresseRepository.findAll();
     }
 

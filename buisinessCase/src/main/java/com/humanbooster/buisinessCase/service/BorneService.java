@@ -26,7 +26,7 @@ public class BorneService{
         borneRepository.save(borne);
     }
 
-    public List<Borne> getAllBorne(){
+    public List<Borne> getAllBornes(){
         return borneRepository.findAll();
     }
 

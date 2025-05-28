@@ -26,7 +26,7 @@ public class LieuService {
         lieuRepository.save(lieu);
     }
 
-    public List<Lieu> getAllLieu(){
+    public List<Lieu> getAllLieus(){
         return lieuRepository.findAll();
     }
 

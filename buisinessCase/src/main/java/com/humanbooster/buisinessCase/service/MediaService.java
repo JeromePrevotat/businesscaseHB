@@ -26,7 +26,7 @@ public class MediaService {
         mediaRepository.save(media);
     }
 
-    public List<Media> getAllMedia(){
+    public List<Media> getAllMedias(){
         return mediaRepository.findAll();
     }
 
