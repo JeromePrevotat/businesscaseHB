@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.humanbooster.buisinessCase.model.Adresse;
 import com.humanbooster.buisinessCase.repository.AdresseRepository;
+import com.humanbooster.buisinessCase.utils.ModelUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -44,17 +45,7 @@ public class AdresseService{
     public Optional<Adresse> updateAdresse(Adresse newAdresse, long id){
         return adresseRepository.findById(id)
                 .map(existingAdresse -> {
-                    existingAdresse.setAddendum(newAdresse.getAddendum());
-                    existingAdresse.setCity(newAdresse.getCity());
-                    existingAdresse.setCountry(newAdresse.getCountry());
-                    existingAdresse.setFloor(newAdresse.getFloor());
-                    existingAdresse.setLieu(newAdresse.getLieu());
-                    existingAdresse.setRegion(newAdresse.getRegion());
-                    existingAdresse.setStreeNumber(newAdresse.getStreeNumber());
-                    existingAdresse.setStreetName(newAdresse.getStreetName());
-                    existingAdresse.setUtilisateur(newAdresse.getUtilisateur());
-                    existingAdresse.setZipcode(newAdresse.getZipcode());
-
+                    ModelUtil.copyFields(newAdresse, existingAdresse);
                     return adresseRepository.save(existingAdresse);
                 });
     }
