@@ -52,7 +52,7 @@ jobs:
                       <server>
                         <id>github</id>
                         <username>${{ github.actor }}</username>
-                        <password>${{ secrets.GH_PAT }}</password>
+                        <password>![CDATA[${{ secrets.GH_PAT }}]]</password>
                       </server>
                     </servers>
                   </settings>" > ~/.m2/settings.xml
