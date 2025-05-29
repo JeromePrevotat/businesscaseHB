@@ -44,12 +44,26 @@ jobs:
                   done
                   echo "MySQL is ready!"
 
+            - name: Configure Maven settings
+              run: |
+                  mkdir -p ~/.m2
+                  echo "<settings>
+                    <servers>
+                      <server>
+                        <id>github</id>
+                        <username>${{ github.actor }}</username>
+                        <password>${{ secrets.GH_PAT }}</password>
+                      </server>
+                    </servers>
+                  </settings>" > ~/.m2/settings.xml
+
             - name: Build with Maven
               run: mvn -B package --file pom.xml
 
             - name: Deploy
-              run: mvn deploy -s $GITHUB_WORKSPACE/.github/maven-settings/settings.xml
+              run: mvn deploy --settings ~/.m2/settings.xml
               env:
+                  USERNAME: ${{ github.actor }}
                   GITHUB_TOKEN: ${{ secrets.GIT_PAT }}
 
             # Close Containers
