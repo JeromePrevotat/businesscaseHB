@@ -24,6 +24,13 @@ jobs:
                   server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
                   settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+            # Install Docker on Github Action
+            - name: Install Docker Compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+                  docker-compose version
+
             # Run my Docker Compose
             - name: Start Docker Compose
               run: docker-compose up -d --build
