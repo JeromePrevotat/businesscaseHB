@@ -62,9 +62,6 @@ jobs:
 
             - name: Deploy
               run: mvn deploy --settings ~/.m2/settings.xml
-              env:
-                  USERNAME: ${{ github.actor }}
-                  GITHUB_TOKEN: ${{ secrets.GIT_PAT }}
 
             # Close Containers
             - name: Stop Docker Compose
