@@ -60,8 +60,8 @@ jobs:
             - name: Build with Maven
               run: mvn -B package --file pom.xml
 
-            - name: Deploy
-              run: mvn deploy --settings ~/.m2/settings.xml
+            # - name: Deploy
+            #   run: mvn deploy --settings ~/.m2/settings.xml
 
             # Close Containers
             - name: Stop Docker Compose
