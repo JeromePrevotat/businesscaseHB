@@ -50,7 +50,7 @@ jobs:
             - name: Deploy
               run: mvn deploy -s $GITHUB_WORKSPACE/.github/maven-settings/settings.xml
               env:
-                  GITHUB_TOKEN: ${{ github.token }}
+                  GITHUB_TOKEN: ${{ secrets.GIT_PAT }}
 
             # Close Containers
             - name: Stop Docker Compose
