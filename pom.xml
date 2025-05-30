@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.JeromePrevotat</groupId>
-    <artifactId>buisiness-case</artifactId>
+    <artifactId>buisinessCase</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>buisinessCase</name>
     <description>BuisinessCase</description>
