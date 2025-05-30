@@ -41,11 +41,18 @@ public class UtilisateurController {
         utilisateurService.saveUtilisateur(utilisateur);
     }
 
+    // @DeleteMapping("/utilisateurs/{id}")
+    // public ResponseEntity<Utilisateur> deleteUtilisateurById(@PathVariable long id){
+    //     return utilisateurService.deleteUtilisateurById(id)
+    //             .map(ResponseEntity::ok)
+    //             .orElse(ResponseEntity.notFound().build());
+    // }
+
     @DeleteMapping("/utilisateurs/{id}")
-    public ResponseEntity<Utilisateur> deleteUtilisateurById(@PathVariable long id){
-        return utilisateurService.deleteUtilisateurById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> deleteUtilisateurById(@PathVariable long id){
+        return utilisateurService.deleteUtilisateurById(id) ?
+                    ResponseEntity.noContent().build() :
+                    ResponseEntity.notFound().build();
     }
 
     @PutMapping("/utilisateurs/{id}")

@@ -34,11 +34,20 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id);
     }
 
+    // @Transactional
+    // public Optional<Utilisateur> deleteUtilisateurById(long id){
+    //     Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findById(id);
+    //     utilisateurOpt.ifPresent(utilisateurRepository::delete);
+    //     return utilisateurOpt;
+    // }
+
     @Transactional
-    public Optional<Utilisateur> deleteUtilisateurById(long id){
+    public boolean deleteUtilisateurById(long id){
         Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findById(id);
-        utilisateurOpt.ifPresent(utilisateurRepository::delete);
-        return utilisateurOpt;
+        return utilisateurOpt.map(user -> {
+            utilisateurRepository.delete(user);
+            return true;
+        }).orElse(false);
     }
 
     @Transactional

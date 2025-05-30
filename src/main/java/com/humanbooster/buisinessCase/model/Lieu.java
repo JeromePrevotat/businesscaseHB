@@ -1,5 +1,7 @@
 package com.humanbooster.buisinessCase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,11 +31,19 @@ public class Lieu {
 
     @NotNull
     @ManyToOne
+    @JsonBackReference("adresse-lieu")
     @JoinColumn(name="adresse_id")
     private Adresse adresse;
 
     @NotNull
     @ManyToOne
+    @JsonBackReference("lieu-utilisateur")
     @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
+    
+    @NotNull
+    @ManyToOne
+    @JsonBackReference("borne-lieu")
+    @JoinColumn(name="borne_id")
+    private Borne borne;
 }

@@ -1,0 +1,93 @@
+######################################################
+### Create User
+### Expected : 201 + tâche créée
+POST http://localhost:8080/utilisateurs
+Content-Type: application/json
+
+{
+"userName": "Bobibob",
+"firstName": "Bob",
+"lastName": "Le Bricoleur",
+"password": "pwdtooshort",
+"role": "ADMIN",
+"email": "bob@mail.com",
+"birthDate": "2025-05-30",
+"iban": "1234567890",
+"banned": false,
+"adresseList": null,
+"lieuList":null,
+"reservationList":null,
+"vehiculeList":null
+}
+######################################################
+
+######################################################
+### List all Users
+### Expected : 200 + liste JSON
+GET http://localhost:8080/utilisateurs
+######################################################
+
+######################################################
+### Get a User By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/utilisateurs/1
+### Invalid Request
+GET http://localhost:8080/utilisateurs/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/utilisateurs/1
+Content-Type: application/json
+
+{
+"userName": "Bobibob Evolved",
+"firstName": "Bob",
+"lastName": "Le Bricoleur du Dimanche",
+"password": "pwdstiltooshort",
+"role": "ADMIN",
+"email": "bob@mail.com",
+"birthDate": "2025-05-30",
+"iban": "0987654321",
+"banned": false,
+"adresseList": null,
+"lieuList":null,
+"reservationList":null,
+"vehiculeList":null
+}
+
+### Invalid Request
+PUT http://localhost:8080/utilisateurs/1234567890987654
+Content-Type: application/json
+
+{
+"userName": "Bobibob Evolved",
+"firstName": "Bob",
+"lastName": "Le Bricoleur du Dimanche",
+"password": "pwdstiltooshort",
+"role": "ADMIN",
+"email": "bob@mail.com",
+"birthDate": "2025-05-30",
+"iban": "0987654321",
+"banned": false,
+"adresseList": null,
+"lieuList":null,
+"reservationList":null,
+"vehiculeList":null
+}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/utilisateurs/3
+### Invalid Request
+DELETE http://localhost:8080/utilisateurs/1234567890987654
+######################################################

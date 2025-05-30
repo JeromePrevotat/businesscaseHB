@@ -2,6 +2,9 @@ package com.humanbooster.buisinessCase.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -61,11 +64,12 @@ public class Adresse {
 
     @NotNull
     @ManyToOne
+    @JsonBackReference("adresse-utilisateur")
     @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
 
     @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="lieu_id")
+    @JsonManagedReference("adresse-lieu")
     private List<Lieu> lieu;
 }

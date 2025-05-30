@@ -2,6 +2,8 @@ package com.humanbooster.buisinessCase.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +37,7 @@ public class Reservation {
     @Column(name="end_date")
     private LocalDate endDate;
 
-    @NotEmpty
+    @NotNull
     @Column(name="state")
     private ReservationState state;
 
@@ -45,11 +47,13 @@ public class Reservation {
 
     @NotNull
     @ManyToOne
+    @JsonBackReference("reservation-utilisateur")
     @JoinColumn(name="utilisateur_id")
     private Utilisateur utilisateur;
     
     @NotNull
     @ManyToOne
+    @JsonBackReference("borne-reservation")
     @JoinColumn(name="borne_id")
     private Borne borne;
     

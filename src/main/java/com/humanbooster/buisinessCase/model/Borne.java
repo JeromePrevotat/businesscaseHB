@@ -2,6 +2,8 @@ package com.humanbooster.buisinessCase.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -49,11 +51,10 @@ public class Borne {
     @Column(name="grounded")
     private boolean grounded;
     
-    @NotBlank
     @Column(name="state")
     private BorneState state;
 
-    @NotEmpty
+    @NotNull
     @Column(name="busy")
     private boolean busy;
     
@@ -63,18 +64,18 @@ public class Borne {
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="reservation_list")
+    @JsonManagedReference("borne-reservation")
     private List<Reservation> reservationList;
     
     @NotNull
     @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="lieu_list")
+    @JsonManagedReference("borne-lieu")
     private List<Lieu> lieuList;
 
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="media_list")
+    @JsonManagedReference("borne-media")
     private List<Media> mediaList;
 }

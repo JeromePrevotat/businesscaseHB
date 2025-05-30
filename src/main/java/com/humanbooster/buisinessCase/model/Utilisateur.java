@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +33,7 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,7 +48,7 @@ public class Utilisateur {
     @NotEmpty
     @Size(min = 6, max = 50)
     @Column(name="username")
-    private String username;
+    private String userName;
     
     @NotBlank
     @NotEmpty
@@ -63,7 +68,7 @@ public class Utilisateur {
     @Column(name="password")
     private String password;
 
-    @NotBlank
+    @NotNull
     @Column(name="role")
     private RoleUtilisateur role;
 
@@ -72,7 +77,7 @@ public class Utilisateur {
     @Column(name="email")
     private String email;
 
-    @NotBlank
+    @NotNull
     @Column(name="birthdate")
     private LocalDate birthDate;
 
@@ -86,17 +91,17 @@ public class Utilisateur {
     
     @OneToMany(targetEntity=Adresse.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="adresse_list")
+    @JsonManagedReference("adresse-utilisateur")
     private List<Adresse> adresseList;
 
     @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="lieu_list")
+    @JsonManagedReference("lieu-utilisateur")
     private List<Lieu> lieuList;
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="reservation_list")
+    @JsonManagedReference("reservation-utilisateur")
     private List<Reservation> reservationList;
     
     @ManyToMany(fetch = FetchType.LAZY)
@@ -106,17 +111,16 @@ public class Utilisateur {
         inverseJoinColumns= @JoinColumn(name="vehicule_id")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @Column(name="vehicule_list")
     private Set<Vehicule> vehiculeList = new HashSet<>(); // HashSet ? HashMap ?
 
-    public Utilisateur(String username,
+    public Utilisateur(String userName,
             String firstName,
             String lastName,
             String password,
             String email,
             LocalDate birthDate,
             String iban) {
-        this.username = username;
+        this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;

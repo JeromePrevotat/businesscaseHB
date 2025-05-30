@@ -2,6 +2,8 @@ package com.humanbooster.buisinessCase.model;
 
 import org.hibernate.validator.constraints.Range;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,6 +50,7 @@ public class Media {
 
     @NotNull
     @ManyToOne
+    @JsonBackReference("borne-media")
     @JoinColumn(name="borne_id")
     private Borne borne;
 }
