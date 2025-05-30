@@ -1,0 +1,87 @@
+######################################################
+### Create Borne
+### Expected : 201 + tâche créée
+POST http://localhost:8080/bornes
+Content-Type: application/json
+
+{
+    "borneName": "Borne de Recharge 1",
+    "hourlyPrice": 2.5,
+    "powerOutput": 22,
+    "instruction": "Veuillez insérer votre carte de recharge.",
+    "grounded": true,
+    "state": "DECENT",
+    "busy": false,
+    "wired": false,
+    "reservationList": {},
+    "lieuList": {},
+    "mediaList": {}
+}
+######################################################
+
+######################################################
+### List all Bornes
+### Expected : 200 + liste JSON
+GET http://localhost:8080/bornes
+######################################################
+
+######################################################
+### Get a Borne By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/bornes/1
+### Invalid Request
+GET http://localhost:8080/bornes/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/bornes/1
+Content-Type: application/json
+
+{
+    "borneName": "Borne de Recharge 1",
+    "hourlyPrice": 5,
+    "powerOutput": 25,
+    "instruction": "Automated",
+    "grounded": true,
+    "state": "PRIME",
+    "busy": false,
+    "wired": true,
+    "reservationList": {},
+    "lieuList": {},
+    "mediaList": {}
+}
+
+### Invalid Request
+PUT http://localhost:8080/bornes/1234567890987654
+Content-Type: application/json
+
+{
+    "borneName": "Borne de Recharge 1",
+    "hourlyPrice": 5,
+    "powerOutput": 25,
+    "instruction": "Automated",
+    "grounded": true,
+    "state": "PRIME",
+    "busy": false,
+    "wired": true,
+    "reservationList": {},
+    "lieuList": {},
+    "mediaList": {}
+}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/bornes/1
+### Invalid Request
+DELETE http://localhost:8080/bornes/1234567890987654
+######################################################

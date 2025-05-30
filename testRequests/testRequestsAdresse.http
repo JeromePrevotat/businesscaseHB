@@ -1,0 +1,92 @@
+######################################################
+### Create Adresse
+### Expected : 201 + tâche créée
+POST http://localhost:8080/adresses
+Content-Type: application/json
+
+{
+    "streetNumber": "123",
+    "streetName": "Rue de la Paix",
+    "zipcode": "75001",
+    "city": "Paris",
+    "country": "France",
+    "region": "Île-de-France",
+    "addendum": "Appartement 4B",
+    "floor": "4",
+    "utilisateur": {
+        "id": 1
+    },
+    "lieu": {}
+
+
+}
+######################################################
+
+######################################################
+### List all Adresses
+### Expected : 200 + liste JSON
+GET http://localhost:8080/adresses
+######################################################
+
+######################################################
+### Get a Adresse By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/adresses/1
+### Invalid Request
+GET http://localhost:8080/adresses/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/adresses/1
+Content-Type: application/json
+
+{
+    "streetNumber": "222",
+    "streetName": "Boulevard Gustave Flaubert",
+    "zipcode": "63000",
+    "city": "Clermont-Ferrand",
+    "country": "France",
+    "region": "Auvergne-Rhône-Alpes",
+    "addendum": "Salle Tokyo",
+    "floor": "3",
+    "utilisateur": {
+        "id": 1
+    },
+    "lieu": {}
+}
+
+### Invalid Request
+PUT http://localhost:8080/adresses/1234567890987654
+Content-Type: application/json
+
+{
+    "streetNumber": "222",
+    "streetName": "Boulevard Gustave Flaubert",
+    "zipcode": "63000",
+    "city": "Clermont-Ferrand",
+    "country": "France",
+    "region": "Auvergne-Rhône-Alpes",
+    "addendum": "Salle Tokyo",
+    "floor": "3",
+    "utilisateur": {
+        "id": 1
+    },
+    "lieu": {}
+}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/adresses/1
+### Invalid Request
+DELETE http://localhost:8080/adresses/1234567890987654
+######################################################

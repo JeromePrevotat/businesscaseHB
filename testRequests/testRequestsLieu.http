@@ -1,0 +1,66 @@
+######################################################
+### Create Lieu
+### Expected : 201 + tâche créée
+POST http://localhost:8080/lieux
+Content-Type: application/json
+
+{
+    "instruction": "Parc de la Tête d'Or",
+    "adresse":{},
+    "utilisateur":{},
+    "borne": {}
+}
+######################################################
+
+######################################################
+### List all Lieus
+### Expected : 200 + liste JSON
+GET http://localhost:8080/lieux
+######################################################
+
+######################################################
+### Get a Lieu By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/lieux/1
+### Invalid Request
+GET http://localhost:8080/lieux/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/lieux/1
+Content-Type: application/json
+
+{
+    "instruction": "Au fond à gauche !",
+    "adresse":{},
+    "utilisateur":{},
+    "borne": {}
+}
+
+### Invalid Request
+PUT http://localhost:8080/lieux/1234567890987654
+Content-Type: application/json
+
+{
+    "instruction": "Au fond à gauche !",
+    "adresse":{},
+    "utilisateur":{},
+    "borne": {}
+}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/lieux/1
+### Invalid Request
+DELETE http://localhost:8080/lieux/1234567890987654
+######################################################

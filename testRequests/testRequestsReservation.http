@@ -1,0 +1,70 @@
+######################################################
+### Create Reservation
+### Expected : 201 + tâche créée
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+    "startDate": "2025-06-01",
+    "endDate": "2025-06-10",
+    "state": "PENDING",
+    "hourlyPriceLog": 2.5,
+    "utilisateur": {},
+    "borne": {},
+}
+######################################################
+
+######################################################
+### List all Reservations
+### Expected : 200 + liste JSON
+GET http://localhost:8080/reservations
+######################################################
+
+######################################################
+### Get a Reservation By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/reservations/1
+### Invalid Request
+GET http://localhost:8080/reservations/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/reservations/1
+Content-Type: application/json
+
+{
+    "startDate": "2025-06-01",
+    "endDate": "2025-06-10",
+    "state": "ACCEPTED",
+    "hourlyPriceLog": 2.5,
+    "utilisateur": {},
+    "borne": {},}
+
+### Invalid Request
+PUT http://localhost:8080/reservations/1234567890987654
+Content-Type: application/json
+
+{
+    "startDate": "2025-06-01",
+    "endDate": "2025-06-10",
+    "state": "ACCEPTED",
+    "hourlyPriceLog": 2.5,
+    "utilisateur": {},
+    "borne": {},}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/reservations/1
+### Invalid Request
+DELETE http://localhost:8080/reservations/1234567890987654
+######################################################

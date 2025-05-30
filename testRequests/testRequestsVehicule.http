@@ -1,0 +1,71 @@
+######################################################
+### Create Vehicule
+### Expected : 201 + tâche créée
+POST http://localhost:8080/vehicules
+Content-Type: application/json
+
+{
+    "plate": "AB-123-CD",
+    "brand": "Tesla",
+    "model": "Model S",
+    "year": 2020,
+    "batteryCapacity": 100
+}
+
+######################################################
+
+######################################################
+### List all Vehicules
+### Expected : 200 + liste JSON
+GET http://localhost:8080/vehicules
+######################################################
+
+######################################################
+### Get a Vehicule By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/vehicules/1
+### Invalid Request
+GET http://localhost:8080/vehicules/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/vehicules/1
+Content-Type: application/json
+
+{
+    "plate": "EF-456-GH",
+    "brand": "Tesla+",
+    "model": "Model Premium",
+    "year": 2025,
+    "batteryCapacity": 200
+}
+
+### Invalid Request
+PUT http://localhost:8080/vehicules/1234567890987654
+Content-Type: application/json
+
+{
+    "plate": "EF-456-GH",
+    "brand": "Tesla+",
+    "model": "Model Premium",
+    "year": 2025,
+    "batteryCapacity": 200
+}
+
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/vehicules/1
+### Invalid Request
+DELETE http://localhost:8080/vehicules/1234567890987654
+######################################################

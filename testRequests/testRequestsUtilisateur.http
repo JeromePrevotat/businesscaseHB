@@ -87,7 +87,7 @@ Content-Type: application/json
 ### Expected : 200 ou 404
 
 ### Valid Request
-DELETE http://localhost:8080/utilisateurs/3
+DELETE http://localhost:8080/utilisateurs/1
 ### Invalid Request
 DELETE http://localhost:8080/utilisateurs/1234567890987654
 ######################################################

@@ -24,31 +24,31 @@ public class LieuController {
         this.lieuService = lieuService;
     }
 
-    @GetMapping("/lieus")
+    @GetMapping("/lieux")
     public List<Lieu> getAllLieus(){
         return lieuService.getAllLieus();
     }
 
-    @GetMapping("/lieus/{id}")
+    @GetMapping("/lieux/{id}")
     public ResponseEntity<Lieu> getLieuById(@PathVariable long id){
         return lieuService.getLieuById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/lieus")
+    @PostMapping("/lieux")
     public void saveLieu(@RequestBody Lieu lieu){
         lieuService.saveLieu(lieu);
     }
 
-    @DeleteMapping("/lieus/{id}")
+    @DeleteMapping("/lieux/{id}")
     public ResponseEntity<Lieu> deleteLieuById(@PathVariable long id){
         return lieuService.deleteLieuById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/lieus/{id}")
+    @PutMapping("/lieux/{id}")
     public ResponseEntity<Lieu> updateLieu(@RequestBody Lieu newLieu, @PathVariable long id){
         return lieuService.updateLieu(newLieu, id)
                 .map(ResponseEntity::ok)
