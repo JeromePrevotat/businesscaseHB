@@ -3,7 +3,6 @@ package com.humanbooster.buisinessCase.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.humanbooster.buisinessCase.model.Spot;
@@ -11,21 +10,23 @@ import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.utils.ModelUtil;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Service class for managing Spot entities.
+ * Provides methods to save, retrieve, update, and delete Spots.
+ */
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class SpotService {
     private final SpotRepository spotRepository;
 
-    @Autowired
-    public SpotService(SpotRepository spotRepository){
-        this.spotRepository = spotRepository;
-    }
-
-    @Transactional
-    public void saveSpot(Spot spot){
-        spotRepository.save(spot);
-    }
-
+    /**
+     * 
+     * @return
+     */
     public List<Spot> getAllSpots(){
         return spotRepository.findAll();
     }
@@ -33,6 +34,11 @@ public class SpotService {
     public Optional<Spot> getSpotById(long id){
         return spotRepository.findById(id);
     }
+    @Transactional
+    public void saveSpot(Spot spot){
+        spotRepository.save(spot);
+    }
+
 
     @Transactional
     public Optional<Spot> deleteSpotById(long id){
