@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.dto;
 
-import com.humanbooster.buisinessCase.model.Spot;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;

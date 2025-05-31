@@ -3,9 +3,11 @@ package com.humanbooster.buisinessCase.mapper;
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
+import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
+import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.Spot;
 
@@ -105,4 +107,33 @@ public class EntityMapper {
         station.setSpot(toEntity(dto.getSpot()));
         return station;
     }
+
+    // MEDIA
+    public MediaDTO toDTO(Media media) {
+        if (media == null) return null;
+        return new MediaDTO(
+            media.getId(),
+            media.getMediaName(),
+            media.getType(),
+            media.getUrl(),
+            media.getDescription(),
+            null
+        );
+    }
+
+    public Media toEntity(MediaDTO dto) {
+        if (dto == null) return null;
+        Media media = new Media();
+        media.setId(dto.getId());
+        media.setMediaName(dto.getMediaName());
+        media.setType(dto.getType());
+        media.setUrl(dto.getUrl());
+        media.setDescription(dto.getDescription());
+        return media;
+    }
+
+
+
+
+    
 }

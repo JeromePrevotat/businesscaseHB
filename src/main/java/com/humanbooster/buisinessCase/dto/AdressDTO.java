@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.dto;
 
-import com.humanbooster.buisinessCase.model.Spot;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;

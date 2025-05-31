@@ -1,23 +1,26 @@
 package com.humanbooster.buisinessCase.model;
 
-import org.hibernate.validator.constraints.Range;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Media entity representing a media file
+ * A Media can illustsrate multiple Stations
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -27,30 +30,27 @@ public class Media {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private long id;
+    private Long id;
 
-    @NotBlank
-    @Column(name="url")
+    @NotBlank(message="URL cannot be blank")
+    @Column(name="url", nullable=false, length=500)
     private String url;
-    
-    @NotBlank
-    @Column(name="type")
+
+    @NotBlank(message="Type cannot be blank")
+    @Column(name="type", nullable=false, length=50)
     private String type;
     
-    @NotBlank
-    @Column(name="media_name")
+    @NotBlank(message="Media name cannot be blank")
+    @Column(name="media_name", nullable=false, length=200)
     private String mediaName;
     
-    @Column(name="description")
+    @Column(name="description", columnDefinition="TEXT")
     private String description;
     
-    @Range(min=1)
     @Column(name="size")
-    private int size;
+    private Long size;
 
-    @NotNull
-    @ManyToOne
-    @JsonBackReference("station-media")
-    @JoinColumn(name="station_id")
-    private Station station;
+    @ManyToMany(mappedBy="medias", fetch=FetchType.LAZY)
+    @JsonIgnore
+    private List<Station> stations;
 }
