@@ -52,7 +52,21 @@ public class EntityMapper {
         return adress;
     }
 
-    // Station
+    // SPOT
+    public SpotDTO toDTO(Spot spot) {
+        if (spot == null) return null;
+        return new SpotDTO(spot.getId(), spot.getInstruction());
+    }
+
+    public Spot toEntity(SpotDTO dto) {
+        if (dto == null) return null;
+        Spot spot = new Spot();
+        spot.setId(dto.getId());
+        spot.setInstruction(dto.getInstruction());
+        return spot;
+    }
+
+    // STATION
     public StationDTO toDTO(Station station) {
         if (station == null) return null;
         return new StationDTO(
