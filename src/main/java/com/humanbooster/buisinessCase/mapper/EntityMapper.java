@@ -3,7 +3,11 @@ package com.humanbooster.buisinessCase.mapper;
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
+import com.humanbooster.buisinessCase.dto.StationDTO;
+import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
+import com.humanbooster.buisinessCase.model.Station;
+import com.humanbooster.buisinessCase.model.Spot;
 
 /**
  * Mapper to convert Entities between DTOs and JPA Entities.
@@ -11,7 +15,7 @@ import com.humanbooster.buisinessCase.model.Adress;
  */
 @Component
 public class EntityMapper {
-    // ADRESSES
+    // ADRESS
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;
         return new AdressDTO(
@@ -25,8 +29,9 @@ public class EntityMapper {
             adress.getRegion(),
             adress.getAddendum(),
             adress.getFloor()
+            
             // adress.getUser() != null ? adress.getUser().getId() : 0, // Reference to User ID
-            // null // Spot list is not included to avoid circular references
+            
         );
     }
 
@@ -45,5 +50,45 @@ public class EntityMapper {
         adress.setFloor(dto.getFloor());
         // adress.setUser(toEntity(dto.getUserId()));
         return adress;
+    }
+
+    // Station
+    public StationDTO toDTO(Station station) {
+        if (station == null) return null;
+        return new StationDTO(
+            station.getId(),
+            station.getStationName(),
+            station.getLatitude(),
+            station.getLongitude(),
+            station.getPowerOutput(),
+            station.getInstruction(),
+            station.isGrounded(),
+            station.getState(),
+            station.isBusy(),
+            station.getCreationDate(),
+            station.getLastMaintenance(),
+            station.isWired(),
+            toDTO(station.getSpot())
+        );
+    }
+
+    public Station toEntity(StationDTO dto) {
+        if (dto == null) return null;
+        Station station = new Station();
+        station.setId(dto.getId());
+        station.setStationName(dto.getStationName());
+        station.setLatitude(dto.getLatitude());
+        station.setLongitude(dto.getLongitude());
+        station.setPowerOutput(dto.getPowerOutput());
+        station.setInstruction(dto.getInstruction());
+        station.setGrounded(dto.isGrounded());
+        station.setState(dto.getState());
+        station.setBusy(dto.isBusy());
+        station.setCreationDate(dto.getCreationDate());
+        station.setLastMaintenance(dto.getLastMaintenance());
+        station.setWired(dto.isWired());
+        // station.setAdress(toEntity(dto.getAdress()));
+        station.setSpot(toEntity(dto.getSpot()));
+        return station;
     }
 }
