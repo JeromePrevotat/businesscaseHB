@@ -21,55 +21,62 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents an Adress in the system.
+ * Users can have multiple Adresses (home, billing, etc...)
+ * A Location is linked to an Adress.
+ */
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="adresses")
-public class Adresse {
+public class Adress {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private long id;
 
+    @Column(name="adress_name")
+    private String adressName;
+
     @Column(name="street_number")
-    private int streeNumber;
+    private int streetNumber;
     
-    @NotBlank
+    @NotBlank(message="Street name cannot be blank")
     @Column(name="street_name")
     private String streetName;
 
-    @NotBlank
+    @NotBlank(message="Zipcode cannot be blank")
     @Column(name="zipcode")
     private String zipcode;
 
-    @NotBlank
+    @NotBlank(message="City cannot be blank")
     @Column(name="city")
     private String city;
 
-    @NotBlank
+    @NotBlank(message="Country cannot be blank")
     @Column(name="country")
     private String country;
 
-    @NotBlank
     @Column(name="region")
     private String region;
 
     @Column(name="addendum")
     private String addendum;
 
-    @NotBlank
     @Column(name="floor")
     private int floor;
 
     @NotNull
     @ManyToOne
-    @JsonBackReference("adresse-utilisateur")
-    @JoinColumn(name="utilisateur_id")
-    private Utilisateur utilisateur;
+    @JsonBackReference("adress-user")
+    @JoinColumn(name="user_id")
+    private User user;
 
-    @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Spot.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("adresse-lieu")
-    private List<Lieu> lieu;
+    @JsonManagedReference("adress-spot")
+    private List<Spot> spotList;
 }

@@ -42,19 +42,19 @@ public class Reservation {
     private ReservationState state;
 
     @NotEmpty
-    @Column(name="hourly_price_log")
-    private double hourlyPriceLog;
+    @Column(name="hourly_rate_log")
+    private double hourlyRateLog;
 
     @NotNull
     @ManyToOne
-    @JsonBackReference("reservation-utilisateur")
-    @JoinColumn(name="utilisateur_id")
-    private Utilisateur utilisateur;
+    @JsonBackReference("reservation-user")
+    @JoinColumn(name="user_id")
+    private User user;
     
     @NotNull
     @ManyToOne
-    @JsonBackReference("borne-reservation")
-    @JoinColumn(name="borne_id")
-    private Borne borne;
+    @JsonBackReference("station-reservation")
+    @JoinColumn(name="station_id")
+    private Station station;
     
 }

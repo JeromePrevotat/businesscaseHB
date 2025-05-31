@@ -51,5 +51,5 @@ public class Vehicule {
 
     @NotNull
     @ManyToMany(mappedBy="vehiculeList")
-    private Set<Utilisateur> utilisateur = new HashSet<>();
+    private Set<User> user = new HashSet<>();
 }

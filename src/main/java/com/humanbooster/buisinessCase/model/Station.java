@@ -23,23 +23,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="bornes")
-public class Borne {
+@Table(name="stations")
+public class Station {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private long id;
     
     @NotBlank
-    @Column(name="borne_name")
-    private String borneName;
-    
+    @Column(name="station_name")
+    private String stationName;
+
     // @Column(name="gps_coordinates")
     // private float coordGps;
 
     @NotBlank
-    @Column(name="hourly_price")
-    private double hourlyPrice;
+    @Column(name="hourly_rate")
+    private double hourlyRate;
 
     @NotBlank
     @Column(name="power_output")
@@ -52,7 +52,7 @@ public class Borne {
     private boolean grounded;
     
     @Column(name="state")
-    private BorneState state;
+    private StationState state;
 
     @NotNull
     @Column(name="busy")
@@ -64,18 +64,18 @@ public class Borne {
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("borne-reservation")
+    @JsonManagedReference("station-reservation")
     private List<Reservation> reservationList;
     
     @NotNull
-    @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Spot.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("borne-lieu")
-    private List<Lieu> lieuList;
+    @JsonManagedReference("station-spot")
+    private List<Spot> spotList;
 
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("borne-media")
+    @JsonManagedReference("station-media")
     private List<Media> mediaList;
 }

@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.humanbooster.buisinessCase.model.Media;
 
+/**
+ * Media's Repository. Provides basic CRUD operations for Media entities.
+ */
 @Repository
 public interface MediaRepository extends JpaRepository<Media, Long>{
 

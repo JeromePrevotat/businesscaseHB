@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="location")
-public class Lieu {
+public class Spot {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -31,19 +31,19 @@ public class Lieu {
 
     @NotNull
     @ManyToOne
-    @JsonBackReference("adresse-lieu")
-    @JoinColumn(name="adresse_id")
-    private Adresse adresse;
+    @JsonBackReference("adresse-spot")
+    @JoinColumn(name="adress_id")
+    private Adress adress;
 
     @NotNull
     @ManyToOne
-    @JsonBackReference("lieu-utilisateur")
-    @JoinColumn(name="utilisateur_id")
-    private Utilisateur utilisateur;
+    @JsonBackReference("spot-user")
+    @JoinColumn(name="user_id")
+    private User user;
     
     @NotNull
     @ManyToOne
-    @JsonBackReference("borne-lieu")
-    @JoinColumn(name="borne_id")
-    private Borne borne;
+    @JsonBackReference("station-spot")
+    @JoinColumn(name="station_id")
+    private Station station;
 }

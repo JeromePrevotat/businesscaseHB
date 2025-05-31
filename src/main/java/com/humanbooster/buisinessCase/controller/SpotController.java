@@ -12,45 +12,45 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.model.Lieu;
-import com.humanbooster.buisinessCase.service.LieuService;
+import com.humanbooster.buisinessCase.model.Spot;
+import com.humanbooster.buisinessCase.service.SpotService;
 
 @RestController
-public class LieuController {
-    private final LieuService lieuService;
+public class SpotController {
+    private final SpotService spotService;
 
     @Autowired
-    public LieuController(LieuService lieuService){
-        this.lieuService = lieuService;
+    public SpotController(SpotService spotService){
+        this.spotService = spotService;
     }
 
-    @GetMapping("/lieux")
-    public List<Lieu> getAllLieus(){
-        return lieuService.getAllLieus();
+    @GetMapping("/spotx")
+    public List<Spot> getAllSpots(){
+        return spotService.getAllSpots();
     }
 
-    @GetMapping("/lieux/{id}")
-    public ResponseEntity<Lieu> getLieuById(@PathVariable long id){
-        return lieuService.getLieuById(id)
+    @GetMapping("/spotx/{id}")
+    public ResponseEntity<Spot> getSpotById(@PathVariable long id){
+        return spotService.getSpotById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/lieux")
-    public void saveLieu(@RequestBody Lieu lieu){
-        lieuService.saveLieu(lieu);
+    @PostMapping("/spotx")
+    public void saveSpot(@RequestBody Spot spot){
+        spotService.saveSpot(spot);
     }
 
-    @DeleteMapping("/lieux/{id}")
-    public ResponseEntity<Lieu> deleteLieuById(@PathVariable long id){
-        return lieuService.deleteLieuById(id)
+    @DeleteMapping("/spotx/{id}")
+    public ResponseEntity<Spot> deleteSpotById(@PathVariable long id){
+        return spotService.deleteSpotById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/lieux/{id}")
-    public ResponseEntity<Lieu> updateLieu(@RequestBody Lieu newLieu, @PathVariable long id){
-        return lieuService.updateLieu(newLieu, id)
+    @PutMapping("/spotx/{id}")
+    public ResponseEntity<Spot> updateSpot(@RequestBody Spot newSpot, @PathVariable long id){
+        return spotService.updateSpot(newSpot, id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

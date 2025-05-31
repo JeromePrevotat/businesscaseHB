@@ -37,8 +37,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="utilisateurs")
-public class Utilisateur {
+@Table(name="users")
+public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -70,7 +70,7 @@ public class Utilisateur {
 
     @NotNull
     @Column(name="role")
-    private RoleUtilisateur role;
+    private UserRole role;
 
     @NotBlank
     @Email
@@ -89,31 +89,31 @@ public class Utilisateur {
     @Column(name="banned")
     private boolean banned;
     
-    @OneToMany(targetEntity=Adresse.class, mappedBy="id", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Adress.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("adresse-utilisateur")
-    private List<Adresse> adresseList;
+    @JsonManagedReference("adress-user")
+    private List<Adress> adressList;
 
-    @OneToMany(targetEntity=Lieu.class, mappedBy="id", fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Spot.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("lieu-utilisateur")
-    private List<Lieu> lieuList;
+    @JsonManagedReference("spot-user")
+    private List<Spot> spotList;
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="id", fetch = FetchType.LAZY)
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("reservation-utilisateur")
+    @JsonManagedReference("reservation-user")
     private List<Reservation> reservationList;
     
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name="utilisateur_vehicule",
-        joinColumns= @JoinColumn(name="utilisateur_id") ,
+        name="user_vehicule",
+        joinColumns= @JoinColumn(name="user_id") ,
         inverseJoinColumns= @JoinColumn(name="vehicule_id")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Vehicule> vehiculeList = new HashSet<>(); // HashSet ? HashMap ?
+    private Set<Vehicule> vehiculeList = new HashSet<>();
 
-    public Utilisateur(String userName,
+    public User(String userName,
             String firstName,
             String lastName,
             String password,
@@ -128,7 +128,7 @@ public class Utilisateur {
         this.birthDate = birthDate;
         this.iban = iban;
         
-        this.role = RoleUtilisateur.REGISTERED;
+        this.role = UserRole.REGISTERED;
     }
     
 }

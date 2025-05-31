@@ -1,5 +1,5 @@
 package com.humanbooster.buisinessCase.model;
 
-public enum RoleUtilisateur {
+public enum UserRole {
     GUEST, REGISTERED, ADMIN
 }

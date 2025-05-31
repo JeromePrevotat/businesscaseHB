@@ -50,7 +50,7 @@ public class Media {
 
     @NotNull
     @ManyToOne
-    @JsonBackReference("borne-media")
-    @JoinColumn(name="borne_id")
-    private Borne borne;
+    @JsonBackReference("station-media")
+    @JoinColumn(name="station_id")
+    private Station station;
 }
