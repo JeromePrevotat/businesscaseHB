@@ -1,7 +1,7 @@
 ######################################################
 ### Create Lieu
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/lieux
+POST http://localhost:8080/api/spots
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 ######################################################
 ### List all Lieus
 ### Expected : 200 + liste JSON
-GET http://localhost:8080/lieux
+GET http://localhost:8080/api/spots
 ######################################################
 
 ######################################################
@@ -23,9 +23,9 @@ GET http://localhost:8080/lieux
 ### Expected : 200 ou 404
 
 ### Valid Request
-GET http://localhost:8080/lieux/1
+GET http://localhost:8080/api/spots/1
 ### Invalid Request
-GET http://localhost:8080/lieux/1234567890987654
+GET http://localhost:8080/api/spots/1234567890987654
 ######################################################
 
 ######################################################
@@ -33,7 +33,7 @@ GET http://localhost:8080/lieux/1234567890987654
 ### Expected : 200 ou 404
 
 ### Invalid Request
-PUT http://localhost:8080/lieux/1
+PUT http://localhost:8080/api/spots/1
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ### Invalid Request
-PUT http://localhost:8080/lieux/1234567890987654
+PUT http://localhost:8080/api/spots/1234567890987654
 Content-Type: application/json
 
 {
@@ -60,7 +60,7 @@ Content-Type: application/json
 ### Expected : 200 ou 404
 
 ### Valid Request
-DELETE http://localhost:8080/lieux/1
+DELETE http://localhost:8080/api/spots/1
 ### Invalid Request
-DELETE http://localhost:8080/lieux/1234567890987654
+DELETE http://localhost:8080/api/spots/1234567890987654
 ######################################################

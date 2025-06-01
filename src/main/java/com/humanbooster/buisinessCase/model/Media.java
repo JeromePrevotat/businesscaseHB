@@ -50,7 +50,7 @@ public class Media {
     @Column(name="size")
     private Long size;
 
-    @ManyToMany(mappedBy="medias", fetch=FetchType.LAZY)
+    @ManyToMany(mappedBy="mediaList", fetch=FetchType.LAZY)
     @JsonIgnore
-    private List<Station> stations;
+    private List<Station> stationList;
 }

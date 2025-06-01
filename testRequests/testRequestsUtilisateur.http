@@ -1,7 +1,7 @@
 ######################################################
 ### Create User
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/utilisateurs
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -24,7 +24,7 @@ Content-Type: application/json
 ######################################################
 ### List all Users
 ### Expected : 200 + liste JSON
-GET http://localhost:8080/utilisateurs
+GET http://localhost:8080/api/users
 ######################################################
 
 ######################################################
@@ -32,9 +32,9 @@ GET http://localhost:8080/utilisateurs
 ### Expected : 200 ou 404
 
 ### Valid Request
-GET http://localhost:8080/utilisateurs/1
+GET http://localhost:8080/api/users/1
 ### Invalid Request
-GET http://localhost:8080/utilisateurs/1234567890987654
+GET http://localhost:8080/api/users/1234567890987654
 ######################################################
 
 ######################################################
@@ -42,7 +42,7 @@ GET http://localhost:8080/utilisateurs/1234567890987654
 ### Expected : 200 ou 404
 
 ### Invalid Request
-PUT http://localhost:8080/utilisateurs/1
+PUT http://localhost:8080/api/users/1
 Content-Type: application/json
 
 {
@@ -62,7 +62,7 @@ Content-Type: application/json
 }
 
 ### Invalid Request
-PUT http://localhost:8080/utilisateurs/1234567890987654
+PUT http://localhost:8080/api/users/1234567890987654
 Content-Type: application/json
 
 {
@@ -87,7 +87,7 @@ Content-Type: application/json
 ### Expected : 200 ou 404
 
 ### Valid Request
-DELETE http://localhost:8080/utilisateurs/1
+DELETE http://localhost:8080/api/users/1
 ### Invalid Request
-DELETE http://localhost:8080/utilisateurs/1234567890987654
+DELETE http://localhost:8080/api/users/1234567890987654
 ######################################################

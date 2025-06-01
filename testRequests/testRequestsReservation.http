@@ -1,7 +1,7 @@
 ######################################################
 ### Create Reservation
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/reservations
+POST http://localhost:8080/api/reservations
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 ######################################################
 ### List all Reservations
 ### Expected : 200 + liste JSON
-GET http://localhost:8080/reservations
+GET http://localhost:8080/api/reservations
 ######################################################
 
 ######################################################
@@ -25,9 +25,9 @@ GET http://localhost:8080/reservations
 ### Expected : 200 ou 404
 
 ### Valid Request
-GET http://localhost:8080/reservations/1
+GET http://localhost:8080/api/reservations/1
 ### Invalid Request
-GET http://localhost:8080/reservations/1234567890987654
+GET http://localhost:8080/api/reservations/1234567890987654
 ######################################################
 
 ######################################################
@@ -35,7 +35,7 @@ GET http://localhost:8080/reservations/1234567890987654
 ### Expected : 200 ou 404
 
 ### Invalid Request
-PUT http://localhost:8080/reservations/1
+PUT http://localhost:8080/api/reservations/1
 Content-Type: application/json
 
 {
@@ -47,7 +47,7 @@ Content-Type: application/json
     "borne": {},}
 
 ### Invalid Request
-PUT http://localhost:8080/reservations/1234567890987654
+PUT http://localhost:8080/api/reservations/1234567890987654
 Content-Type: application/json
 
 {
@@ -64,7 +64,7 @@ Content-Type: application/json
 ### Expected : 200 ou 404
 
 ### Valid Request
-DELETE http://localhost:8080/reservations/1
+DELETE http://localhost:8080/api/reservations/1
 ### Invalid Request
-DELETE http://localhost:8080/reservations/1234567890987654
+DELETE http://localhost:8080/api/reservations/1234567890987654
 ######################################################

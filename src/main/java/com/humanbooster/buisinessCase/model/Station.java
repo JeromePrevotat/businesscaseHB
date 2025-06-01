@@ -66,7 +66,7 @@ public class Station {
     @Column(name="power_output", precision = 10, scale = 2, nullable = false)
     @DecimalMin(value = "0.1", message = "Power output must be positive")
     @NotNull(message = "Power output is required")
-    private double powerOutput;
+    private BigDecimal powerOutput;
     
     @Column(name="instruction", columnDefinition= "TEXT")
     private String instruction;
@@ -97,20 +97,20 @@ public class Station {
 
     @NotNull(message = "Spot is required")
     @ManyToOne
-    @JoinColumn(name="id", nullable = false)
+    @JoinColumn(name="spot-id", nullable = false)
     @JsonBackReference("station-spot")
     private Spot spot;
 
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("station-rate")
-    private List<Rate> rateList;
+    private List<HourlyRate> rateList;
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("station-reservation")
     private List<Reservation> reservationList;
     
     @NotNull
-    @ManyToMany(targetEntity=Media.class, mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity=Media.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
         name = "media_station",
         joinColumns = @JoinColumn(name = "station_id"),

@@ -1,7 +1,7 @@
 ######################################################
 ### Create PlugType
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/plugtypes
+POST http://localhost:8080/api/plugtypes
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 ######################################################
 ### List all PlugTypes
 ### Expected : 200 + liste JSON
-GET http://localhost:8080/plugtypes
+GET http://localhost:8080/api/plugtypes
 ######################################################
 
 ######################################################
@@ -20,9 +20,9 @@ GET http://localhost:8080/plugtypes
 ### Expected : 200 ou 404
 
 ### Valid Request
-GET http://localhost:8080/plugtypes/1
+GET http://localhost:8080/api/plugtypes/1
 ### Invalid Request
-GET http://localhost:8080/plugtypes/1234567890987654
+GET http://localhost:8080/api/plugtypes/1234567890987654
 ######################################################
 
 ######################################################
@@ -30,7 +30,7 @@ GET http://localhost:8080/plugtypes/1234567890987654
 ### Expected : 200 ou 404
 
 ### Invalid Request
-PUT http://localhost:8080/plugtypes/1
+PUT http://localhost:8080/api/plugtypes/1
 Content-Type: application/json
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json
 }
 
 ### Invalid Request
-PUT http://localhost:8080/plugtypes/1234567890987654
+PUT http://localhost:8080/api/plugtypes/1234567890987654
 Content-Type: application/json
 
 {
@@ -51,7 +51,7 @@ Content-Type: application/json
 ### Expected : 200 ou 404
 
 ### Valid Request
-DELETE http://localhost:8080/plugtypes/1
+DELETE http://localhost:8080/api/plugtypes/1    
 ### Invalid Request
-DELETE http://localhost:8080/plugtypes/1234567890987654
+DELETE http://localhost:8080/api/plugtypes/1234567890987654
 ######################################################

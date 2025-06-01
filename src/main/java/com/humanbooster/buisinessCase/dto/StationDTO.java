@@ -38,7 +38,7 @@ public class StationDTO {
 
     @DecimalMin(value = "0.1", message = "Power output must be positive")
     @NotNull(message = "Power output is required")
-    private double powerOutput;
+    private BigDecimal powerOutput;
     
     private String instruction;
     
