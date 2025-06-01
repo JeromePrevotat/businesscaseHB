@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
+import com.humanbooster.buisinessCase.dto.HourlyRateDTO;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
+import com.humanbooster.buisinessCase.model.HourlyRate;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.ReservationState;
@@ -170,4 +172,34 @@ public class EntityMapper {
         return reservation;
     }
 
+    // HOURLY RATE
+    public HourlyRateDTO toDTO(HourlyRate rate) {
+        if (rate == null) return null;
+        return new HourlyRateDTO(
+            rate.getId(),
+            rate.getHourlyRate(),
+            rate.getStartTime(),
+            rate.getEndTime(),
+            rate.getWeekDay(),
+            rate.getStartDate(),
+            rate.getEndDate(),
+            rate.getActive(),
+            rate.getStation() != null ? rate.getStation().getId() : null
+        );
+    }
+
+    public HourlyRate toEntity(HourlyRateDTO dto) {
+        if (dto == null) return null;
+        HourlyRate rate = new HourlyRate();
+        rate.setId(dto.getId());
+        rate.setHourlyRate(dto.getHourlyRate());
+        rate.setStartTime(dto.getStartTime());
+        rate.setEndTime(dto.getEndTime());
+        rate.setWeekDay(dto.getWeekDay());
+        rate.setStartDate(dto.getStartDate());
+        rate.setEndDate(dto.getEndDate());
+        rate.setActive(dto.getActive());
+        // Note: La référence Station doit être résolue par le service
+        return rate;
+    }
 }
