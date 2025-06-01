@@ -37,10 +37,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="stations")
 public class Station {
+
+    public Station(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private long id;
+    private Long id;
     
     @NotBlank(message = "Station name cannot be blank")
     @Column(name="station_name")

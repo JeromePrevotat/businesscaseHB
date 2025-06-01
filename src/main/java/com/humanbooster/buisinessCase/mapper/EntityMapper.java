@@ -1,14 +1,21 @@
 package com.humanbooster.buisinessCase.mapper;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
+import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
+import com.humanbooster.buisinessCase.model.Reservation;
+import com.humanbooster.buisinessCase.model.ReservationState;
 import com.humanbooster.buisinessCase.model.Station;
+import com.humanbooster.buisinessCase.model.User;
+
 import com.humanbooster.buisinessCase.model.Spot;
 
 /**
@@ -132,8 +139,35 @@ public class EntityMapper {
         return media;
     }
 
+    // RESERVATION
+    public ReservationDTO toDTO(Reservation reservation) {
+        if (reservation == null) return null;
+        return new ReservationDTO(
+            reservation.getId(),
+            reservation.getStartDate(),
+            reservation.getEndDate(),
+            reservation.getState(),
+            reservation.getPricePayed(),
+            reservation.getDatePayed(),
+            reservation.getHourlyRateLog(),
+            reservation.getUser() != null ? reservation.getUser().getId() : null,
+            reservation.getStation() != null ? reservation.getStation().getId() : null
+        );
+    }
 
+    public Reservation toEntity(ReservationDTO dto) {
+        if (dto == null) return null;
+        Reservation reservation = new Reservation();
+        reservation.setId(dto.getId());
+        reservation.setStartDate(dto.getStartDate());
+        reservation.setEndDate(dto.getEndDate());
+        reservation.setState(dto.getState());
+        reservation.setPricePayed(dto.getPricePayed());
+        reservation.setDatePayed(dto.getDatePayed());
+        reservation.setHourlyRateLog(dto.getHourlyRateLog());
+        reservation.setUser(new User(dto.getUserId()));
+        reservation.setStation(new Station(dto.getStationId()));
+        return reservation;
+    }
 
-
-    
 }

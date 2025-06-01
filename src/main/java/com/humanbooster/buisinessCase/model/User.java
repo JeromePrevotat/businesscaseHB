@@ -39,10 +39,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="users")
 public class User {
+
+    public User(Long id){
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
-    private long id;
+    private Long id;
 
     @NotBlank
     @NotEmpty
