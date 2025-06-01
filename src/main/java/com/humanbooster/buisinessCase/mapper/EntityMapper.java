@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.mapper;
 
-import java.time.LocalDate;
-
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
@@ -9,15 +7,14 @@ import com.humanbooster.buisinessCase.dto.HourlyRateDTO;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
+import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.HourlyRate;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
-import com.humanbooster.buisinessCase.model.ReservationState;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
-
 import com.humanbooster.buisinessCase.model.Spot;
 
 /**
@@ -201,5 +198,44 @@ public class EntityMapper {
         rate.setActive(dto.getActive());
         // Note: La référence Station doit être résolue par le service
         return rate;
+    }
+
+    // USER
+    public UserDTO toDTO(User user) {
+        if (user == null) return null;
+        return new UserDTO(
+            user.getId(),
+            user.getUserName(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getRole(),
+            user.getEmail(),
+            user.getBirthDate(),
+            user.getIban(),
+            // user.getVehicule(),
+            user.isBanned(),
+            user.isAccountValid(),
+            user.getInscriptionDate(),
+            toDTO(user.getSpot())
+        );
+    }
+
+    public User toEntity(UserDTO dto) {
+        if (dto == null) return null;
+        User user = new User();
+        user.setId(dto.getId());
+        user.setUserName(dto.getUserName());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setRole(dto.getRole());
+        user.setEmail(dto.getEmail());
+        user.setBirthDate(dto.getBirthDate());
+        user.setIban(dto.getIban());
+        // user.setVehicule(dto.getVehicule());
+        user.setBanned(dto.getBanned());
+        user.setAccountValid(dto.getAccountValid());
+        user.setInscriptionDate(dto.getInscriptionDate());
+        user.setSpot(toEntity(dto.getSpot()));
+        return user;
     }
 }
