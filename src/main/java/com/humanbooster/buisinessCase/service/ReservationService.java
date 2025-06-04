@@ -48,7 +48,7 @@ public class ReservationService {
      * @return an Optional containing the Reservation if found, or empty if not found
      */
     @Transactional(readOnly = true)
-    public Optional<Reservation> getReservationById(long id){
+    public Optional<Reservation> getReservationById(Long id){
         return reservationRepository.findById(id);
     }
 
@@ -58,7 +58,7 @@ public class ReservationService {
      * @return an Optional containing the deleted Reservation if found, or empty if not found
      */
     @Transactional
-    public Optional<Reservation> deleteReservationById(long id){
+    public Optional<Reservation> deleteReservationById(Long id){
         Optional<Reservation> reservationOpt = reservationRepository.findById(id);
         reservationOpt.ifPresent(reservationRepository::delete);
         return reservationOpt;

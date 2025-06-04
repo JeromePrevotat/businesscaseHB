@@ -30,19 +30,19 @@ public class VehiculeService {
         return vehiculeRepository.findAll();
     }
 
-    public Optional<Vehicule> getVehiculeById(long id){
+    public Optional<Vehicule> getVehiculeById(Long id){
         return vehiculeRepository.findById(id);
     }
 
     @Transactional
-    public Optional<Vehicule> deleteVehiculeById(long id){
+    public Optional<Vehicule> deleteVehiculeById(Long id){
         Optional<Vehicule> vehiculeOpt = vehiculeRepository.findById(id);
         vehiculeOpt.ifPresent(vehiculeRepository::delete);
         return vehiculeOpt;
     }
 
     @Transactional
-    public Optional<Vehicule> updateVehicule(Vehicule newVehicule, long id){
+    public Optional<Vehicule> updateVehicule(Vehicule newVehicule, Long id){
         return vehiculeRepository.findById(id)
                 .map(existingVehicule -> {
                     ModelUtil.copyFields(newVehicule, existingVehicule);

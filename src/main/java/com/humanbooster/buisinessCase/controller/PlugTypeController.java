@@ -30,7 +30,7 @@ public class PlugTypeController {
     }
 
     @GetMapping("/plugTypes/{id}")
-    public ResponseEntity<PlugType> getPlugTypeById(@PathVariable long id){
+    public ResponseEntity<PlugType> getPlugTypeById(@PathVariable Long id){
         return plugTypeService.getPlugTypeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -42,14 +42,14 @@ public class PlugTypeController {
     }
 
     @DeleteMapping("/plugTypes/{id}")
-    public ResponseEntity<PlugType> deletePlugTypeById(@PathVariable long id){
+    public ResponseEntity<PlugType> deletePlugTypeById(@PathVariable Long id){
         return plugTypeService.deletePlugTypeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/plugTypes/{id}")
-    public ResponseEntity<PlugType> updatePlugType(@RequestBody PlugType newPlugType, @PathVariable long id){
+    public ResponseEntity<PlugType> updatePlugType(@RequestBody PlugType newPlugType, @PathVariable Long id){
         return plugTypeService.updatePlugType(newPlugType, id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

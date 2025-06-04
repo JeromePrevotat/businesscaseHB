@@ -1,10 +1,11 @@
 ######################################################
 ### Create Adresse
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/adresses
+POST http://localhost:8080/api/adresses
 Content-Type: application/json
 
 {
+    "adressName":"Test Adress",
     "streetNumber": "123",
     "streetName": "Rue de la Paix",
     "zipcode": "75001",
@@ -13,19 +14,17 @@ Content-Type: application/json
     "region": "Île-de-France",
     "addendum": "Appartement 4B",
     "floor": "4",
-    "utilisateur": {
+    "user": {
         "id": 1
     },
-    "lieu": {}
-
-
+    "spotList": {}
 }
 ######################################################
 
 ######################################################
 ### List all Adresses
 ### Expected : 200 + liste JSON
-GET http://localhost:8080/adresses
+GET http://localhost:8080/api/adresses
 ######################################################
 
 ######################################################

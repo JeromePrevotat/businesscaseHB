@@ -46,7 +46,7 @@ public class StationController {
      * @return the Station with the specified ID, or 404 Not Found if it does not exist
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Station> getStationById(@PathVariable long id){
+    public ResponseEntity<Station> getStationById(@PathVariable Long id){
         return stationService.getStationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

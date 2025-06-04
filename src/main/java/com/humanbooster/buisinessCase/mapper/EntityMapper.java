@@ -6,16 +6,16 @@ import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.dto.HourlyRateDTO;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
+import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.UserDTO;
-import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.HourlyRate;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
+import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
-import com.humanbooster.buisinessCase.model.Spot;
 
 /**
  * Mapper to convert Entities between DTOs and JPA Entities.
@@ -27,6 +27,7 @@ public class EntityMapper {
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;
         return new AdressDTO(
+            // if (adress.getId().longValue() != null) adress.getId();
             adress.getId(),
             adress.getAdressName(),
             adress.getStreetNumber(),

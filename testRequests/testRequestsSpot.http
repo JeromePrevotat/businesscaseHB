@@ -6,9 +6,9 @@ Content-Type: application/json
 
 {
     "instruction": "Parc de la Tête d'Or",
+    "borne": null,
+    "utilisateur":null,
     "adresse":{},
-    "utilisateur":{},
-    "borne": {}
 }
 ######################################################
 

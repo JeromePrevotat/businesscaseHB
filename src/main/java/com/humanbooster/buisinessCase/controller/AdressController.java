@@ -56,7 +56,7 @@ public class AdressController {
      * @return the Adress if found, or 404 Not Found if not
      */
     @GetMapping("/{id}")
-    public ResponseEntity<AdressDTO> getAdressById(@PathVariable long id){
+    public ResponseEntity<AdressDTO> getAdressById(@PathVariable Long id){
         return adressService.getAdressById(id)
                 .map(adress -> ResponseEntity.ok(mapper.toDTO(adress)))
                 .orElse(ResponseEntity.notFound().build());
@@ -68,7 +68,7 @@ public class AdressController {
      * @param adress the Adress to save
      * @return 201 Created if successful
      */
-    @PostMapping("/adresses")
+    @PostMapping
     public ResponseEntity<AdressDTO> saveAdresse(@Valid @RequestBody AdressDTO adressDTO) {
         Adress adress = mapper.toEntity(adressDTO);
         Adress savedAdress = adressService.saveAdress(adress);
@@ -83,7 +83,7 @@ public class AdressController {
      * @return ResponseEntity with no content or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<AdressDTO> deleteAdressById(@PathVariable long id){
+    public ResponseEntity<AdressDTO> deleteAdressById(@PathVariable Long id){
         if (!adressService.existsById(id)) return ResponseEntity.notFound().build();
         adressService.deleteAdressById(id);
         return ResponseEntity.noContent().build();
@@ -97,7 +97,7 @@ public class AdressController {
      * @return ResponseEntity with the updated Adress or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<AdressDTO> updateAdress(@PathVariable long id, @Valid @RequestBody AdressDTO newAdressDTO){
+    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO newAdressDTO){
         if (!adressService.existsById(id)) return ResponseEntity.notFound().build();
         Adress adress = mapper.toEntity(newAdressDTO); // From DTO to Entity
         Adress updatedAdress = adressService.updateAdress(id, adress).get(); // Update the Adress

@@ -37,7 +37,7 @@ public class StationService{
      * @return an Optional containing the found Station, or empty if not found
      */
     @Transactional(readOnly = true)
-    public Optional<Station> getStationById(long id){
+    public Optional<Station> getStationById(Long id){
         return stationRepository.findById(id);
     }
 
@@ -57,7 +57,7 @@ public class StationService{
      * @return an Optional containing the deleted Station if found, or empty if not found
      */
     @Transactional
-    public Optional<Station> deleteStationById(long id){
+    public Optional<Station> deleteStationById(Long id){
         Optional<Station> stationOpt = stationRepository.findById(id);
         stationOpt.ifPresent(stationRepository::delete);
         return stationOpt;
@@ -84,7 +84,7 @@ public class StationService{
      * @return true if the Station exists, false otherwise
      */
     @Transactional(readOnly = true)
-    public boolean existsById(long id) {
+    public boolean existsById(Long id) {
         return stationRepository.existsById(id);
     }
 

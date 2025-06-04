@@ -47,7 +47,7 @@ public class UserController {
      * @return ResponseEntity containing the user if found, or a 404 Not Found status if not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id){
+    public ResponseEntity<User> getUserById(@PathVariable Long id){
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -72,7 +72,7 @@ public class UserController {
      * @return ResponseEntity with 204 No Content status if deleted, or 404 Not Found status if not found.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable long id){
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
         return userService.deleteUserById(id) ?
                     ResponseEntity.noContent().build() :
                     ResponseEntity.notFound().build();
@@ -86,7 +86,7 @@ public class UserController {
      * @return ResponseEntity containing the updated user if found, or a 404 Not Found status if not found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User newUser){
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User newUser){
         return userService.updateUser(id, newUser)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

@@ -48,7 +48,7 @@ public class AdressService{
      * @return  an Optional containing the Adress if found, or empty if not found
      */
     @Transactional(readOnly = true)
-    public Optional<Adress> getAdressById(long id){
+    public Optional<Adress> getAdressById(Long id){
         return adressRepository.findById(id);
     }
 
@@ -58,7 +58,7 @@ public class AdressService{
      * @return an Optional containing the deleted Adress if found, or empty if not found
      */
     @Transactional
-    public Optional<Adress> deleteAdressById(long id){
+    public Optional<Adress> deleteAdressById(Long id){
         Optional<Adress> adressOpt = adressRepository.findById(id);
         adressOpt.ifPresent(adressRepository::delete);
         return adressOpt;
@@ -71,7 +71,7 @@ public class AdressService{
      * @return an Optional containing the updated Adress if found, or empty if not found
      */
     @Transactional
-    public Optional<Adress> updateAdress(long id, Adress newAdress){
+    public Optional<Adress> updateAdress(Long id, Adress newAdress){
         return adressRepository.findById(id)
                 .map(existingAdress -> {
                     ModelUtil.copyFields(newAdress, existingAdress);

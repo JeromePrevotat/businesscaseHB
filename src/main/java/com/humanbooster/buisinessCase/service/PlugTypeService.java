@@ -30,19 +30,19 @@ public class PlugTypeService {
         return plugTypeRepository.findAll();
     }
 
-    public Optional<PlugType> getPlugTypeById(long id){
+    public Optional<PlugType> getPlugTypeById(Long id){
         return plugTypeRepository.findById(id);
     }
 
     @Transactional
-    public Optional<PlugType> deletePlugTypeById(long id){
+    public Optional<PlugType> deletePlugTypeById(Long id){
         Optional<PlugType> plugTypeOpt = plugTypeRepository.findById(id);
         plugTypeOpt.ifPresent(plugTypeRepository::delete);
         return plugTypeOpt;
     }
 
     @Transactional
-    public Optional<PlugType> updatePlugType(PlugType newPlugType, long id){
+    public Optional<PlugType> updatePlugType(PlugType newPlugType, Long id){
         return plugTypeRepository.findById(id)
                 .map(existingPlugType -> {
                     ModelUtil.copyFields(newPlugType, existingPlugType);

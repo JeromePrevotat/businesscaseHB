@@ -36,7 +36,7 @@ public class MediaService {
      * @param id the ID of the Media to retrieve
      * @return Optional containing the Media if found, otherwise empty
      */
-    public Optional<Media> getMediaById(long id){
+    public Optional<Media> getMediaById(Long id){
         return mediaRepository.findById(id);
     }
 

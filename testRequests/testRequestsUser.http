@@ -14,10 +14,12 @@ Content-Type: application/json
 "birthDate": "2025-05-30",
 "iban": "1234567890",
 "banned": false,
-"adresseList": null,
-"lieuList":null,
-"reservationList":null,
-"vehiculeList":null
+"accountValid": true,
+"inscriptionDate": "2025-05-30",
+"spot":{},
+"reservationList":{},
+"adresseList": {},
+"vehiculeList":{}
 }
 ######################################################
 
