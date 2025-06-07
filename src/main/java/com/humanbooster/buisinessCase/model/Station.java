@@ -38,10 +38,6 @@ import lombok.NoArgsConstructor;
 @Table(name="stations")
 public class Station {
 
-    public Station(Long id) {
-        this.id = id;
-    }
-
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
@@ -63,33 +59,31 @@ public class Station {
     @NotNull(message = "Longitude is required")
     private BigDecimal longitude;
 
+    @Column(name="price_rate", precision = 10, scale = 2, nullable = false)
+    @DecimalMin(value = "0.1", message = "Price rate must be positive")
+    @NotNull(message = "Price rate is required")
+    private BigDecimal priceRate;
+
     @Column(name="power_output", precision = 10, scale = 2, nullable = false)
     @DecimalMin(value = "0.1", message = "Power output must be positive")
     @NotNull(message = "Power output is required")
     private BigDecimal powerOutput;
     
-    @Column(name="instruction", columnDefinition= "TEXT")
-    private String instruction;
-    
-    @Column(name="grounded", nullable = false)
-    @NotNull(message = "Grounded status is required")
-    private boolean grounded = true;
+    @Column(name="manual", columnDefinition= "TEXT")
+    private String manual;
     
     @Enumerated(EnumType.STRING)
     @Column(name="state", length = 20, nullable = false)
     @NotNull(message = "Station state is required")
     private StationState state;
 
+    @Column(name="grounded", nullable = false)
+    @NotNull(message = "Grounded status is required")
+    private boolean grounded = true;
+    
     @NotNull(message = "Busy status is required")
     @Column(name="busy", nullable = false)
     private boolean busy =  false;
-    
-    @NotNull(message = "Creation Date is required")
-    @Column(name = "creation_date", nullable = false)
-    private LocalDateTime creationDate = LocalDateTime.now();
-
-    @Column(name = "last_maintenance")
-    private LocalDateTime lastMaintenance;
 
     @NotNull(message = "Wired status is required")
     @Column(name="wired")
@@ -98,24 +92,15 @@ public class Station {
     @NotNull(message = "Spot is required")
     @ManyToOne
     @JoinColumn(name="spot-id", nullable = false)
-    @JsonBackReference("station-spot")
-    private Spot spot;
+    @JsonBackReference("stations-spots")
+    private Spot spot_id;
 
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("station-rate")
-    private List<HourlyRate> rateList;
-
-    @OneToMany(targetEntity=Reservation.class, mappedBy="id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("station-reservation")
+    @OneToMany(targetEntity=Reservation.class, mappedBy="station_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("stations-reservations")
     private List<Reservation> reservationList;
     
     @NotNull
-    @ManyToMany(targetEntity=Media.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "media_station",
-        joinColumns = @JoinColumn(name = "station_id"),
-        inverseJoinColumns = @JoinColumn(name = "media_id")
-    )
+    @OneToMany(targetEntity=Media.class, mappedBy="media_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Media> mediaList;
 }

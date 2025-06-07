@@ -10,7 +10,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -44,13 +47,17 @@ public class Media {
     @Column(name="media_name", nullable=false, length=200)
     private String mediaName;
     
-    @Column(name="description", columnDefinition="TEXT")
-    private String description;
-    
     @Column(name="size")
     private Long size;
 
-    @ManyToMany(mappedBy="mediaList", fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonIgnore
+    private List<Spot> spotList;
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @JsonIgnore
     private List<Station> stationList;
 }

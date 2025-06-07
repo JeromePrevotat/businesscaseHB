@@ -32,19 +32,12 @@ public class Vehicule {
     @Column(name="id")
     private Long id;
 
-    @NotBlank
-    @NotEmpty
+    @NotBlank(message="Vehicule Plate cannot be blank")
     @Column(name="plate")
     private String plate;
 
     @Column(name="brand")
     private String brand;
-
-    @Column(name="model")
-    private String model;
-
-    @Column(name="year")
-    private int year;
 
     @Column(name="battery_capacity")
     private int batteryCapacity;

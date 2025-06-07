@@ -2,17 +2,18 @@ package com.humanbooster.buisinessCase.model;
 
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -38,18 +39,19 @@ public class Adress {
     @Column(name="id")
     private Long id;
 
+    @NotBlank(message="Adress name cannot be blank")
     @Column(name="adress_name")
     private String adressName;
 
-    @Column(name="street_number")
-    private int streetNumber;
+    @Column(name="street_number", length=15)
+    private String streetNumber;
     
     @NotBlank(message="Street name cannot be blank")
     @Column(name="street_name")
     private String streetName;
 
     @NotBlank(message="Zipcode cannot be blank")
-    @Column(name="zipcode")
+    @Column(name="zipcode", length=15)
     private String zipcode;
 
     @NotBlank(message="City cannot be blank")
@@ -70,13 +72,11 @@ public class Adress {
     private int floor;
 
     @NotNull
-    @ManyToOne
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference("adress-user")
-    @JoinColumn(name="user_id")
-    private User user;
+    private List<User> userList;
 
-    @OneToMany(targetEntity=Spot.class, mappedBy="id", fetch = FetchType.LAZY)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(targetEntity=Spot.class, mappedBy="id", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("adress-spot")
     private List<Spot> spotList;
 }

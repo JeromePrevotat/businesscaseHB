@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -24,6 +25,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,16 +40,12 @@ import lombok.NoArgsConstructor;
  * User entity representing a user in the system.
  */
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="users")
 public class User {
-
-    public User(Long id){
-        this.id = id;
-    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -55,35 +53,44 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Username is required")
-    @Column(name="username", length=100, nullable = false, unique = true)
-    private String userName;
+    @Column(name="username", nullable = false, unique = true)
+    private String username;
 
     @NotBlank(message = "First name is required")
-    @Column(name="firstname", length=100, nullable = false)
-    private String firstName;
+    @Column(name="firstname", nullable = false)
+    private String firstname;
 
     @NotBlank(message = "Last name is required")
-    @Column(name="lastname", length=100, nullable = false)
-    private String lastName;
-    
+    @Column(name="lastname", nullable = false)
+    private String lastname;
+
     @NotBlank(message = "Password is required")
     @Column(name="password", length=255, nullable = false)
     private String password;
 
-    @NotNull(message = "Role is required")
-    @Enumerated(EnumType.STRING)
-    @Column(name="role", length=20, nullable = false)
-    private UserRole role;
-
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    @Column(name="email", length=150, nullable = false, unique = true)
+    @Column(name="email", nullable = false, unique = true)
     private String email;
 
     @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     @Column(name="birthdate", nullable = false)
     private LocalDate birthDate;
+    
+    @Column(name = "inscription_date", nullable = false)
+    private LocalDateTime inscriptionDate = LocalDateTime.now();
+
+    @Column(name="account_valid", nullable = false)
+    private boolean accountValid = false;
+
+    @Column(name = "validation_code", length = 15)
+    private String validationCode;
+
+    @NotNull(message = "Role is required")
+    @Enumerated(EnumType.STRING)
+    @Column(name="role", length=20, nullable = false)
+    private UserRole role;
 
     @Column(name="iban", length=34)
     private String iban;
@@ -91,40 +98,31 @@ public class User {
     @Column(name="banned", nullable = false)
     private boolean banned = false;
 
-    @Column(name="account_valid", nullable = false)
-    private boolean accountValid = false;
-
-    @Column(name = "validation_code", length = 100)
-    private String validationCode;
-
-    @Column(name = "inscription_date", nullable = false)
-    private LocalDateTime inscriptionDate = LocalDateTime.now();
-
-    @ManyToOne
-    @JoinColumn(name = "spot_id", nullable = false)
-    @JsonManagedReference("spot-user")
-    private Spot spot;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("reservation-user")
-    private List<Reservation> reservationList;
-
-    @OneToMany(targetEntity=Adress.class, mappedBy="id", fetch = FetchType.LAZY)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference("adress-user")
-    private List<Adress> adressList;
-    
-    // @Column(name = "vehicule", length = 100)
-    // private String vehicule;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name="user_vehicule",
+        name="users_vehicules",
         joinColumns= @JoinColumn(name="user_id") ,
         inverseJoinColumns= @JoinColumn(name="vehicule_id")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Vehicule> vehiculeList = new HashSet<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Media media;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name="users_adresses",
+        joinColumns= @JoinColumn(name="user_id") ,
+        inverseJoinColumns= @JoinColumn(name="adress_id")
+    )
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Adress> adressList = new HashSet<>();
+
+    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("reservation-user")
+    private List<Reservation> reservationList;
 
     public User(String userName,
             String firstName,
@@ -133,9 +131,9 @@ public class User {
             String email,
             LocalDate birthDate,
             String iban) {
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.username = userName;
+        this.firstname = firstName;
+        this.lastname = lastName;
         this.password = password;
         this.email = email;
         this.birthDate = birthDate;

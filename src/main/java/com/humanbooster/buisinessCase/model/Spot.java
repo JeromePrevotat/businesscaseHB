@@ -36,11 +36,8 @@ public class Spot {
     @Column(name="instruction", columnDefinition="TEXT")
     private String instruction;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "spot_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Station> stationList;
-
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> userList;
 
     @ManyToOne
     @JoinColumn(name="adress_id", nullable=false)
