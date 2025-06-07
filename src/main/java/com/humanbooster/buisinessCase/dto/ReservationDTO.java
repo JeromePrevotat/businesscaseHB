@@ -13,12 +13,16 @@ import lombok.NoArgsConstructor;
 
 /**
  * Reservation's DTO
+ * Prevents circular references
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationDTO {
     private Long id;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime validatedAt;
 
     @NotNull(message="Start Date is required")
     @Future(message="Start Date must be in the future")
@@ -27,18 +31,18 @@ public class ReservationDTO {
     @NotNull(message="End Date is required")
     private LocalDateTime endDate;
 
+    @NotNull(message="Hourly Rate Log is required")
+    private BigDecimal hourlyRateLog;
+
     @NotNull(message="State is required")
     private ReservationState state;
 
-    private BigDecimal pricePayed;
+    private BigDecimal payed;
     private LocalDateTime datePayed;
-
-    @NotNull(message="Hourly Rate Log is required")
-    private BigDecimal hourlyRateLog;
     
     @NotNull(message="User ID is required")
-    private Long userId;
+    private Long user_id;
 
     @NotNull(message="Station ID is required")
-    private Long stationId;
+    private Long station_id;
 }

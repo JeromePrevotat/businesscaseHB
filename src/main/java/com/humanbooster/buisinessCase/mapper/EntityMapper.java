@@ -10,7 +10,6 @@ import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.model.Adress;
-import com.humanbooster.buisinessCase.model.HourlyRate;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.Spot;

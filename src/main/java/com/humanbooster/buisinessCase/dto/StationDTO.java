@@ -1,7 +1,6 @@
 package com.humanbooster.buisinessCase.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import com.humanbooster.buisinessCase.model.StationState;
 
@@ -36,27 +35,27 @@ public class StationDTO {
     @NotNull(message = "Longitude is required")
     private BigDecimal longitude;
 
+    @DecimalMin(value = "0.1", message = "Price rate must be positive")
+    @NotNull(message = "Price rate is required")
+    private BigDecimal priceRate;
+
     @DecimalMin(value = "0.1", message = "Power output must be positive")
     @NotNull(message = "Power output is required")
     private BigDecimal powerOutput;
     
-    private String instruction;
-    
-    @NotNull(message = "Grounded status is required")
-    private boolean grounded = true;
+    private String manual;
     
     @NotNull(message = "Station state is required")
     private StationState state;
 
+    @NotNull(message = "Grounded status is required")
+    private boolean grounded = true;
+    
     @NotNull(message = "Busy status is required")
     private boolean busy =  false;
     
-    private LocalDateTime creationDate;
-    private LocalDateTime lastMaintenance;
-
     @NotNull(message = "Wired status is required")
     private boolean wired = false;
 
-
-    private SpotDTO spot;
+    private Long spot_id;
 }

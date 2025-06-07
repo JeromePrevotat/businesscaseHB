@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 
@@ -16,6 +17,7 @@ import com.humanbooster.buisinessCase.model.UserRole;
 /**
  * User's DTO
  * Discards Password
+ * Prevents circular references
  */
 @Data
 @NoArgsConstructor
@@ -24,28 +26,28 @@ public class UserDTO {
     private Long id;
 
     @NotBlank(message = "Username is required")
-    private String userName;
+    private String username;
 
     @NotBlank(message = "First name is required")
-    private String firstName;
+    private String firstname;
 
     @NotBlank(message = "Last name is required")
-    private String lastName;
-
-    @NotNull(message = "Role is required")
-    private UserRole role;
+    private String lastname;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
 
     @Past(message = "Birth date must be in the past")
+    @Column(name="birthdate", nullable = false)
     private LocalDate birthDate;
 
-    private String iban;
-    // private String vehicule;
-    private Boolean banned;
-    private Boolean accountValid;
     private LocalDateTime inscriptionDate;
-    private SpotDTO spot;
+    private Boolean accountValid;
+
+    @NotNull(message = "Role is required")
+    private UserRole role;
+
+    private Boolean banned;
+    private Long media_id;
 } 

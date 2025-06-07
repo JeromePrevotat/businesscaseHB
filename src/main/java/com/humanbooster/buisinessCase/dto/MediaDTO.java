@@ -1,14 +1,13 @@
 package com.humanbooster.buisinessCase.dto;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Medias's DTO
+ * Media's DTO
+ * Prevents circular references
  */
 @Data
 @NoArgsConstructor
@@ -16,15 +15,15 @@ import lombok.NoArgsConstructor;
 public class MediaDTO {
     private Long id;
 
-    @NotBlank(message="Media name cannot be blank")
-    private String mediaName;
+    @NotBlank(message="URL cannot be blank")
+    private String url;
 
     @NotBlank(message="Type cannot be blank")
     private String type;
 
-    @NotBlank(message="URL cannot be blank")
-    private String url;
+    @NotBlank(message="Media name cannot be blank")
+    private String mediaName;
 
-    private String description;
-    private LocalDate creationDate;
+    private Long size;
+    private Long userId;
 }

@@ -13,4 +13,5 @@ import lombok.AllArgsConstructor;
 public class SpotDTO {
         private Long id;
         private String instruction;
+        private Long address_id;
 }

@@ -2,9 +2,7 @@ package com.humanbooster.buisinessCase.model;
 
 import java.util.List;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -41,14 +39,14 @@ public class Adress {
 
     @NotBlank(message="Adress name cannot be blank")
     @Column(name="adress_name")
-    private String adressName;
+    private String adressname;
 
     @Column(name="street_number", length=15)
-    private String streetNumber;
+    private String streetnumber;
     
     @NotBlank(message="Street name cannot be blank")
     @Column(name="street_name")
-    private String streetName;
+    private String streetname;
 
     @NotBlank(message="Zipcode cannot be blank")
     @Column(name="zipcode", length=15)
@@ -73,10 +71,9 @@ public class Adress {
 
     @NotNull
     @ManyToMany(fetch = FetchType.LAZY)
-    @JsonBackReference("adress-user")
+    @JsonBackReference("adresses-users")
     private List<User> userList;
 
-    @OneToMany(targetEntity=Spot.class, mappedBy="id", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("adress-spot")
+    @OneToMany(targetEntity=Spot.class, mappedBy="adress_id", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Spot> spotList;
 }

@@ -14,11 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdressDTO {
     private Long id;
-    private String adressName;
-    private int streetNumber;
+    @NotBlank(message="Adress name cannot be blank")
+    private String adressname;
+
+    @NotBlank(message="Street number cannot be blank")
+    private int streetnumber;
     
     @NotBlank(message="Street name cannot be blank")
-    private String streetName;
+    private String streetname;
 
     @NotBlank(message="Zipcode cannot be blank")
     private String zipcode;
@@ -33,6 +36,4 @@ public class AdressDTO {
     private String addendum;
     private int floor;
 
-    // private Long userId; // Reference to Utilisateur ID
-    // private List<SpotDTO> spotList; // List of LieuDTOs to avoid circular references
 }
