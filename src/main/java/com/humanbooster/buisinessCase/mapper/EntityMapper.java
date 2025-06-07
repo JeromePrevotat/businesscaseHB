@@ -3,18 +3,21 @@ package com.humanbooster.buisinessCase.mapper;
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
-import com.humanbooster.buisinessCase.dto.HourlyRateDTO;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
+import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.dto.VehiculeDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
+import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
+import com.humanbooster.buisinessCase.model.Vehicule;
 
 /**
  * Mapper to convert Entities between DTOs and JPA Entities.
@@ -26,11 +29,10 @@ public class EntityMapper {
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;
         return new AdressDTO(
-            // if (adress.getId().longValue() != null) adress.getId();
             adress.getId(),
-            adress.getAdressName(),
-            adress.getStreetNumber(),
-            adress.getStreetName(),
+            adress.getAdressname(),
+            adress.getStreetnumber(),
+            adress.getStreetname(),
             adress.getZipcode(),
             adress.getCity(),
             adress.getCountry(),
@@ -47,23 +49,24 @@ public class EntityMapper {
         if (dto == null) return null;
         Adress adress = new Adress();
         adress.setId(dto.getId());
-        adress.setAdressName(dto.getAdressName());
-        adress.setStreetNumber(dto.getStreetNumber());
-        adress.setStreetName(dto.getStreetName());
+        adress.setAdressname(dto.getAdressname());
+        adress.setStreetnumber(dto.getStreetnumber());
+        adress.setStreetname(dto.getStreetname());
         adress.setZipcode(dto.getZipcode());
         adress.setCity(dto.getCity());
         adress.setCountry(dto.getCountry());
         adress.setRegion(dto.getRegion());
         adress.setAddendum(dto.getAddendum());
         adress.setFloor(dto.getFloor());
-        // adress.setUser(toEntity(dto.getUserId()));
         return adress;
     }
 
     // SPOT
     public SpotDTO toDTO(Spot spot) {
         if (spot == null) return null;
-        return new SpotDTO(spot.getId(), spot.getInstruction());
+        return new SpotDTO(spot.getId(),
+                    spot.getInstruction(),
+                    spot.getAddress() != null ? spot.getAddress().getId() : null);
     }
 
     public Spot toEntity(SpotDTO dto) {
@@ -82,15 +85,14 @@ public class EntityMapper {
             station.getStationName(),
             station.getLatitude(),
             station.getLongitude(),
+            station.getPriceRate(),
             station.getPowerOutput(),
-            station.getInstruction(),
-            station.isGrounded(),
+            station.getManual(),
             station.getState(),
+            station.isGrounded(),
             station.isBusy(),
-            station.getCreationDate(),
-            station.getLastMaintenance(),
             station.isWired(),
-            toDTO(station.getSpot())
+            station.getSpot_id() != null ? station.getSpot_id().getId() : null
         );
     }
 
@@ -101,16 +103,13 @@ public class EntityMapper {
         station.setStationName(dto.getStationName());
         station.setLatitude(dto.getLatitude());
         station.setLongitude(dto.getLongitude());
+        station.setPriceRate(dto.getPriceRate());
         station.setPowerOutput(dto.getPowerOutput());
-        station.setInstruction(dto.getInstruction());
-        station.setGrounded(dto.isGrounded());
+        station.setManual(dto.getManual());
         station.setState(dto.getState());
+        station.setGrounded(dto.isGrounded());
         station.setBusy(dto.isBusy());
-        station.setCreationDate(dto.getCreationDate());
-        station.setLastMaintenance(dto.getLastMaintenance());
         station.setWired(dto.isWired());
-        // station.setAdress(toEntity(dto.getAdress()));
-        station.setSpot(toEntity(dto.getSpot()));
         return station;
     }
 
@@ -119,11 +118,11 @@ public class EntityMapper {
         if (media == null) return null;
         return new MediaDTO(
             media.getId(),
-            media.getMediaName(),
-            media.getType(),
             media.getUrl(),
-            media.getDescription(),
-            null
+            media.getType(),
+            media.getMediaName(),
+            media.getSize(),
+            media.getUser() != null ? media.getUser().getId() : null
         );
     }
 
@@ -131,10 +130,10 @@ public class EntityMapper {
         if (dto == null) return null;
         Media media = new Media();
         media.setId(dto.getId());
-        media.setMediaName(dto.getMediaName());
-        media.setType(dto.getType());
         media.setUrl(dto.getUrl());
-        media.setDescription(dto.getDescription());
+        media.setType(dto.getType());
+        media.setMediaName(dto.getMediaName());
+        media.setSize(dto.getSize());
         return media;
     }
 
@@ -143,14 +142,16 @@ public class EntityMapper {
         if (reservation == null) return null;
         return new ReservationDTO(
             reservation.getId(),
+            reservation.getCreatedAt(),
+            reservation.getValidatedAt(),
             reservation.getStartDate(),
             reservation.getEndDate(),
-            reservation.getState(),
-            reservation.getPricePayed(),
-            reservation.getDatePayed(),
             reservation.getHourlyRateLog(),
-            reservation.getUser() != null ? reservation.getUser().getId() : null,
-            reservation.getStation() != null ? reservation.getStation().getId() : null
+            reservation.getState(),
+            reservation.isPayed(),
+            reservation.getDatePayed(),
+            reservation.getUser_id() != null ? reservation.getUser_id().getId() : null,
+            reservation.getStation_id() != null ? reservation.getStation_id().getId() : null
         );
     }
 
@@ -158,46 +159,15 @@ public class EntityMapper {
         if (dto == null) return null;
         Reservation reservation = new Reservation();
         reservation.setId(dto.getId());
+        reservation.setCreatedAt(dto.getCreatedAt());
+        reservation.setValidatedAt(dto.getValidatedAt());
         reservation.setStartDate(dto.getStartDate());
         reservation.setEndDate(dto.getEndDate());
-        reservation.setState(dto.getState());
-        reservation.setPricePayed(dto.getPricePayed());
-        reservation.setDatePayed(dto.getDatePayed());
         reservation.setHourlyRateLog(dto.getHourlyRateLog());
-        reservation.setUser(new User(dto.getUserId()));
-        reservation.setStation(new Station(dto.getStationId()));
+        reservation.setState(dto.getState());
+        reservation.setPayed(dto.isPayed());
+        reservation.setDatePayed(dto.getDatePayed());
         return reservation;
-    }
-
-    // HOURLY RATE
-    public HourlyRateDTO toDTO(HourlyRate rate) {
-        if (rate == null) return null;
-        return new HourlyRateDTO(
-            rate.getId(),
-            rate.getHourlyRate(),
-            rate.getStartTime(),
-            rate.getEndTime(),
-            rate.getWeekDay(),
-            rate.getStartDate(),
-            rate.getEndDate(),
-            rate.getActive(),
-            rate.getStation() != null ? rate.getStation().getId() : null
-        );
-    }
-
-    public HourlyRate toEntity(HourlyRateDTO dto) {
-        if (dto == null) return null;
-        HourlyRate rate = new HourlyRate();
-        rate.setId(dto.getId());
-        rate.setHourlyRate(dto.getHourlyRate());
-        rate.setStartTime(dto.getStartTime());
-        rate.setEndTime(dto.getEndTime());
-        rate.setWeekDay(dto.getWeekDay());
-        rate.setStartDate(dto.getStartDate());
-        rate.setEndDate(dto.getEndDate());
-        rate.setActive(dto.getActive());
-        // Note: La référence Station doit être résolue par le service
-        return rate;
     }
 
     // USER
@@ -205,18 +175,16 @@ public class EntityMapper {
         if (user == null) return null;
         return new UserDTO(
             user.getId(),
-            user.getUserName(),
-            user.getFirstName(),
-            user.getLastName(),
-            user.getRole(),
+            user.getUsername(),
+            user.getFirstname(),
+            user.getLastname(),
             user.getEmail(),
             user.getBirthDate(),
-            user.getIban(),
-            // user.getVehicule(),
-            user.isBanned(),
-            user.isAccountValid(),
             user.getInscriptionDate(),
-            toDTO(user.getSpot())
+            user.isAccountValid(),
+            user.getRole(),
+            user.isBanned(),
+            user.getMedia() != null ? user.getMedia().getId() : null
         );
     }
 
@@ -224,18 +192,53 @@ public class EntityMapper {
         if (dto == null) return null;
         User user = new User();
         user.setId(dto.getId());
-        user.setUserName(dto.getUserName());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setRole(dto.getRole());
+        user.setUsername(dto.getUsername());
+        user.setFirstname(dto.getFirstname());
+        user.setLastname(dto.getLastname());
         user.setEmail(dto.getEmail());
         user.setBirthDate(dto.getBirthDate());
-        user.setIban(dto.getIban());
-        // user.setVehicule(dto.getVehicule());
-        user.setBanned(dto.getBanned());
-        user.setAccountValid(dto.getAccountValid());
         user.setInscriptionDate(dto.getInscriptionDate());
-        user.setSpot(toEntity(dto.getSpot()));
+        user.setAccountValid(dto.getAccountValid());
+        user.setRole(dto.getRole());
+        user.setBanned(dto.getBanned());
         return user;
+    }
+
+    // PLUG TYPE
+    public PlugTypeDTO toDTO(PlugType plugType) {
+        if (plugType == null) return null;
+        return new PlugTypeDTO(
+            plugType.getId(),
+            plugType.getPlugname()
+        );
+    }
+
+    public PlugType toEntity(PlugTypeDTO dto) {
+        if (dto == null) return null;
+        PlugType plugType = new PlugType();
+        plugType.setId(dto.getId());
+        plugType.setPlugname(dto.getPlugname());
+        return plugType;
+    }
+
+    // VEHICULE
+    public VehiculeDTO toDTO(Vehicule vehicule) {
+        if (vehicule == null) return null;
+        return new VehiculeDTO(
+            vehicule.getId(),
+            vehicule.getPlate(),
+            vehicule.getBrand(),
+            vehicule.getBatteryCapacity()
+        );
+    }
+
+    public Vehicule toEntity(VehiculeDTO dto) {
+        if (dto == null) return null;
+        Vehicule vehicule = new Vehicule();
+        vehicule.setId(dto.getId());
+        vehicule.setPlate(dto.getPlate());
+        vehicule.setBrand(dto.getBrand());
+        vehicule.setBatteryCapacity(dto.getBatteryCapacity());
+        return vehicule;
     }
 }

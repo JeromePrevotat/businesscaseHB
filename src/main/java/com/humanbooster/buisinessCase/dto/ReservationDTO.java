@@ -37,7 +37,7 @@ public class ReservationDTO {
     @NotNull(message="State is required")
     private ReservationState state;
 
-    private BigDecimal payed;
+    private boolean payed;
     private LocalDateTime datePayed;
     
     @NotNull(message="User ID is required")

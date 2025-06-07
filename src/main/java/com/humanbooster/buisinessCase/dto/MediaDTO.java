@@ -25,5 +25,5 @@ public class MediaDTO {
     private String mediaName;
 
     private Long size;
-    private Long userId;
+    private Long user_id;
 }

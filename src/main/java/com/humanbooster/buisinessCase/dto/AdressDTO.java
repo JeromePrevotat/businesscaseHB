@@ -14,11 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdressDTO {
     private Long id;
+    
     @NotBlank(message="Adress name cannot be blank")
     private String adressname;
 
     @NotBlank(message="Street number cannot be blank")
-    private int streetnumber;
+    private String streetnumber;
     
     @NotBlank(message="Street name cannot be blank")
     private String streetname;

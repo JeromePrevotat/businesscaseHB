@@ -1,7 +1,6 @@
 package com.humanbooster.buisinessCase.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -39,10 +38,10 @@ public class Reservation {
     private Long id;
 
     @Column(name="created_at", nullable=false)
-    private LocalDate createdAt = LocalDate.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name="validated_at")
-    private LocalDate validatedAt;
+    private LocalDateTime validatedAt;
 
     @NotNull(message="Start Date is required")
     @Future(message="Start Date must be in the future")
