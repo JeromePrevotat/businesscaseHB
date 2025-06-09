@@ -18,4 +18,5 @@ public class SpotDTO {
         private String instruction;
         private List<Long> stationList;
         private Long address_id;
+        private List<Long> mediaList;
 }

@@ -117,7 +117,13 @@ public class EntityMapper {
                                                     .map(station -> station.getId())
                                                     .toList()
                                             : null,
-                    spot.getAddress() != null ? spot.getAddress().getId() : null);
+                    spot.getAddress() != null ? spot.getAddress().getId() : null,
+                    spot.getMediaList() != null ? spot.getMediaList()
+                                                    .stream()
+                                                    .map(media -> media.getId())
+                                                    .toList()
+                                            : null
+        );
     }
 
     public Spot toEntity(SpotDTO dto) {
@@ -141,6 +147,16 @@ public class EntityMapper {
             spot.setAddress(adress);
         }
         else spot.setAddress(null);
+        if (dto.getMediaList() != null && !dto.getMediaList().isEmpty()) {
+            spot.setMediaList(dto.getMediaList()
+                                    .stream()
+                                    .map(mediaId -> {
+                                        Media media = mediaRepository.findById(mediaId)
+                                                                    .orElse(null);
+                                        return media;
+                                    })
+                                    .toList());
+        } else spot.setMediaList(new ArrayList<>());
         return spot;
     }
 
@@ -240,16 +256,8 @@ public class EntityMapper {
             media.getMediaName(),
             media.getSize(),
             media.getUser() != null ? media.getUser().getId() : null,
-            media.getSpotList() != null ? media.getSpotList()
-                                                .stream()
-                                                .map(spot -> spot.getId())
-                                                .toList()
-                                        : null,
-            media.getStationList() != null ? media.getStationList()
-                                                .stream()
-                                                .map(station -> station.getId())
-                                                .toList()
-                                        : null
+            media.getSpot() != null ? media.getSpot().getId() : null,
+            media.getStation() != null ? media.getStation().getId() : null
         );
     }
 
@@ -266,27 +274,16 @@ public class EntityMapper {
                                         .orElse(null);
             media.setUser(user);
         }
-        if (dto.getSpotList() != null && !dto.getSpotList().isEmpty()) {
-            media.setSpotList(dto.getSpotList()
-                                    .stream()
-                                    .map(spotId -> {
-                                        Spot spot = new Spot();
-                                        spot.setId(spotId);
-                                        return spot;
-                                    })
-                                    .toList());
+        if (dto.getSpot_id() != null) {
+            Spot spot = spotRepository.findById(dto.getSpot_id())
+                                        .orElse(null);
+            media.setSpot(spot);
         }
-        if (dto.getStationList() != null && !dto.getStationList().isEmpty()) {
-            media.setStationList(dto.getStationList()
-                                    .stream()
-                                    .map(stationId -> {
-                                        Station station = new Station();
-                                        station.setId(stationId);
-                                        return station;
-                                    })
-                                    .toList());
+        if (dto.getStation_id() != null) {
+            Station station = stationRepository.findById(dto.getStation_id())
+                                                .orElse(null);
+            media.setStation(station);
         }
-        else media.setStationList(new ArrayList<>());
         return media;
     }
 

@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.dto;
 
-import java.util.List;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +26,6 @@ public class MediaDTO {
 
     private Long size;
     private Long user_id;
-    private List<Long> spotList;
-    private List<Long> stationList;
+    private Long spot_id;
+    private Long station_id;
 }
