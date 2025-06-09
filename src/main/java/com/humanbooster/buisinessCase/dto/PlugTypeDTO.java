@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.dto;
 
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +20,6 @@ public class PlugTypeDTO {
 
     @NotBlank(message="Plug type cannot be blank")
     private String plugname;
+    private List<Long> vehicule_id;
+    private List<Long> station_id;
 }

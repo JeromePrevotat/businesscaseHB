@@ -1,5 +1,7 @@
 package com.humanbooster.buisinessCase.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,5 +38,7 @@ public class AdressDTO {
     private String region;
     private String addendum;
     private int floor;
+    private List<Long> userList;
+    private List<Long> spotList;
 
 }

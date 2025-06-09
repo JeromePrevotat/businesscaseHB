@@ -1,5 +1,7 @@
 package com.humanbooster.buisinessCase.dto;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,4 +26,5 @@ public class VehiculeDTO {
 
     @Column(name="battery_capacity")
     private int batteryCapacity;
+    private List<Long> userList;
 }

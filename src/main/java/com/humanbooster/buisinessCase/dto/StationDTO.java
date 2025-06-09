@@ -1,6 +1,7 @@
 package com.humanbooster.buisinessCase.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.humanbooster.buisinessCase.model.StationState;
 
@@ -58,4 +59,7 @@ public class StationDTO {
     private boolean wired = false;
 
     private Long spot_id;
+    private List<Long> reservationList;
+    private List<Long> mediaList;
+
 }

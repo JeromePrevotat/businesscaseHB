@@ -1,5 +1,8 @@
 package com.humanbooster.buisinessCase.mapper;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.AdressDTO;
@@ -18,13 +21,29 @@ import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.Vehicule;
+import com.humanbooster.buisinessCase.repository.AdressRepository;
+import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.repository.SpotRepository;
+import com.humanbooster.buisinessCase.repository.StationRepository;
+import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.repository.VehiculeRepository;
+
+import lombok.AllArgsConstructor;
 
 /**
  * Mapper to convert Entities between DTOs and JPA Entities.
  * Prevents circular references in JSON serialization.
  */
 @Component
+@AllArgsConstructor
 public class EntityMapper {
+    private final VehiculeRepository vehiculeRepository;
+    private final MediaRepository mediaRepository;
+    private final AdressRepository adressRepository;
+    private final UserRepository userRepository;
+    private final StationRepository stationRepository;
+    private final SpotRepository spotRepository;
+
     // ADRESS
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;
@@ -38,10 +57,17 @@ public class EntityMapper {
             adress.getCountry(),
             adress.getRegion(),
             adress.getAddendum(),
-            adress.getFloor()
-            
-            // adress.getUser() != null ? adress.getUser().getId() : 0, // Reference to User ID
-            
+            adress.getFloor(),
+            adress.getUserList() != null ? adress.getUserList()
+                                                    .stream()
+                                                    .map(user -> user.getId())
+                                                    .toList()
+                                            : null,
+            adress.getSpotList() != null ? adress.getSpotList()
+                                                    .stream()
+                                                    .map(spot -> spot.getId())
+                                                    .toList()
+                                            : null
         );
     }
 
@@ -58,6 +84,24 @@ public class EntityMapper {
         adress.setRegion(dto.getRegion());
         adress.setAddendum(dto.getAddendum());
         adress.setFloor(dto.getFloor());
+        adress.setUserList(dto.getUserList() != null ? dto.getUserList()
+                                                    .stream()
+                                                    .map(userId -> {
+                                                        User user = new User();
+                                                        user.setId(userId);
+                                                        return user;
+                                                    })
+                                                    .toList()
+                                            : null);
+        adress.setSpotList(dto.getSpotList() != null ? dto.getSpotList()
+                                                    .stream()
+                                                    .map(spotId -> {
+                                                        Spot spot = new Spot();
+                                                        spot.setId(spotId);
+                                                        return spot;
+                                                    })
+                                                    .toList()
+                                            : null);
         return adress;
     }
 
@@ -66,6 +110,11 @@ public class EntityMapper {
         if (spot == null) return null;
         return new SpotDTO(spot.getId(),
                     spot.getInstruction(),
+                    spot.getStationList() != null ? spot.getStationList()
+                                                    .stream()
+                                                    .map(station -> station.getId())
+                                                    .toList()
+                                            : null,
                     spot.getAddress() != null ? spot.getAddress().getId() : null);
     }
 
@@ -74,6 +123,22 @@ public class EntityMapper {
         Spot spot = new Spot();
         spot.setId(dto.getId());
         spot.setInstruction(dto.getInstruction());
+        if (dto.getStationList() != null && !dto.getStationList().isEmpty()) {
+            spot.setStationList(dto.getStationList()
+                                    .stream()
+                                    .map(stationId -> {
+                                        Station station = new Station();
+                                        station.setId(stationId);
+                                        return station;
+                                    })
+                                    .toList());
+        } else spot.setStationList(new ArrayList<>());
+        if (dto.getAddress_id() != null) {
+            Adress adress = adressRepository.findById(dto.getAddress_id())
+                                            .orElse(null);
+            spot.setAddress(adress);
+        }
+        else spot.setAddress(null);
         return spot;
     }
 
@@ -92,7 +157,17 @@ public class EntityMapper {
             station.isGrounded(),
             station.isBusy(),
             station.isWired(),
-            station.getSpot_id() != null ? station.getSpot_id().getId() : null
+            station.getSpot_id() != null ? station.getSpot_id().getId() : null,
+            station.getReservationList() != null ? station.getReservationList()
+                                                    .stream()
+                                                    .map(reservation -> reservation.getId())
+                                                    .toList()
+                                            : null,
+            station.getMediaList() != null ? station.getMediaList()
+                                                    .stream()
+                                                    .map(media -> media.getId())
+                                                    .toList()
+                                            : null
         );
     }
 
@@ -110,6 +185,31 @@ public class EntityMapper {
         station.setGrounded(dto.isGrounded());
         station.setBusy(dto.isBusy());
         station.setWired(dto.isWired());
+        if (dto.getSpot_id() != null) {
+            Spot spot = spotRepository.findById(dto.getSpot_id())
+                                        .orElse(null);
+            station.setSpot_id(spot);
+        } else station.setSpot_id(null);
+        if (dto.getReservationList() != null && !dto.getReservationList().isEmpty()) {
+            station.setReservationList(dto.getReservationList()
+                                            .stream()
+                                            .map(reservationId -> {
+                                                Reservation reservation = new Reservation();
+                                                reservation.setId(reservationId);
+                                                return reservation;
+                                            })
+                                            .toList());
+        } else station.setReservationList(new ArrayList<>());
+        if (dto.getMediaList() != null && !dto.getMediaList().isEmpty()) {
+            station.setMediaList(dto.getMediaList()
+                                        .stream()
+                                        .map(mediaId -> {
+                                            Media media = mediaRepository.findById(mediaId)
+                                                                        .orElse(null);
+                                            return media;
+                                        })
+                                        .toList());
+        } else station.setMediaList(new ArrayList<>());
         return station;
     }
 
@@ -122,7 +222,17 @@ public class EntityMapper {
             media.getType(),
             media.getMediaName(),
             media.getSize(),
-            media.getUser() != null ? media.getUser().getId() : null
+            media.getUser() != null ? media.getUser().getId() : null,
+            media.getSpotList() != null ? media.getSpotList()
+                                                .stream()
+                                                .map(spot -> spot.getId())
+                                                .toList()
+                                        : null,
+            media.getStationList() != null ? media.getStationList()
+                                                .stream()
+                                                .map(station -> station.getId())
+                                                .toList()
+                                        : null
         );
     }
 
@@ -134,6 +244,32 @@ public class EntityMapper {
         media.setType(dto.getType());
         media.setMediaName(dto.getMediaName());
         media.setSize(dto.getSize());
+        if (dto.getUser_id() != null) {
+            User user = userRepository.findById(dto.getUser_id())
+                                        .orElse(null);
+            media.setUser(user);
+        }
+        if (dto.getSpotList() != null && !dto.getSpotList().isEmpty()) {
+            media.setSpotList(dto.getSpotList()
+                                    .stream()
+                                    .map(spotId -> {
+                                        Spot spot = new Spot();
+                                        spot.setId(spotId);
+                                        return spot;
+                                    })
+                                    .toList());
+        }
+        if (dto.getStationList() != null && !dto.getStationList().isEmpty()) {
+            media.setStationList(dto.getStationList()
+                                    .stream()
+                                    .map(stationId -> {
+                                        Station station = new Station();
+                                        station.setId(stationId);
+                                        return station;
+                                    })
+                                    .toList());
+        }
+        else media.setStationList(new ArrayList<>());
         return media;
     }
 
@@ -167,6 +303,16 @@ public class EntityMapper {
         reservation.setState(dto.getState());
         reservation.setPayed(dto.isPayed());
         reservation.setDatePayed(dto.getDatePayed());
+        if (dto.getUser_id() != null) {
+            User user = userRepository.findById(dto.getUser_id())
+                                        .orElse(null);
+            reservation.setUser_id(user);
+        }
+        if (dto.getStation_id() != null) {
+            Station station = stationRepository.findById(dto.getStation_id())
+                                                .orElse(null);
+            reservation.setStation_id(station);
+        }
         return reservation;
     }
 
@@ -184,7 +330,22 @@ public class EntityMapper {
             user.isAccountValid(),
             user.getRole(),
             user.isBanned(),
-            user.getMedia() != null ? user.getMedia().getId() : null
+            user.getVehiculeList() != null ? user.getVehiculeList()
+                                                .stream()
+                                                .map(Vehicule::getId)
+                                                .toList()
+                                        : null,
+            user.getMedia() != null ? user.getMedia().getId() : null,
+            user.getAdressList() != null ? user.getAdressList()
+                                                .stream()
+                                                .map(Adress::getId)
+                                                .toList()
+                                        : null,
+            user.getReservationList() != null ? user.getReservationList()
+                                                .stream()
+                                                .map(Reservation::getId)
+                                                .toList()
+                                        : null
         );
     }
 
@@ -201,6 +362,43 @@ public class EntityMapper {
         user.setAccountValid(dto.getAccountValid());
         user.setRole(dto.getRole());
         user.setBanned(dto.getBanned());
+        if (dto.getVehiculeList() != null && !dto.getVehiculeList().isEmpty()) {
+            user.setVehiculeList(new HashSet<>(
+                dto.getVehiculeList()
+                    .stream()
+                    .map(id -> {
+                        Vehicule vehicule = vehiculeRepository.findById(id)
+                                                                .orElse(null);
+                        return vehicule;
+                    })
+                    .toList()));
+        } else user.setVehiculeList(new HashSet<>());
+        if (dto.getMedia_id() != null) {
+            Media media = mediaRepository.findById(dto.getMedia_id()).orElse(null);
+            user.setMedia(media);
+        }
+        if (dto.getAdressList() != null && !dto.getAdressList().isEmpty()) {
+            user.setAdressList(new HashSet<>(
+                dto.getAdressList()
+                    .stream()
+                    .map(id -> {
+                        Adress adress = adressRepository.findById(id)
+                                                        .orElse(null);
+                        return adress;
+                    })
+                    .toList()));
+        } else user.setAdressList(new HashSet<>());
+        if (dto.getReservationList() != null && !dto.getReservationList().isEmpty()) {
+            user.setReservationList(
+                dto.getReservationList()
+                    .stream()
+                    .map(id -> {
+                        Reservation reservation = new Reservation();
+                        reservation.setId(id);
+                        return reservation;
+                    })
+                    .toList());
+        } else user.setReservationList(new ArrayList<>());
         return user;
     }
 
@@ -209,7 +407,17 @@ public class EntityMapper {
         if (plugType == null) return null;
         return new PlugTypeDTO(
             plugType.getId(),
-            plugType.getPlugname()
+            plugType.getPlugname(),
+            plugType.getVehiculeList() != null ? plugType.getVehiculeList()
+                                                    .stream()
+                                                    .map(vehicule -> vehicule.getId())
+                                                    .toList()
+                                            : null,
+            plugType.getStationList() != null ? plugType.getStationList()
+                                                    .stream()
+                                                    .map(station -> station.getId())
+                                                    .toList()
+                                            : null
         );
     }
 
@@ -218,6 +426,28 @@ public class EntityMapper {
         PlugType plugType = new PlugType();
         plugType.setId(dto.getId());
         plugType.setPlugname(dto.getPlugname());
+        if (dto.getVehicule_id() != null && !dto.getVehicule_id().isEmpty()) {
+            plugType.setVehiculeList(new HashSet<>(
+                dto.getVehicule_id()
+                    .stream()
+                    .map(id -> {
+                        Vehicule vehicule = vehiculeRepository.findById(id)
+                                                                .orElse(null);
+                        return vehicule;
+                    })
+                    .toList()));
+        } else plugType.setVehiculeList(new HashSet<>());
+        if (dto.getStation_id() != null && !dto.getStation_id().isEmpty()) {
+            plugType.setStationList(new HashSet<>(
+                dto.getStation_id()
+                    .stream()
+                    .map(id -> {
+                        Station station = new Station();
+                        station.setId(id);
+                        return station;
+                    })
+                    .toList()));
+        } else plugType.setStationList(new HashSet<>());
         return plugType;
     }
 
@@ -228,7 +458,12 @@ public class EntityMapper {
             vehicule.getId(),
             vehicule.getPlate(),
             vehicule.getBrand(),
-            vehicule.getBatteryCapacity()
+            vehicule.getBatteryCapacity(),
+            vehicule.getUser() != null ? vehicule.getUser()
+                                                    .stream()
+                                                    .map(user -> user.getId())
+                                                    .toList()
+                                            : null
         );
     }
 
@@ -239,6 +474,17 @@ public class EntityMapper {
         vehicule.setPlate(dto.getPlate());
         vehicule.setBrand(dto.getBrand());
         vehicule.setBatteryCapacity(dto.getBatteryCapacity());
+        if (dto.getUserList() != null && !dto.getUserList().isEmpty()) {
+            vehicule.setUser(new HashSet<>(
+                dto.getUserList()
+                    .stream()
+                    .map(id -> {
+                        User user = userRepository.findById(id)
+                                                    .orElse(null);
+                        return user;
+                    })
+                    .toList()));
+        } else vehicule.setUser(new HashSet<>());
         return vehicule;
     }
 }

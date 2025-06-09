@@ -2,6 +2,9 @@ package com.humanbooster.buisinessCase.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 
 /**
@@ -13,5 +16,6 @@ import lombok.AllArgsConstructor;
 public class SpotDTO {
         private Long id;
         private String instruction;
+        private List<Long> stationList;
         private Long address_id;
 }
