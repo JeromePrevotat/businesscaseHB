@@ -90,16 +90,16 @@ public class Station {
 
     @NotNull(message = "Spot is required")
     @ManyToOne
-    @JoinColumn(name="spot-id", nullable = false)
+    @JoinColumn(name="spot", nullable = false)
     @JsonBackReference("stations-spots")
-    private Spot spot_id;
+    private Spot spot;
 
-    @OneToMany(targetEntity=Reservation.class, mappedBy="station_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Reservation.class, mappedBy="station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("stations-reservations")
     private List<Reservation> reservationList;
     
     @NotNull
-    @OneToMany(targetEntity=Media.class, mappedBy="media_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Media.class, mappedBy="station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Media> mediaList;
 

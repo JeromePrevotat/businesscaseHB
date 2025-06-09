@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -98,26 +97,25 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name="users_vehicules",
-        joinColumns= @JoinColumn(name="user_id") ,
-        inverseJoinColumns= @JoinColumn(name="vehicule_id")
+        joinColumns= @JoinColumn(name="user") ,
+        inverseJoinColumns= @JoinColumn(name="vehicule")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Vehicule> vehiculeList = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Media media;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name="adresses_users",
-        joinColumns= @JoinColumn(name="user_id") ,
-        inverseJoinColumns= @JoinColumn(name="adress_id")
+        joinColumns= @JoinColumn(name="user") ,
+        inverseJoinColumns= @JoinColumn(name="adress")
     )
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Adress> adressList = new HashSet<>();
 
-    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("reservation-user")
     private List<Reservation> reservationList;
 

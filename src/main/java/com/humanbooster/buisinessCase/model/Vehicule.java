@@ -51,8 +51,8 @@ public class Vehicule {
     @ManyToMany
     @JoinTable(
         name = "plug_types_vehicules",
-        joinColumns = @JoinColumn(name = "vehicule_id"),
-        inverseJoinColumns = @JoinColumn(name = "plug_type_id")
+        joinColumns = @JoinColumn(name = "vehicule"),
+        inverseJoinColumns = @JoinColumn(name = "plug_type")
     )
     private Set<PlugType> plugType = new HashSet<>();
 }

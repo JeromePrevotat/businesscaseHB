@@ -74,6 +74,6 @@ public class Adress {
     @JsonBackReference("adresses-users")
     private List<User> userList;
 
-    @OneToMany(targetEntity=Spot.class, mappedBy="adress_id", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Spot.class, mappedBy="adress", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Spot> spotList;
 }

@@ -70,13 +70,13 @@ public class Reservation {
     @NotNull(message="User is required")
     @ManyToOne
     @JsonBackReference("reservations-users")
-    @JoinColumn(name="user_id", nullable=false)
-    private User user_id;
-    
+    @JoinColumn(name="user", nullable=false)
+    private User user;
+
     @NotNull(message="Station is required")
     @ManyToOne
     @JsonBackReference("station-reservation")
-    @JoinColumn(name="station_id", nullable=false)
-    private Station station_id;
-    
+    @JoinColumn(name="station", nullable=false)
+    private Station station;
+
 }

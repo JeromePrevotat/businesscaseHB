@@ -2,6 +2,21 @@ services:
     mysql:
         image: mysql:8.3
         container_name: mysql
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost",
+                    "-u",
+                    "user",
+                    "-ppassword",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 10
 
         environment:
             MYSQL_ROOT_PASSWORD: root
@@ -17,7 +32,8 @@ services:
         build: ./
         container_name: app
         depends_on:
-            - mysql
+            mysql:
+                condition: service_healthy # Wait for MySQL to be healthy
         restart: on-failure
         environment:
             DB_HOST: mysql

@@ -12,11 +12,11 @@ import com.humanbooster.buisinessCase.model.User;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-    Optional<User> findByUserName(String username);
+    Optional<User> findByUsername(String username);
     
     Optional<User> findByEmail(String email);
-    
-    boolean existsByUserName(String username);
-    
+
+    boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
 }

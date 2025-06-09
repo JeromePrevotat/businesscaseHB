@@ -39,15 +39,15 @@ public class Spot {
     @Column(name="instruction", columnDefinition="TEXT")
     private String instruction;
 
-    @OneToMany(mappedBy = "spot_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Station> stationList;
 
     @ManyToOne
-    @JoinColumn(name="adress_id", nullable=false)
-    private Adress address_id;
+    @JoinColumn(name="adress", nullable=false)
+    private Adress adress;
 
     @NotNull
-    @OneToMany(targetEntity=Media.class, mappedBy="media_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity=Media.class, mappedBy="spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Media> mediaList;
 }
