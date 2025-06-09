@@ -32,19 +32,9 @@ public class PlugType {
     @Column(name="plug_name")
     private String plugname;
 
-    @ManyToMany(mappedBy = "plug_id")
-    @JoinTable(
-        name="vehicules_plug_types",
-        joinColumns= @JoinColumn(name="vehicule_id") ,
-        inverseJoinColumns= @JoinColumn(name="plug_type_id")
-    )
+    @ManyToMany(mappedBy = "plugType")
     private Set<Vehicule> vehiculeList = new HashSet<>();
 
-    @ManyToMany(mappedBy = "plug_id")
-    @JoinTable(
-        name="stations_plug_types",
-        joinColumns= @JoinColumn(name="station_id") ,
-        inverseJoinColumns= @JoinColumn(name="plug_type_id")
-    )
+    @ManyToMany(mappedBy = "plugType")
     private Set<Station> stationList = new HashSet<>();
 }

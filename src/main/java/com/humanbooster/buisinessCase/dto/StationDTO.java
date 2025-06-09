@@ -61,5 +61,6 @@ public class StationDTO {
     private Long spot_id;
     private List<Long> reservationList;
     private List<Long> mediaList;
+    private List<Long> plugTypeList;
 
 }

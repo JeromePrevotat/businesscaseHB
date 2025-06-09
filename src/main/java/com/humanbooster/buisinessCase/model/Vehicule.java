@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -44,4 +46,13 @@ public class Vehicule {
     @NotNull
     @ManyToMany(mappedBy="vehiculeList")
     private Set<User> user = new HashSet<>();
+
+    @NotNull
+    @ManyToMany
+    @JoinTable(
+        name = "plug_types_vehicules",
+        joinColumns = @JoinColumn(name = "vehicule_id"),
+        inverseJoinColumns = @JoinColumn(name = "plug_type_id")
+    )
+    private Set<PlugType> plugType = new HashSet<>();
 }

@@ -23,6 +23,7 @@ import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
@@ -43,6 +44,7 @@ public class EntityMapper {
     private final UserRepository userRepository;
     private final StationRepository stationRepository;
     private final SpotRepository spotRepository;
+    private final PlugTypeRepository plugTypeRepository;
 
     // ADRESS
     public AdressDTO toDTO(Adress adress) {
@@ -167,6 +169,11 @@ public class EntityMapper {
                                                     .stream()
                                                     .map(media -> media.getId())
                                                     .toList()
+                                            : null,
+            station.getPlugType() != null ? station.getPlugType()
+                                                    .stream()
+                                                    .map(plugType -> plugType.getId())
+                                                    .toList()
                                             : null
         );
     }
@@ -210,6 +217,16 @@ public class EntityMapper {
                                         })
                                         .toList());
         } else station.setMediaList(new ArrayList<>());
+        if (dto.getPlugTypeList() != null && !dto.getPlugTypeList().isEmpty()) {
+            station.setPlugType(dto.getPlugTypeList()
+                                    .stream()
+                                    .map(plugTypeId -> {
+                                        PlugType plugType = plugTypeRepository.findById(plugTypeId)
+                                                                                .orElse(null);
+                                        return plugType;
+                                    })
+                                    .toList());
+        } else station.setPlugType(new ArrayList<>());
         return station;
     }
 
@@ -463,6 +480,11 @@ public class EntityMapper {
                                                     .stream()
                                                     .map(user -> user.getId())
                                                     .toList()
+                                            : null,
+            vehicule.getPlugType() != null ? vehicule.getPlugType()
+                                                    .stream()
+                                                    .map(plugType -> plugType.getId())
+                                                    .toList()
                                             : null
         );
     }
@@ -485,6 +507,17 @@ public class EntityMapper {
                     })
                     .toList()));
         } else vehicule.setUser(new HashSet<>());
+        if (dto.getPlugTypeList() != null && !dto.getPlugTypeList().isEmpty()) {
+            vehicule.setPlugType(new HashSet<>(
+                dto.getPlugTypeList()
+                    .stream()
+                    .map(id -> {
+                        PlugType plugType = plugTypeRepository.findById(id)
+                                                                .orElse(null);
+                        return plugType;
+                    })
+                    .toList()));
+        } else vehicule.setPlugType(new HashSet<>());
         return vehicule;
     }
 }

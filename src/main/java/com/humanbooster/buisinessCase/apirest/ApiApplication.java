@@ -11,6 +11,8 @@ public class ApiApplication extends ResourceConfig{
             "com.humanbooster.buisinessCase.repository",
             "com.humanbooster.buisinessCase.service",
             "com.humanbooster.buisinessCase.controller",
+            "com.humanbooster.buisinessCase.dto",
+            "com.humanbooster.buisinessCase.mapper",
             "com.humanbooster.buisinessCase.utils");
         register(JacksonFeature.class);
     }

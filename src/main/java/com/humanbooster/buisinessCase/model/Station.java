@@ -17,6 +17,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -100,4 +102,13 @@ public class Station {
     @OneToMany(targetEntity=Media.class, mappedBy="media_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Media> mediaList;
+
+    @NotNull
+    @ManyToMany
+    @JoinTable(
+        name = "plug_types_stations",
+        joinColumns = @JoinColumn(name = "station_id"),
+        inverseJoinColumns = @JoinColumn(name = "plug_type_id")
+    )
+    private List<PlugType> plugType;
 }

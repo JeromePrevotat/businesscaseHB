@@ -27,4 +27,5 @@ public class VehiculeDTO {
     @Column(name="battery_capacity")
     private int batteryCapacity;
     private List<Long> userList;
+    private List<Long> plugTypeList;
 }
