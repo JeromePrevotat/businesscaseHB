@@ -117,7 +117,7 @@ public class EntityMapper {
                                                     .map(station -> station.getId())
                                                     .toList()
                                             : null,
-                    spot.getAddress() != null ? spot.getAddress().getId() : null,
+                    spot.getAddress_id() != null ? spot.getAddress_id().getId() : null,
                     spot.getMediaList() != null ? spot.getMediaList()
                                                     .stream()
                                                     .map(media -> media.getId())
@@ -144,9 +144,9 @@ public class EntityMapper {
         if (dto.getAddress_id() != null) {
             Adress adress = adressRepository.findById(dto.getAddress_id())
                                             .orElse(null);
-            spot.setAddress(adress);
+            spot.setAddress_id(adress);
         }
-        else spot.setAddress(null);
+        else spot.setAddress_id(null);
         if (dto.getMediaList() != null && !dto.getMediaList().isEmpty()) {
             spot.setMediaList(dto.getMediaList()
                                     .stream()

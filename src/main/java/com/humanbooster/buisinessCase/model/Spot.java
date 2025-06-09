@@ -44,7 +44,7 @@ public class Spot {
 
     @ManyToOne
     @JoinColumn(name="adress_id", nullable=false)
-    private Adress address;
+    private Adress address_id;
 
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="media_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
