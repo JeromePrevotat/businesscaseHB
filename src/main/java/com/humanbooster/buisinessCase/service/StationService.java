@@ -8,14 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.repository.StationRepository;
-
 import com.humanbooster.buisinessCase.utils.ModelUtil;
+
 import lombok.RequiredArgsConstructor;
 
 /**
  * Service class for managing Stations.
- * Provides methods to save, retrieve, update, and delete Stations.
+ * Provides methods to save, retrieve, update, and delete Stations  .
  */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -23,7 +24,17 @@ public class StationService{
     private final StationRepository stationRepository;
 
     /**
-     * Finds all Stations.
+     * Saves a new Station.
+     * @param station the Station to save
+     * @return the newly saved Station  
+     */
+    @Transactional
+    public Station saveStation(Station station){
+        return stationRepository.save(station);
+    }
+
+    /**
+     * Retrieves all Stations.
      * @return a list of all Stations
      */
     @Transactional(readOnly = true)
@@ -34,21 +45,11 @@ public class StationService{
     /**
      * Retrieves a Station by its ID.
      * @param id the ID of the Station to retrieve
-     * @return an Optional containing the found Station, or empty if not found
+     * @return  an Optional containing the Station if found, or empty if not found
      */
     @Transactional(readOnly = true)
     public Optional<Station> getStationById(Long id){
         return stationRepository.findById(id);
-    }
-
-    /**
-     * Saves a new Station.
-     * @param station the Station to save
-     * @return the newly saved Station
-     */
-    @Transactional
-    public Station saveStation(Station station){
-        return stationRepository.save(station);
     }
 
     /**
@@ -65,9 +66,9 @@ public class StationService{
 
     /**
      * Updates an existing Station.
-     * @param newStation the Station with updated fields
      * @param id the ID of the Station to update
-     * @return an Optional containing the updated Station, or empty if not found
+     * @param newStation the new Station data to update
+     * @return an Optional containing the updated Station if found, or empty if not found
      */
     @Transactional
     public Optional<Station> updateStation(Long id, Station newStation){
@@ -87,5 +88,4 @@ public class StationService{
     public boolean existsById(Long id) {
         return stationRepository.existsById(id);
     }
-
 }

@@ -16,34 +16,17 @@ import lombok.RequiredArgsConstructor;
  * Service class for managing Media entities.
  * Provides methods to save, retrieve, update, and delete Media records.
  */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MediaService {
+public class MediaService{
     private final MediaRepository mediaRepository;
 
     /**
-     * Retrieves all Medias
-     * @return List of all Medias
-     */
-    @Transactional(readOnly = true)
-    public List<Media> getAllMedias(){
-        return mediaRepository.findAll();
-    }
-    
-    /**
-     * Retrieves a Media by its ID
-     * @param id the ID of the Media to retrieve
-     * @return Optional containing the Media if found, otherwise empty
-     */
-    public Optional<Media> getMediaById(Long id){
-        return mediaRepository.findById(id);
-    }
-
-    /**
-     * Saves a new Media
-     * @param media the Media object to save
-     * @return the newly saved Media object
+     * Saves a new Media.
+     * @param media the Media to save
+     * @return the newly saved Media
      */
     @Transactional
     public Media saveMedia(Media media){
@@ -51,9 +34,28 @@ public class MediaService {
     }
 
     /**
-     * Deletes a Media by its ID
+     * Retrieves all Media.
+     * @return a list of all Media
+     */
+    @Transactional(readOnly = true)
+    public List<Media> getAllMedia(){
+        return mediaRepository.findAll();
+    }
+
+    /**
+     * Retrieves a Media by its ID.
+     * @param id the ID of the Media to retrieve
+     * @return  an Optional containing the Media if found, or empty if not found
+     */
+    @Transactional(readOnly = true)
+    public Optional<Media> getMediaById(Long id){
+        return mediaRepository.findById(id);
+    }
+
+    /**
+     * Deletes a Media by its ID.
      * @param id the ID of the Media to delete
-     * @return Optional containing the deleted Media if found, otherwise empty
+     * @return an Optional containing the deleted Media if found, or empty if not found
      */
     @Transactional
     public Optional<Media> deleteMediaById(Long id){
@@ -63,10 +65,10 @@ public class MediaService {
     }
 
     /**
-     * Updates an existing Media
+     * Updates an existing Media.
      * @param id the ID of the Media to update
-     * @param newMedia the Media object containing updated fields
-     * @return Optional containing the updated Media if found, otherwise empty
+     * @param newMedia the new Media data to update
+     * @return an Optional containing the updated Media if found, or empty if not found
      */
     @Transactional
     public Optional<Media> updateMedia(Long id, Media newMedia){
@@ -78,7 +80,7 @@ public class MediaService {
     }
 
     /**
-     * Checks if a Media exists by its ID
+     * Checks if a Media exists by its ID.
      * @param id the ID of the Media to check
      * @return true if the Media exists, false otherwise
      */
@@ -86,5 +88,4 @@ public class MediaService {
     public boolean existsById(Long id) {
         return mediaRepository.existsById(id);
     }
-
 }

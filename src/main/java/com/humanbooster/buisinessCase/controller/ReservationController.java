@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,80 +15,96 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.service.ReservationService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-
 /**
- * REST controller for managing Reservations.
- * Provides endpoints to create, read, update, and delete Reservations.
+ * REST Controller for managing Reservation entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting reservations.
  */
 @RestController
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
     private final ReservationService reservationService;
+    private final EntityMapper mapper;
+
 
     /**
-     * Endpoint to retrieve all reservations.
+     * Get all reservations.
      * GET /api/reservations
-     * @return ResponseEntity containing a list of all reservations.
+     * @return ResponseEntity with the list of reservations
      */
     @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations(){
-        return ResponseEntity.ok(reservationService.getAllReservations());
+    public ResponseEntity<List<ReservationDTO>> getAllReservations(){
+        List<ReservationDTO> reservationDTOs = reservationService.getAllReservations().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(reservationDTOs);
     }
 
     /**
-     * Endpoint to retrieve a reservation by its ID.
+     * Get a reservation by ID.
      * GET /api/reservations/{id}
-     * @param id the ID of the reservation to retrieve
-     * @return ResponseEntity containing the reservation if found, or 404 Not Found if not found.
+     * @param id The ID of the reservation to retrieve
+     * @return ResponseEntity with the reservation if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id){
+    public ResponseEntity<ReservationDTO> getReservationById(@PathVariable Long id){
         return reservationService.getReservationById(id)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-/**
-     * Endpoint to save a new reservation.
+
+    /**
+     * Save a new reservation.
      * POST /api/reservations
-     * @param reservation the reservation object to save
+     * @param reservation The reservation entity to be saved
+     * @return ResponseEntity with the saved reservation and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<Reservation> saveReservation(@Valid @RequestBody Reservation reservation){
-        Reservation savedReservation = reservationService.saveReservation(reservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
+    public ResponseEntity<ReservationDTO> saveReservation(@Valid @RequestBody ReservationDTO reservationDTO){
+        Reservation newReservation = mapper.toEntity(reservationDTO);
+        Reservation savedReservation = reservationService.saveReservation(newReservation);
+        ReservationDTO savedReservationDTO = mapper.toDTO(savedReservation);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/reservations/" + savedReservation.getId());
+        // return ResponseEntity.created(location).body(savedReservation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservationDTO);
     }
 
     /**
-     * Endpoint to delete a reservation by its ID.
+     * Delete a reservation by ID.
      * DELETE /api/reservations/{id}
-     * @param id the ID of the reservation to delete
-     * @return ResponseEntity containing the deleted reservation if found, or 404 Not Found if not found.
+     * @param id The ID of the reservation to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Reservation> deleteReservationById(@PathVariable Long id){
-        if (!reservationService.existsById(id)) return ResponseEntity.notFound().build();
-        reservationService.deleteReservationById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteReservationById(@PathVariable Long id){
+        return reservationService.deleteReservationById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     * Endpoint to update an existing reservation.
+     * Update a reservation by ID.
      * PUT /api/reservations/{id}
-     * @param id the ID of the reservation to update
-     * @param newReservation the new reservation object with updated fields
-     * @return ResponseEntity containing the updated reservation if found, or 404 Not Found if not found.
+     * @param id The ID of the reservation to update
+     * @param newReservation The updated reservation entity
+     * @return ResponseEntity with the updated reservation if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, @Valid @RequestBody Reservation newReservation){
+    public ResponseEntity<ReservationDTO> updateReservation(@PathVariable Long id, @Valid @RequestBody Reservation newReservation){
         return reservationService.updateReservation(id, newReservation)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+

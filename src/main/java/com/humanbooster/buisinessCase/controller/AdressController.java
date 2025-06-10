@@ -1,5 +1,6 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.service.AdressService;
 
@@ -23,9 +24,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Controller for managing Adresses.
- * Provides CRUD's endpoints Adresses.
- * Uses DTO to avoid circular references in JSON serialization.
+ * REST Controller for managing Adress entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting adresses.
  */
 @RestController
 @RequestMapping("/api/adresses")
@@ -36,73 +36,76 @@ public class AdressController {
 
 
     /**
-     * Get all Adresses.
+     * Get all adresses.
      * GET /api/adresses
-     * @return a list of all Adresses
+     * @return ResponseEntity with the list of adresses
      */
     @GetMapping
-    public ResponseEntity<List<AdressDTO>> getAllAdresses() {
-        List<Adress> adresses = adressService.getAllAdresses();
-        List<AdressDTO> adressesDTO = adresses.stream()
+    public ResponseEntity<List<AdressDTO>> getAllAdresses(){
+        List<AdressDTO> adressDTOs = adressService.getAllAdresses().stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(adressesDTO);
+        return ResponseEntity.ok(adressDTOs);
     }
 
     /**
-     * Get an Adress by its ID.
+     * Get a adress by ID.
      * GET /api/adresses/{id}
-     * @param id the ID of the Adress to retrieve
-     * @return the Adress if found, or 404 Not Found if not
+     * @param id The ID of the adress to retrieve
+     * @return ResponseEntity with the adress if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
     public ResponseEntity<AdressDTO> getAdressById(@PathVariable Long id){
         return adressService.getAdressById(id)
-                .map(adress -> ResponseEntity.ok(mapper.toDTO(adress)))
+                .map(mapper::toDTO)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Save a new Adress.
+     * Save a new adress.
      * POST /api/adresses
-     * @param adress the Adress to save
-     * @return 201 Created if successful
+     * @param adress The adress entity to be saved
+     * @return ResponseEntity with the saved adress and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<AdressDTO> saveAdresse(@Valid @RequestBody AdressDTO adressDTO) {
-        Adress adress = mapper.toEntity(adressDTO);
-        Adress savedAdress = adressService.saveAdress(adress);
-        AdressDTO savedDTO = mapper.toDTO(savedAdress);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedDTO);
+    public ResponseEntity<AdressDTO> saveAdress(@Valid @RequestBody AdressDTO adressDTO){
+        Adress newAdress = mapper.toEntity(adressDTO);
+        Adress savedAdress = adressService.saveAdress(newAdress);
+        AdressDTO savedAdressDTO = mapper.toDTO(savedAdress);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/adresses/" + savedAdress.getId());
+        // return ResponseEntity.created(location).body(savedAdress);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAdressDTO);
     }
-    
+
     /**
-     * Delete an Adress by its ID.
+     * Delete a adress by ID.
      * DELETE /api/adresses/{id}
-     * @param id the ID of the Adress to delete
-     * @return ResponseEntity with no content or 404 Not Found if not found
+     * @param id The ID of the adress to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<AdressDTO> deleteAdressById(@PathVariable Long id){
-        if (!adressService.existsById(id)) return ResponseEntity.notFound().build();
-        adressService.deleteAdressById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAdressById(@PathVariable Long id){
+        return adressService.deleteAdressById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     * Update an existing Adress.
+     * Update a adress by ID.
      * PUT /api/adresses/{id}
-     * @param id the ID of the Adress to update
-     * @param newAdress the new Adress data to update
-     * @return ResponseEntity with the updated Adress or 404 Not Found if not found
+     * @param id The ID of the adress to update
+     * @param newAdress The updated adress entity
+     * @return ResponseEntity with the updated adress if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO newAdressDTO){
-        if (!adressService.existsById(id)) return ResponseEntity.notFound().build();
-        Adress adress = mapper.toEntity(newAdressDTO); // From DTO to Entity
-        Adress updatedAdress = adressService.updateAdress(id, adress).get(); // Update the Adress
-        AdressDTO updatedAdressDTO = mapper.toDTO(updatedAdress); // Back to DTO
-        return ResponseEntity.ok(updatedAdressDTO);
+    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody Adress newAdress){
+        return adressService.updateAdress(id, newAdress)
+                .map(mapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-
 }
+
+

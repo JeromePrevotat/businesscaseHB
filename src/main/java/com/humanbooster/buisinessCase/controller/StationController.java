@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.service.StationService;
 
@@ -20,74 +24,87 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * REST controller for managing Stations.
- * Provides endpoints to retrieve, create, update, and delete Stations.
+ * REST Controller for managing Station entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting stations.
  */
 @RestController
 @RequestMapping("/api/stations")
 @RequiredArgsConstructor
 public class StationController {
     private final StationService stationService;
+    private final EntityMapper mapper;
+
 
     /**
-     * Retrieves all Stations.
+     * Get all stations.
      * GET /api/stations
-     * @return a list of all Stations
+     * @return ResponseEntity with the list of stations
      */
     @GetMapping
-    public ResponseEntity<List<Station>> getAllStations(){
-        return ResponseEntity.ok(stationService.getAllStations());
+    public ResponseEntity<List<StationDTO>> getAllStations(){
+        List<StationDTO> stationDTOs = stationService.getAllStations().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(stationDTOs);
     }
 
-/**
-     * Retrieves a Station by its ID.
+    /**
+     * Get a station by ID.
      * GET /api/stations/{id}
-     * @param id the ID of the Station to retrieve
-     * @return the Station with the specified ID, or 404 Not Found if it does not exist
+     * @param id The ID of the station to retrieve
+     * @return ResponseEntity with the station if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Station> getStationById(@PathVariable Long id){
+    public ResponseEntity<StationDTO> getStationById(@PathVariable Long id){
         return stationService.getStationById(id)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Saves a new Station.
+     * Save a new station.
      * POST /api/stations
-     * @param station the Station to save
-     * @return the saved Station with HTTP status 201 Created
+     * @param station The station entity to be saved
+     * @return ResponseEntity with the saved station and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<Station> saveStation(@Valid @RequestBody Station station){
-        return ResponseEntity.status(HttpStatus.CREATED).body(stationService.saveStation(station));
+    public ResponseEntity<StationDTO> saveStation(@Valid @RequestBody StationDTO stationDTO){
+        Station newStation = mapper.toEntity(stationDTO);
+        Station savedStation = stationService.saveStation(newStation);
+        StationDTO savedStationDTO = mapper.toDTO(savedStation);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/stations/" + savedStation.getId());
+        // return ResponseEntity.created(location).body(savedStation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedStationDTO);
     }
 
     /**
-     * Deletes a Station by its ID.
+     * Delete a station by ID.
      * DELETE /api/stations/{id}
-     * @param id the ID of the Station to delete
-     * @return 200 OK if the deletion was successful, or 404 Not Found if the Station does not exist
+     * @param id The ID of the station to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStationById(@PathVariable Long id){
-        if (!stationService.existsById(id)) return ResponseEntity.notFound().build();
-        
-        stationService.deleteStationById(id);
-        return ResponseEntity.noContent().build();
+        return stationService.deleteStationById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     *  Updates an existing Station.
-     *  PUT /api/stations/{id}
-     * @param id the ID of the Station to update
-     * @param newStation the updated Station data
-     * @return the updated Station with HTTP status 200 OK, or 404 Not Found if the Station does not exist
+     * Update a station by ID.
+     * PUT /api/stations/{id}
+     * @param id The ID of the station to update
+     * @param newStation The updated station entity
+     * @return ResponseEntity with the updated station if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Station> updateStation(@PathVariable Long id, @Valid @RequestBody Station newStation){
+    public ResponseEntity<StationDTO> updateStation(@PathVariable Long id, @Valid @RequestBody Station newStation){
         return stationService.updateStation(id, newStation)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+

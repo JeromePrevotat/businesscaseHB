@@ -1,5 +1,6 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.service.SpotService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-
 /**
- * REST controller for managing Spot entities.
- * Provides endpoints to create, read, update, and delete Spots.
+ * REST Controller for managing Spot entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting spots.
  */
 @RestController
 @RequestMapping("/api/spots")
@@ -33,26 +33,26 @@ import lombok.RequiredArgsConstructor;
 public class SpotController {
     private final SpotService spotService;
     private final EntityMapper mapper;
-    
+
+
     /**
-     * Get all Spots.
+     * Get all spots.
      * GET /api/spots
-     * @return List of SpotDTOs
+     * @return ResponseEntity with the list of spots
      */
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<SpotDTO>> getAllSpots(){
-        List<Spot> spots = spotService.getAllSpots();
-        List<SpotDTO> spotDTOs = spots.stream()
-                                       .map(mapper::toDTO)
-                                       .collect(Collectors.toList());
+        List<SpotDTO> spotDTOs = spotService.getAllSpots().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(spotDTOs);
     }
 
     /**
-     * Get a Spot by ID.
+     * Get a spot by ID.
      * GET /api/spots/{id}
-     * @param id the Spot ID
-     * @return the Spot
+     * @param id The ID of the spot to retrieve
+     * @return ResponseEntity with the spot if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
     public ResponseEntity<SpotDTO> getSpotById(@PathVariable Long id){
@@ -63,38 +63,41 @@ public class SpotController {
     }
 
     /**
-     * Save a new Spot.
+     * Save a new spot.
      * POST /api/spots
-     * @param spot the Spot to save
-     * @return the newly saved Spot
+     * @param spot The spot entity to be saved
+     * @return ResponseEntity with the saved spot and 201 Created status
      */
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<SpotDTO> saveSpot(@Valid @RequestBody SpotDTO spotDTO){
         Spot newSpot = mapper.toEntity(spotDTO);
         Spot savedSpot = spotService.saveSpot(newSpot);
         SpotDTO savedSpotDTO = mapper.toDTO(savedSpot);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/spots/" + savedSpot.getId());
+        // return ResponseEntity.created(location).body(savedSpot);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSpotDTO);
     }
 
     /**
-     * Delete a Spot by ID.
+     * Delete a spot by ID.
      * DELETE /api/spots/{id}
-     * @param id the Spot ID
-     * @return ResponseEntity with status OK if deleted, NOT_FOUND if not found
+     * @param id The ID of the spot to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSpotById(@PathVariable Long id){
-        if (!spotService.existsById(id)) return ResponseEntity.notFound().build();
-        spotService.deleteSpotById(id);
-        return ResponseEntity.ok().build();
+        return spotService.deleteSpotById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     * Update an existing Spot.
+     * Update a spot by ID.
      * PUT /api/spots/{id}
-     * @param id the Spot ID to update
-     * @param newSpot the updated Spot data
-     * @return ResponseEntity with the updated Spot or NOT_FOUND if not found
+     * @param id The ID of the spot to update
+     * @param newSpot The updated spot entity
+     * @return ResponseEntity with the updated spot if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
     public ResponseEntity<SpotDTO> updateSpot(@PathVariable Long id, @Valid @RequestBody Spot newSpot){
@@ -104,3 +107,4 @@ public class SpotController {
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+

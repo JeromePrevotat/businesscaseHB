@@ -12,21 +12,21 @@ import com.humanbooster.buisinessCase.utils.ModelUtil;
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
- * User's Service
- * This class provides methods to manage User entities, including saving, retrieving, updating, and deleting users.
+ * Service class for managing Users.
+ * Provides methods to save, retrieve, update, and delete Users.
  */
+
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserService {
+public class UserService{
     private final UserRepository userRepository;
 
     /**
-     * Saves a new User
-     * @param user The User entity to be saved
-     * @return The saved User entity
+     * Saves a new User.
+     * @param user the User to save
+     * @return the newly saved User
      */
     @Transactional
     public User saveUser(User user){
@@ -34,8 +34,8 @@ public class UserService {
     }
 
     /**
-     * Retrieves all Users
-     * @return A list of all User entities
+     * Retrieves all Users.
+     * @return a list of all Users
      */
     @Transactional(readOnly = true)
     public List<User> getAllUsers(){
@@ -43,9 +43,9 @@ public class UserService {
     }
 
     /**
-     * Retrieves a User by its ID
-     * @param id The ID of the User to retrieve
-     * @return An Optional containing the User if found, or empty if not found
+     * Retrieves a User by its ID.
+     * @param id the ID of the User to retrieve
+     * @return  an Optional containing the User if found, or empty if not found
      */
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id){
@@ -53,24 +53,22 @@ public class UserService {
     }
 
     /**
-     * Deletes a User by its ID
-     * @param id The ID of the User to delete
-     * @return true if the User was deleted, false if not found
+     * Deletes a User by its ID.
+     * @param id the ID of the User to delete
+     * @return an Optional containing the deleted User if found, or empty if not found
      */
     @Transactional
-    public boolean deleteUserById(Long id){
+    public Optional<User> deleteUserById(Long id){
         Optional<User> userOpt = userRepository.findById(id);
-        return userOpt.map(user -> {
-            userRepository.delete(user);
-            return true;
-        }).orElse(false);
+        userOpt.ifPresent(userRepository::delete);
+        return userOpt;
     }
 
     /**
-     * Updates an existing User
-     * @param id The ID of the User to update
-     * @param newUser The User entity with updated fields
-     * @return An Optional containing the updated User if found, or empty if not found
+     * Updates an existing User.
+     * @param id the ID of the User to update
+     * @param newUser the new User data to update
+     * @return an Optional containing the updated User if found, or empty if not found
      */
     @Transactional
     public Optional<User> updateUser(Long id, User newUser){
@@ -82,10 +80,11 @@ public class UserService {
     }
 
     /**
-     * Checks if a User exists by its ID
-     * @param id The ID of the User to check
+     * Checks if a User exists by its ID.
+     * @param id the ID of the User to check
      * @return true if the User exists, false otherwise
      */
+    @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
     }

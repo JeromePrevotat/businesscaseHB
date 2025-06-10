@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.service.MediaService;
 
@@ -20,69 +24,87 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * REST controller for managing Medias
- * Provides endpoints to retrieve, create, update, and delete Media records.
+ * REST Controller for managing Media entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting media    .
  */
 @RestController
 @RequestMapping("/api/medias")
 @RequiredArgsConstructor
 public class MediaController {
     private final MediaService mediaService;
+    private final EntityMapper mapper;
+
 
     /**
-     * Retrieves all Medias
-     * @return ResponseEntity containing a list of all Medias
+     * Get all media.
+     * GET /api/medias
+     * @return ResponseEntity with the list of media
      */
     @GetMapping
-    public ResponseEntity<List<Media>> getAllMedias(){
-        return ResponseEntity.ok(mediaService.getAllMedias());
+    public ResponseEntity<List<MediaDTO>> getAllMedia(){
+        List<MediaDTO> mediaDTOs = mediaService.getAllMedia().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(mediaDTOs);
     }
 
     /**
-     * Retrieves a Media by its ID
-     * @param id the ID of the Media to retrieve
-     * @return ResponseEntity containing the Media if found, otherwise 404 Not Found
+     * Get a media by ID.
+     * GET /api/medias/{id}
+     * @param id The ID of the media to retrieve
+     * @return ResponseEntity with the media if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Media> getMediaById(@PathVariable Long id){
+    public ResponseEntity<MediaDTO> getMediaById(@PathVariable Long id){
         return mediaService.getMediaById(id)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Saves a new Media
-     * @param media the Media object to save
-     * @return ResponseEntity indicating the result of the save operation
+     * Save a new media.
+     * POST /api/medias
+     * @param media The media entity to be saved
+     * @return ResponseEntity with the saved media and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<Media> saveMedia(@Valid @RequestBody Media media){
-        Media savedMedia = mediaService.saveMedia(media);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedMedia);
+    public ResponseEntity<MediaDTO> saveMedia(@Valid @RequestBody MediaDTO mediaDTO){
+        Media newMedia = mapper.toEntity(mediaDTO);
+        Media savedMedia = mediaService.saveMedia(newMedia);
+        MediaDTO savedMediaDTO = mapper.toDTO(savedMedia);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/medias/" + savedMedia.getId());
+        // return ResponseEntity.created(location).body(savedMedia);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedMediaDTO);
     }
 
     /**
-     * Deletes a Media by its ID
-     * @param id the ID of the Media to delete
-     * @return ResponseEntity indicating the result of the delete operation
+     * Delete a media by ID.
+     * DELETE /api/medias/{id}
+     * @param id The ID of the media to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Media> deleteMediaById(@PathVariable Long id){
-        return mediaService.deleteMediaById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Void> deleteMediaById(@PathVariable Long id){
+        return mediaService.deleteMediaById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     * Updates an existing Media
-     * @param id the ID of the Media to update
-     * @param newMedia the Media object containing updated fields
-     * @return ResponseEntity containing the updated Media if found, otherwise 404 Not Found
+     * Update a media by ID.
+     * PUT /api/medias/{id}
+     * @param id The ID of the media to update
+     * @param newMedia The updated media entity
+     * @return ResponseEntity with the updated media if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Media> updateMedia(@PathVariable Long id, @Valid @RequestBody Media newMedia){
+    public ResponseEntity<MediaDTO> updateMedia(@PathVariable Long id, @Valid @RequestBody Media newMedia){
         return mediaService.updateMedia(id, newMedia)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+

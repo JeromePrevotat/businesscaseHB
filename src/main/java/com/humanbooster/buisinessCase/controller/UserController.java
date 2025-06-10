@@ -1,6 +1,8 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,82 +15,96 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-
 /**
- * REST Controller for managing User entities.
- * Provides endpoints for creating, retrieving, updating, and deleting users.
+ * REST Controller for managing Vehicule entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting vehicules.
  */
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final EntityMapper mapper;
+
 
     /**
-     * Retrieves all users.
+     * Get all users.
      * GET /api/users
-     * @return ResponseEntity containing a list of all users.
-     */ 
+     * @return ResponseEntity with the list of users
+     */
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List<UserDTO> userDTOs = userService.getAllUsers().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userDTOs);
     }
 
     /**
-     * Retrieves a user by ID.
+     * Get a user by ID.
      * GET /api/users/{id}
-     * @param id The ID of the user to retrieve.
-     * @return ResponseEntity containing the user if found, or a 404 Not Found status if not found.
+     * @param id The ID of the user to retrieve
+     * @return ResponseEntity with the user if found, or 404 Not Found if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
         return userService.getUserById(id)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Saves a new user.
+     * Save a new user.
      * POST /api/users
-     * @param user The user entity to be saved.
-     * @return ResponseEntity containing the saved user with a 201 Created status.
+     * @param user The user entity to be saved
+     * @return ResponseEntity with the saved user and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<User> saveUser(@Valid @RequestBody User user){
-        User savedUser = userService.saveUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserDTO userDTO){
+        User newUser = mapper.toEntity(userDTO);
+        User savedUser = userService.saveUser(newUser);
+        UserDTO savedUserDTO = mapper.toDTO(savedUser);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/users/" + savedUser.getId());
+        // return ResponseEntity.created(location).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
     }
 
     /**
-     * Deletes a user by ID.
+     * Delete a user by ID.
      * DELETE /api/users/{id}
-     * @param id The ID of the user to delete.
-     * @return ResponseEntity with 204 No Content status if deleted, or 404 Not Found status if not found.
+     * @param id The ID of the user to delete
+     * @return ResponseEntity with the 204 No Content if deleted, or 404 Not Found if not found
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
-        return userService.deleteUserById(id) ?
-                    ResponseEntity.noContent().build() :
-                    ResponseEntity.notFound().build();
+        return userService.deleteUserById(id).isPresent() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.notFound().build();
     }
 
     /**
-     * Updates an existing user.
+     * Update a user by ID.
      * PUT /api/users/{id}
-     * @param id The ID of the user to update.
-     * @param newUser The updated user entity.
-     * @return ResponseEntity containing the updated user if found, or a 404 Not Found status if not found.
+     * @param id The ID of the user to update
+     * @param newUser The updated user entity
+     * @return ResponseEntity with the updated user if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User newUser){
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody User newUser){
         return userService.updateUser(id, newUser)
+                .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
+
