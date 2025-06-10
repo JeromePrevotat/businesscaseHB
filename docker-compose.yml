@@ -43,6 +43,27 @@ services:
             DB_PASSWORD: password
         ports:
             - "8080:8080"
+    # apptests container for running tests
+    apptests:
+        build: ./
+        image: maven:3.9.6-eclipse-temurin-21
+        container_name: apptests
+        depends_on:
+            mysql:
+                condition: service_healthy # Wait for MySQL to be healthy
+        restart: on-failure
+        working_dir: /app # Maven seeks pom file at the project's root
+        volumes:
+            - ./:/app # Mount the current directory to /app in the container
+        environment:
+            DB_HOST: mysql
+            DB_PORT: 3306
+            DB_NAME: db
+            DB_USER: user
+            DB_PASSWORD: password
+        ports:
+            - "8080:8080"
+        command: mvn test
 
     # mysql client container for testing
     mysql-client:
