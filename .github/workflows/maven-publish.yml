@@ -57,8 +57,11 @@ jobs:
                     </servers>
                   </settings>" > ~/.m2/settings.xml
 
-            - name: Build with Maven
-              run: mvn -B package --file pom.xml
+            - name: Run Unit Tests
+              run: mvn test
+
+            # - name: Build with Maven
+            #   run: mvn -B package --file pom.xml
 
             # - name: Deploy
             #   run: mvn deploy --settings ~/.m2/settings.xml
