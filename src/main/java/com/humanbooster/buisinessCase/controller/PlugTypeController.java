@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.service.PlugTypeService;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlugTypeController {
     private final PlugTypeService plugTypeService;
-    private final EntityMapper mapper;
+    private final PlugTypeMapper mapper;
 
 
     /**

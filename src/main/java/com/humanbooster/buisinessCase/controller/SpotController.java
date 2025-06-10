@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.mapper.SpotMapper;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.service.SpotService;
@@ -31,8 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpotController {
     private final SpotService spotService;
-    private final EntityMapper mapper;
-
+    private final SpotMapper mapper;
 
     /**
      * Get all spots.

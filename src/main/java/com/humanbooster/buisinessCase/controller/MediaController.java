@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.mapper.MediaMapper;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.service.MediaService;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MediaController {
     private final MediaService mediaService;
-    private final EntityMapper mapper;
+    private final MediaMapper mapper;
 
 
     /**

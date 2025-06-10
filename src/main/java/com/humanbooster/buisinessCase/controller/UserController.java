@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.service.UserService;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final EntityMapper mapper;
+    private final UserMapper mapper;
 
 
     /**

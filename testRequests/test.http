@@ -1,0 +1,290 @@
+### Adress
+GET http://localhost:8081/api/adresses
+
+
+###
+GET http://localhost:8081/api/adresses/1
+
+###
+POST http://localhost:8081/api/adresses
+Content-Type: application/json
+
+{
+  "adressname": "12 rue de la Paix",
+  "streetnumber": "12",
+  "streetname": "Paix",
+  "zipcode": "75002",
+  "city": "Paris",
+  "country": "France",
+  "region": "Ile-de-France",
+  "addendum": "",
+  "floor": 1,
+  "userList": [],
+  "spotList": []
+}
+
+###
+PUT http://localhost:8081/api/adresses/1
+Content-Type: application/json
+
+{
+  "adressname": "13 rue de la Paix",
+  "streetnumber": "13",
+  "streetname": "Paix",
+  "zipcode": "75002",
+  "city": "Paris",
+  "country": "France",
+  "region": "Ile-de-France",
+  "addendum": "",
+  "floor": 2,
+  "userList": [],
+  "spotList": []
+}
+
+###
+DELETE http://localhost:8081/api/adresses/1
+
+### Media
+GET http://localhost:8081/api/medias
+###
+GET http://localhost:8081/api/medias/1
+###
+POST http://localhost:8081/api/medias
+Content-Type: application/json
+
+{
+  "url": "http://example.com/image.jpg",
+  "type": "image/jpeg",
+  "mediaName": "Image de test",
+  "size": 123456,
+  "user_id": 1,
+  "spot_id": 1,
+  "station_id": 1
+}
+###
+PUT http://localhost:8081/api/medias/1
+Content-Type: application/json
+
+{
+  "url": "http://example.com/image2.jpg",
+  "type": "image/png",
+  "mediaName": "Image modifiée",
+  "size": 654321,
+  "user_id": 1,
+  "spot_id": 1,
+  "station_id": 1
+}
+###
+DELETE http://localhost:8081/api/medias/1
+
+### PlugType
+GET http://localhost:8081/api/plug-types
+###
+GET http://localhost:8081/api/plug-types/1
+###
+POST http://localhost:8081/api/plug-types
+Content-Type: application/json
+
+{
+  "plugname": "Type 2",
+  "vehicule_id": [],
+  "station_id": []
+}
+###
+PUT http://localhost:8081/api/plug-types/1
+Content-Type: application/json
+
+{
+  "plugname": "Type 2 modifié",
+  "vehicule_id": [],
+  "station_id": []
+}
+###
+DELETE http://localhost:8081/api/plug-types/1
+
+### Reservation
+GET http://localhost:8081/api/reservations
+###         
+GET http://localhost:8081/api/reservations/1
+###
+POST http://localhost:8081/api/reservations
+Content-Type: application/json
+
+{
+  "createdAt": "2024-06-01T10:00:00",
+  "validatedAt": "2024-06-01T10:05:00",
+  "startDate": "2024-07-01T10:00:00",
+  "endDate": "2024-07-01T12:00:00",
+  "hourlyRateLog": 15.5,
+  "state": "PENDING",
+  "payed": false,
+  "datePayed": null,
+  "user_id": 1,
+  "station_id": 1
+}
+###
+PUT http://localhost:8081/api/reservations/1
+Content-Type: application/json
+
+{
+  "createdAt": "2024-06-01T10:00:00",
+  "validatedAt": "2024-06-01T10:05:00",
+  "startDate": "2024-07-01T10:00:00",
+  "endDate": "2024-07-01T13:00:00",
+  "hourlyRateLog": 20.0,
+  "state": "VALIDATED",
+  "payed": true,
+  "datePayed": "2024-07-01T13:00:00",
+  "user_id": 1,
+  "station_id": 1
+}
+###
+DELETE http://localhost:8081/api/reservations/1
+
+### Spot
+GET http://localhost:8081/api/spots
+###
+GET http://localhost:8081/api/spots/1
+###
+POST http://localhost:8081/api/spots
+Content-Type: application/json
+
+{
+  "instruction": "Se garer à droite",
+  "stationList": [],
+  "address_id": 1,
+  "mediaList": []
+}
+###
+PUT http://localhost:8081/api/spots/1
+Content-Type: application/json
+
+{
+  "instruction": "Se garer à gauche",
+  "stationList": [],
+  "address_id": 1,
+  "mediaList": []
+}
+###
+DELETE http://localhost:8081/api/spots/1
+
+### Station
+GET http://localhost:8081/api/stations
+###
+GET http://localhost:8081/api/stations/1
+###
+POST http://localhost:8081/api/stations
+Content-Type: application/json
+
+{
+  "stationName": "Station République",
+  "latitude": 48.867,
+  "longitude": 2.363,
+  "priceRate": 0.25,
+  "powerOutput": 22.0,
+  "manual": "Brancher et charger",
+  "state": "OPENED",
+  "grounded": true,
+  "busy": false,
+  "wired": true,
+  "spot_id": 1,
+  "reservationList": [],
+  "mediaList": [],
+  "plugTypeList": []
+}
+###
+PUT http://localhost:8081/api/stations/1
+Content-Type: application/json
+
+{
+  "stationName": "Station Bastille",
+  "latitude": 48.853,
+  "longitude": 2.369,
+  "priceRate": 0.30,
+  "powerOutput": 50.0,
+  "manual": "Brancher et charger rapidement",
+  "state": "CLOSED",
+  "grounded": false,
+  "busy": true,
+  "wired": false,
+  "spot_id": 1,
+  "reservationList": [],
+  "mediaList": [],
+  "plugTypeList": []
+}
+###
+DELETE http://localhost:8081/api/stations/1
+
+### User
+GET http://localhost:8081/api/users
+###
+GET http://localhost:8081/api/users/1
+###
+POST http://localhost:8081/api/users
+Content-Type: application/json
+
+{
+  "username": "jdupont",
+  "firstname": "Jean",
+  "lastname": "Dupont",
+  "email": "jean.dupont@example.com",
+  "birthDate": "1990-01-01",
+  "inscriptionDate": "2024-06-01T10:00:00",
+  "accountValid": true,
+  "role": "USER",
+  "banned": false,
+  "vehiculeList": [],
+  "media_id": 1,
+  "adressList": [],
+  "reservationList": []
+}
+###
+PUT http://localhost:8081/api/users/1
+Content-Type: application/json
+
+{
+  "username": "jdupont2",
+  "firstname": "Jean",
+  "lastname": "Dupont",
+  "email": "jean.dupont2@example.com",
+  "birthDate": "1990-01-01",
+  "inscriptionDate": "2024-06-01T10:00:00",
+  "accountValid": false,
+  "role": "ADMIN",
+  "banned": true,
+  "vehiculeList": [],
+  "media_id": 1,
+  "adressList": [],
+  "reservationList": []
+}
+###     
+DELETE http://localhost:8081/api/users/1
+
+### Vehicule
+GET http://localhost:8081/api/vehicules
+###
+GET http://localhost:8081/api/vehicules/1
+###
+POST http://localhost:8081/api/vehicules
+Content-Type: application/json
+
+{
+  "plate": "AB-123-CD",
+  "brand": "Renault",
+  "batteryCapacity": 40,
+  "userList": [],
+  "plugTypeList": []
+}
+###
+PUT http://localhost:8081/api/vehicules/1
+Content-Type: application/json
+
+{
+  "plate": "AB-123-EF",
+  "brand": "Peugeot",
+  "batteryCapacity": 50,
+  "userList": [],
+  "plugTypeList": []
+}
+###
+DELETE http://localhost:8081/api/vehicules/1 

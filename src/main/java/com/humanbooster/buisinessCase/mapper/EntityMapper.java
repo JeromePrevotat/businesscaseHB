@@ -199,7 +199,7 @@ public class EntityMapper {
     }
 
     // SPOT
-        public SpotDTO toDTO(Spot spot) {
+    public SpotDTO toDTO(Spot spot) {
         if (spot == null) return null;
         return new SpotDTO(spot.getId(),
                     spot.getInstruction(),
@@ -295,7 +295,7 @@ public class EntityMapper {
     }
 
     // STATION
-        public StationDTO toDTO(Station station) {
+    public StationDTO toDTO(Station station) {
         if (station == null) return null;
         return new StationDTO(
             station.getId(),

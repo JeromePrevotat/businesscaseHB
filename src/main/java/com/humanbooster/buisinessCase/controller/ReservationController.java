@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
+import com.humanbooster.buisinessCase.mapper.ReservationMapper;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.service.ReservationService;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservationController {
     private final ReservationService reservationService;
-    private final EntityMapper mapper;
+    private final ReservationMapper mapper;
 
 
     /**

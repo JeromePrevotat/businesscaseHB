@@ -1,15 +1,15 @@
 ######################################################
 ### Create Vehicule
 ### Expected : 201 + tâche créée
-POST http://localhost:8080/vehicules
+POST http://localhost:8080/api/vehicules
 Content-Type: application/json
 
 {
-    "plate": "AB-123-CD",
-    "brand": "Tesla",
-    "model": "Model S",
-    "year": 2020,
-    "batteryCapacity": 100
+  "plate": "AB-123-CD",
+  "brand": "Renault",
+  "batteryCapacity": 50,
+  "userList": [1, 2],
+  "plugTypeList": [1]
 }
 
 ######################################################
@@ -69,3 +69,34 @@ DELETE http://localhost:8080/vehicules/1
 ### Invalid Request
 DELETE http://localhost:8080/vehicules/1234567890987654
 ######################################################
+
+
+
+### Vehicule
+GET http://localhost:8080/api/vehicules
+###
+GET http://localhost:8080/api/vehicules/1
+###
+POST http://localhost:8080/api/vehicules
+Content-Type: application/json
+
+{
+  "plate": "AB-123-CD",
+  "brand": "Renault",
+  "batteryCapacity": 40,
+  "userList": [],
+  "plugTypeList": []
+}
+###
+PUT http://localhost:8080/api/vehicules/1
+Content-Type: application/json
+
+{
+  "plate": "AB-123-EF",
+  "brand": "Peugeot",
+  "batteryCapacity": 50,
+  "userList": [],
+  "plugTypeList": []
+}
+###
+DELETE http://localhost:8080/api/vehicules/1

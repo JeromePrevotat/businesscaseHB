@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.dto.VehiculeDTO;
-import com.humanbooster.buisinessCase.mapper.EntityMapper;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.service.VehiculeService;
 
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VehiculeController {
     private final VehiculeService vehiculeService;
-    private final EntityMapper mapper;
+    private final VehiculeMapper mapper;
 
 
     /**
