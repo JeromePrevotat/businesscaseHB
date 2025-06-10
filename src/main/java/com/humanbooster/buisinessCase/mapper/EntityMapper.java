@@ -46,6 +46,7 @@ public class EntityMapper {
     private final SpotRepository spotRepository;
     private final PlugTypeRepository plugTypeRepository;
 
+
     // ADRESS
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;
@@ -107,8 +108,98 @@ public class EntityMapper {
         return adress;
     }
 
+    // MEDIA
+    public MediaDTO toDTO(Media media) {
+        if (media == null) return null;
+        return new MediaDTO(
+            media.getId(),
+            media.getUrl(),
+            media.getType(),
+            media.getMediaName(),
+            media.getSize(),
+            media.getUser() != null ? media.getUser().getId() : null,
+            media.getSpot() != null ? media.getSpot().getId() : null,
+            media.getStation() != null ? media.getStation().getId() : null
+        );
+    }
+
+    public Media toEntity(MediaDTO dto) {
+        if (dto == null) return null;
+        Media media = new Media();
+        media.setId(dto.getId());
+        media.setUrl(dto.getUrl());
+        media.setType(dto.getType());
+        media.setMediaName(dto.getMediaName());
+        media.setSize(dto.getSize());
+        if (dto.getUser_id() != null) {
+            User user = userRepository.findById(dto.getUser_id())
+                                        .orElse(null);
+            media.setUser(user);
+        }
+        if (dto.getSpot_id() != null) {
+            Spot spot = spotRepository.findById(dto.getSpot_id())
+                                        .orElse(null);
+            media.setSpot(spot);
+        }
+        if (dto.getStation_id() != null) {
+            Station station = stationRepository.findById(dto.getStation_id())
+                                                .orElse(null);
+            media.setStation(station);
+        }
+        return media;
+    }
+
+    //PLUG TYPE
+    public PlugTypeDTO toDTO(PlugType plugType) {
+        if (plugType == null) return null;
+        return new PlugTypeDTO(
+            plugType.getId(),
+            plugType.getPlugname(),
+            plugType.getVehiculeList() != null ? plugType.getVehiculeList()
+                                                    .stream()
+                                                    .map(vehicule -> vehicule.getId())
+                                                    .toList()
+                                            : null,
+            plugType.getStationList() != null ? plugType.getStationList()
+                                                    .stream()
+                                                    .map(station -> station.getId())
+                                                    .toList()
+                                            : null
+        );
+    }
+
+    public PlugType toEntity(PlugTypeDTO dto) {
+        if (dto == null) return null;
+        PlugType plugType = new PlugType();
+        plugType.setId(dto.getId());
+        plugType.setPlugname(dto.getPlugname());
+        if (dto.getVehicule_id() != null && !dto.getVehicule_id().isEmpty()) {
+            plugType.setVehiculeList(new HashSet<>(
+                dto.getVehicule_id()
+                    .stream()
+                    .map(id -> {
+                        Vehicule vehicule = vehiculeRepository.findById(id)
+                                                                .orElse(null);
+                        return vehicule;
+                    })
+                    .toList()));
+        } else plugType.setVehiculeList(new HashSet<>());
+        if (dto.getStation_id() != null && !dto.getStation_id().isEmpty()) {
+            plugType.setStationList(new HashSet<>(
+                dto.getStation_id()
+                    .stream()
+                    .map(id -> {
+                        Station station = new Station();
+                        station.setId(id);
+                        return station;
+                    })
+                    .toList()));
+        } else plugType.setStationList(new HashSet<>());
+        return plugType;
+    }
+
     // SPOT
-    public SpotDTO toDTO(Spot spot) {
+        public SpotDTO toDTO(Spot spot) {
         if (spot == null) return null;
         return new SpotDTO(spot.getId(),
                     spot.getInstruction(),
@@ -160,8 +251,51 @@ public class EntityMapper {
         return spot;
     }
 
+    // RESERVATION
+    public ReservationDTO toDTO(Reservation reservation) {
+        if (reservation == null) return null;
+        return new ReservationDTO(
+            reservation.getId(),
+            reservation.getCreatedAt(),
+            reservation.getValidatedAt(),
+            reservation.getStartDate(),
+            reservation.getEndDate(),
+            reservation.getHourlyRateLog(),
+            reservation.getState(),
+            reservation.isPayed(),
+            reservation.getDatePayed(),
+            reservation.getUser() != null ? reservation.getUser().getId() : null,
+            reservation.getStation() != null ? reservation.getStation().getId() : null
+        );
+    }
+
+    public Reservation toEntity(ReservationDTO dto) {
+        if (dto == null) return null;
+        Reservation reservation = new Reservation();
+        reservation.setId(dto.getId());
+        reservation.setCreatedAt(dto.getCreatedAt());
+        reservation.setValidatedAt(dto.getValidatedAt());
+        reservation.setStartDate(dto.getStartDate());
+        reservation.setEndDate(dto.getEndDate());
+        reservation.setHourlyRateLog(dto.getHourlyRateLog());
+        reservation.setState(dto.getState());
+        reservation.setPayed(dto.isPayed());
+        reservation.setDatePayed(dto.getDatePayed());
+        if (dto.getUser_id() != null) {
+            User user = userRepository.findById(dto.getUser_id())
+                                        .orElse(null);
+            reservation.setUser(user);
+        }
+        if (dto.getStation_id() != null) {
+            Station station = stationRepository.findById(dto.getStation_id())
+                                                .orElse(null);
+            reservation.setStation(station);
+        }
+        return reservation;
+    }
+
     // STATION
-    public StationDTO toDTO(Station station) {
+        public StationDTO toDTO(Station station) {
         if (station == null) return null;
         return new StationDTO(
             station.getId(),
@@ -244,90 +378,6 @@ public class EntityMapper {
                                     .toList());
         } else station.setPlugType(new ArrayList<>());
         return station;
-    }
-
-    // MEDIA
-    public MediaDTO toDTO(Media media) {
-        if (media == null) return null;
-        return new MediaDTO(
-            media.getId(),
-            media.getUrl(),
-            media.getType(),
-            media.getMediaName(),
-            media.getSize(),
-            media.getUser() != null ? media.getUser().getId() : null,
-            media.getSpot() != null ? media.getSpot().getId() : null,
-            media.getStation() != null ? media.getStation().getId() : null
-        );
-    }
-
-    public Media toEntity(MediaDTO dto) {
-        if (dto == null) return null;
-        Media media = new Media();
-        media.setId(dto.getId());
-        media.setUrl(dto.getUrl());
-        media.setType(dto.getType());
-        media.setMediaName(dto.getMediaName());
-        media.setSize(dto.getSize());
-        if (dto.getUser_id() != null) {
-            User user = userRepository.findById(dto.getUser_id())
-                                        .orElse(null);
-            media.setUser(user);
-        }
-        if (dto.getSpot_id() != null) {
-            Spot spot = spotRepository.findById(dto.getSpot_id())
-                                        .orElse(null);
-            media.setSpot(spot);
-        }
-        if (dto.getStation_id() != null) {
-            Station station = stationRepository.findById(dto.getStation_id())
-                                                .orElse(null);
-            media.setStation(station);
-        }
-        return media;
-    }
-
-    // RESERVATION
-    public ReservationDTO toDTO(Reservation reservation) {
-        if (reservation == null) return null;
-        return new ReservationDTO(
-            reservation.getId(),
-            reservation.getCreatedAt(),
-            reservation.getValidatedAt(),
-            reservation.getStartDate(),
-            reservation.getEndDate(),
-            reservation.getHourlyRateLog(),
-            reservation.getState(),
-            reservation.isPayed(),
-            reservation.getDatePayed(),
-            reservation.getUser() != null ? reservation.getUser().getId() : null,
-            reservation.getStation() != null ? reservation.getStation().getId() : null
-        );
-    }
-
-    public Reservation toEntity(ReservationDTO dto) {
-        if (dto == null) return null;
-        Reservation reservation = new Reservation();
-        reservation.setId(dto.getId());
-        reservation.setCreatedAt(dto.getCreatedAt());
-        reservation.setValidatedAt(dto.getValidatedAt());
-        reservation.setStartDate(dto.getStartDate());
-        reservation.setEndDate(dto.getEndDate());
-        reservation.setHourlyRateLog(dto.getHourlyRateLog());
-        reservation.setState(dto.getState());
-        reservation.setPayed(dto.isPayed());
-        reservation.setDatePayed(dto.getDatePayed());
-        if (dto.getUser_id() != null) {
-            User user = userRepository.findById(dto.getUser_id())
-                                        .orElse(null);
-            reservation.setUser(user);
-        }
-        if (dto.getStation_id() != null) {
-            Station station = stationRepository.findById(dto.getStation_id())
-                                                .orElse(null);
-            reservation.setStation(station);
-        }
-        return reservation;
     }
 
     // USER
@@ -416,55 +466,6 @@ public class EntityMapper {
         return user;
     }
 
-    // PLUG TYPE
-    public PlugTypeDTO toDTO(PlugType plugType) {
-        if (plugType == null) return null;
-        return new PlugTypeDTO(
-            plugType.getId(),
-            plugType.getPlugname(),
-            plugType.getVehiculeList() != null ? plugType.getVehiculeList()
-                                                    .stream()
-                                                    .map(vehicule -> vehicule.getId())
-                                                    .toList()
-                                            : null,
-            plugType.getStationList() != null ? plugType.getStationList()
-                                                    .stream()
-                                                    .map(station -> station.getId())
-                                                    .toList()
-                                            : null
-        );
-    }
-
-    public PlugType toEntity(PlugTypeDTO dto) {
-        if (dto == null) return null;
-        PlugType plugType = new PlugType();
-        plugType.setId(dto.getId());
-        plugType.setPlugname(dto.getPlugname());
-        if (dto.getVehicule_id() != null && !dto.getVehicule_id().isEmpty()) {
-            plugType.setVehiculeList(new HashSet<>(
-                dto.getVehicule_id()
-                    .stream()
-                    .map(id -> {
-                        Vehicule vehicule = vehiculeRepository.findById(id)
-                                                                .orElse(null);
-                        return vehicule;
-                    })
-                    .toList()));
-        } else plugType.setVehiculeList(new HashSet<>());
-        if (dto.getStation_id() != null && !dto.getStation_id().isEmpty()) {
-            plugType.setStationList(new HashSet<>(
-                dto.getStation_id()
-                    .stream()
-                    .map(id -> {
-                        Station station = new Station();
-                        station.setId(id);
-                        return station;
-                    })
-                    .toList()));
-        } else plugType.setStationList(new HashSet<>());
-        return plugType;
-    }
-
     // VEHICULE
     public VehiculeDTO toDTO(Vehicule vehicule) {
         if (vehicule == null) return null;
@@ -517,4 +518,5 @@ public class EntityMapper {
         } else vehicule.setPlugType(new HashSet<>());
         return vehicule;
     }
+
 }

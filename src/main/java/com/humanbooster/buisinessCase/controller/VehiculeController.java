@@ -42,7 +42,7 @@ public class VehiculeController {
     @GetMapping
     public ResponseEntity<List<VehiculeDTO>> getAllVehicules(){
         List<VehiculeDTO> vehiculeDTOs = vehiculeService.getAllVehicules().stream()
-                .map(mapper::toDTO)
+                .map(v -> mapper.toDTO((Vehicule) v))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(vehiculeDTOs);
     }
