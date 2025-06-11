@@ -7,10 +7,7 @@ import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.User;
 
-import lombok.AllArgsConstructor;
-
 @Component
-@AllArgsConstructor
 public class AdressMapper {
     public AdressDTO toDTO(Adress adress) {
         if (adress == null) return null;

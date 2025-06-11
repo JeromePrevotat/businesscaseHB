@@ -1,4 +1,4 @@
-package com.humanbooster.buisinessCase.model;
+package com.humanbooster.buisinessCase.controller;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,17 +12,17 @@ import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes = com.humanbooster.buisinessCase.BuisinessCaseApplication.class,  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-public class ReservationTests {
+public class VehiculeTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testReservation() {
+    public void testVehicule() {
         // Arrange & Act
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/reservations", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/vehicules", String.class);
 
         // Assert
-        assertAll("Reservation API Response Validation",
+        assertAll("Vehicule API Response Validation",
             () -> assertNotNull(response, "Response should not be null"),
             () -> assertEquals(HttpStatus.OK, response.getStatusCode(), "Status should be 200 OK"),
             () -> assertNotNull(response.getBody(), "Response body should not be null")
