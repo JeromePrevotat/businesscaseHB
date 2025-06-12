@@ -98,9 +98,8 @@ public class AdressController {
      * @param newAdress The updated adress entity
      * @return ResponseEntity with the updated adress if found, or 404 Not Found if not found
      */
-    @PutMapping(value = "/{id}", consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO adressDTO){
-        Adress newAdress = mapper.toEntity(adressDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody Adress newAdress){
         return adressService.updateAdress(id, newAdress)
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)

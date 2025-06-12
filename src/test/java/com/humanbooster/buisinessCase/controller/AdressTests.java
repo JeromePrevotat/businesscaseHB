@@ -1,6 +1,5 @@
 package com.humanbooster.buisinessCase.controller;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,18 +7,14 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,9 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.ArgumentMatchers.any;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.AdressDTO;
@@ -38,96 +31,6 @@ import com.humanbooster.buisinessCase.mapper.AdressMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.service.AdressService;
-
-// @SpringBootTest(classes = com.humanbooster.buisinessCase.BuisinessCaseApplication.class,  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-// public class AdressTests {
-//     @Autowired
-//     private TestRestTemplate restTemplate;
-    
-//     @Test
-//     public void test_adress_route() {
-//         // Arrange & Act
-//         ResponseEntity<String> response = restTemplate.getForEntity("/api/adresses", String.class);
-
-//         // Assert
-//         assertAll("Address API Response Validation",
-//             () -> assertNotNull(response, "Response should not be null"),
-//             () -> assertEquals(HttpStatus.OK, response.getStatusCode(), "Status should be 200 OK"),
-//             () -> assertNotNull(response.getBody(), "Response body should not be null")
-//         );
-//     }
-
-//     @Test
-//     public void test_get_adress_route_with_id() {
-//         // Arrange & Act
-//         Long idToGet = 1L; // Assuming this ID exists in the database
-//         ResponseEntity<String> response = restTemplate.getForEntity("/api/adresses/" + idToGet, String.class);
-
-//         // Assert
-//         assertAll("Address API Response Validation",
-//             () -> assertNotNull(response, "Response should not be null"),
-//             () -> assertEquals(HttpStatus.OK, response.getStatusCode(), "Status should be 200 OK"),
-//             () -> assertNotNull(response.getBody(), "Response body should not be null")
-//         );
-//     }
-
-//     @Test
-//     public void test_get_adress_route_with_invalid_id() {
-//         // Arrange & Act
-//         ResponseEntity<AdressDTO> response = restTemplate.getForEntity("/api/adresses/999", AdressDTO.class);
-
-//         // Assert
-//         assertAll("Address API Response Validation for Invalid ID",
-//             () -> assertNotNull(response, "Response should not be null"),
-//             () -> assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "Status should be 404 Not Found"),
-//             () -> assertTrue(response.getBody() == null, "Response body should indicate not found")
-//         );
-
-//     }
-
-//     @Test
-//     public void test_save_adress_route(){
-//         // Arrange
-//         AdressDTO newAdressDTO = new AdressDTO();
-//         newAdressDTO.setAdressname("Test Save Adress");
-//         newAdressDTO.setStreetnumber("123");
-//         newAdressDTO.setStreetname("Test Save Street");
-//         newAdressDTO.setZipcode("75000");
-//         newAdressDTO.setCity("Paris");
-//         newAdressDTO.setCountry("France");
-//         newAdressDTO.setRegion("Île-de-France");
-//         newAdressDTO.setAddendum("Bâtiment A");
-//         newAdressDTO.setFloor(1);
-//         newAdressDTO.setUserList(new ArrayList<>());
-
-//         // Act
-//         ResponseEntity<AdressDTO> response = restTemplate.postForEntity("/api/adresses", newAdressDTO, AdressDTO.class);
-
-//         // Assert
-//         assertAll("Address API Response Validation",
-//             () -> assertNotNull(response, "Response should not be null"),
-//             () -> assertEquals(HttpStatus.CREATED, response.getStatusCode(), "Status should be 201 Created"),
-//             () -> assertNotNull(response.getBody(), "Response body should not be null"),
-//             () -> assertEquals("Test Save Adress", response.getBody().getAdressname(), "Address name should match"),
-//             () -> assertEquals("123", response.getBody().getStreetnumber(), "Street number should match")
-//         );
-//     }
-
-//     @Test
-//     public void test_delete_adress_route_with_id() {
-//         // Arrange
-//         Long idToDelete = 2L; // Assuming this ID exists in the database
-
-//         // Act
-//         ResponseEntity<Void> response = restTemplate.exchange("/api/adresses/" + idToDelete, HttpMethod.DELETE, null, Void.class);
-
-//         // Assert
-//         assertAll("Address API Response Validation for Delete",
-//             () -> assertNotNull(response, "Response should not be null"),
-//             () -> assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode(), "Status should be 204 No Content")
-//         );
-//     }
-// }
 
 
 @WebMvcTest(AdressController.class)
@@ -140,10 +43,12 @@ public class AdressTests {
     private AdressService adressService;
     @MockitoBean
     private AdressRepository adressRepository;
+    @Autowired
+    private AdressMapper adressMapper;
 
     @Test
     public void test_get_all_adress_route() throws Exception {
-        // Arrange
+        // Arrange == set up mock result
         List<Adress> mockAdresses = new ArrayList<>();
         Adress mockAdress = new Adress();
         mockAdress.setId(1L);
@@ -158,6 +63,7 @@ public class AdressTests {
         mockAdress.setFloor(1);
         mockAdress.setUserList(new ArrayList<>());
         mockAdresses.add(mockAdress);
+        // Mock Behaviour
         given(adressService.getAllAdresses()).willReturn(mockAdresses);
 
         // Act & Assert
@@ -165,6 +71,7 @@ public class AdressTests {
                 .andExpect(result -> assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus(), "Status should be 200 OK"))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertNotNull(result.getResponse().getContentAsString(), "Response body should not be null"))
+                // Assert False ?
                 .andExpect(result -> assertTrue(!result.getResponse().getContentAsString().isEmpty(), "Response body should not be empty"));
     }
 
@@ -184,13 +91,14 @@ public class AdressTests {
         mockAdress.setAddendum("Bâtiment A");
         mockAdress.setFloor(1);
         mockAdress.setUserList(new ArrayList<>());
-        given(adressService.getAdressById(idToGet)).willReturn(java.util.Optional.of(mockAdress));
+        given(adressService.getAdressById(idToGet)).willReturn(Optional.of(mockAdress));
 
         // Act & Assert
         mockMvc.perform(get("/api/adresses/" + idToGet))
                 .andExpect(result -> assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus(), "Status should be 200 OK"))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertNotNull(result.getResponse().getContentAsString(), "Response body should not be null"));
+                // .andExpect(result -> assertEquals("Test Adress", result.getResponse().getContentAsString().getAdressname(), "Adressname should match")); How ?
     }
 
     @Test
@@ -203,7 +111,7 @@ public class AdressTests {
         mockMvc.perform(get("/api/adresses/" + idToGet))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))
-                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().isEmpty(), "Response body should indicate not found"));
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().isEmpty(), "Response body should be empty"));
     }
 
     @Test
@@ -243,11 +151,13 @@ public class AdressTests {
         
         String content = mvcResult.getResponse().getContentAsString();
         AdressDTO responseAdress = new ObjectMapper().readValue(content, AdressDTO.class);
-        assertNotNull(responseAdress, "Response should not be null");
+        // assertNotNull(responseAdress, "Response should not be null");
+        assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
-        assertTrue(responseAdress.getAdressname().equals("Test Save Adress"), "Address name should match");
-        assertTrue(responseAdress.getStreetnumber().equals("123"), "Street number should match");
+        // assertTrue(responseAdress.getAdressname().equals("Test Save Adress"), "Address name should match");
+        assertEquals("Test Save Adress", responseAdress.getAdressname(), "Address name should match");
+        assertEquals("123", responseAdress.getStreetnumber(), "Street number should match");
     }
 
     @Test
@@ -281,34 +191,33 @@ public class AdressTests {
         updatedAdress.setFloor(2);
         updatedAdress.setUserList(new ArrayList<>());
 
-        given(adressService.updateAdress(any(Long.class), any(Adress.class))).willReturn(java.util.Optional.of(updatedAdress));
+        given(adressService.updateAdress(any(Long.class), any(Adress.class))).willReturn(Optional.of(updatedAdress));
 
-        // Création de l'objet à envoyer dans la requête
-        Adress newAdress = new Adress();
-        newAdress.setAdressname("Updated Adress");
-        newAdress.setStreetnumber("456");
-        newAdress.setStreetname("Updated Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
+        // Create AdressDTO to send in the request
+        AdressDTO newAdressDTO = new AdressDTO();
+        newAdressDTO.setAdressname("Updated Adress");
+        newAdressDTO.setStreetnumber("456");
+        newAdressDTO.setStreetname("Updated Street");
+        newAdressDTO.setZipcode("12345");
+        newAdressDTO.setCity("Lyon");
+        newAdressDTO.setCountry("France");
+        newAdressDTO.setRegion("Auvergne-Rhône-Alpes");
+        newAdressDTO.setAddendum("Bâtiment B");
+        newAdressDTO.setFloor(2);
+        newAdressDTO.setUserList(new ArrayList<>());
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/adresses/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newAdress))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8"))
+                .content(new ObjectMapper().writeValueAsString(newAdressDTO))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         // Assert
         String content = mvcResult.getResponse().getContentAsString();
+        assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
-        AdressDTO responseAdress = new ObjectMapper().readValue(content, AdressDTO.class);
+        AdressDTO responseAdress = adressMapper.toDTO(new ObjectMapper().readValue(content, Adress.class));
         assertEquals("Updated Adress", responseAdress.getAdressname(), "Address name should match");
         assertEquals("456", responseAdress.getStreetnumber(), "Street number should match");
         assertEquals("Lyon", responseAdress.getCity(), "City should match");
