@@ -116,7 +116,7 @@ public class User {
     private Set<Adress> adressList = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("reservation-user")
+    @JsonManagedReference("reservations-users")
     private List<Reservation> reservationList;
 
     public User(String userName,

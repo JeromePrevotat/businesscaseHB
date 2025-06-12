@@ -75,7 +75,7 @@ public class Reservation {
 
     @NotNull(message="Station is required")
     @ManyToOne
-    @JsonBackReference("station-reservation")
+    @JsonBackReference("stations-reservations")
     @JoinColumn(name="station", nullable=false)
     private Station station;
 

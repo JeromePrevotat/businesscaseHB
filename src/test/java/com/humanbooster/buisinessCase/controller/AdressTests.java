@@ -166,7 +166,7 @@ public class AdressTests {
         Long idToDelete = 2L;
         Adress mockAdress = new Adress();
         mockAdress.setId(idToDelete);
-        given(adressService.deleteAdressById(idToDelete)).willReturn(java.util.Optional.of(mockAdress));
+        given(adressService.deleteAdressById(idToDelete)).willReturn(Optional.of(mockAdress));
 
         // Act & Assert
         mockMvc.perform(delete("/api/adresses/" + idToDelete))

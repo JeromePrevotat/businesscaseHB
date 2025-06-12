@@ -98,8 +98,9 @@ public class AdressController {
      * @param newAdress The updated adress entity
      * @return ResponseEntity with the updated adress if found, or 404 Not Found if not found
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody Adress newAdress){
+    @PutMapping(value= "/{id}", consumes= "application/json")
+    public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO newAdressDTO){
+        Adress newAdress = mapper.toEntity(newAdressDTO);
         return adressService.updateAdress(id, newAdress)
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
