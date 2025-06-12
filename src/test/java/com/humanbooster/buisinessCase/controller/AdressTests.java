@@ -186,6 +186,19 @@ public class AdressTests {
     }
 
     @Test
+    public void test_delete_adress_route_with_invalid_id() throws Exception {
+        // Arrange
+        Long idToDelete = 999L;
+        given(adressService.deleteAdressById(idToDelete)).willReturn(java.util.Optional.empty());
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/adresses/" + idToDelete))
+                .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
+                .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().isEmpty(), "Response body should be empty"));
+    }
+
+    @Test
     public void test_update_adress_route() throws Exception {
         // Arrange
         Long idToUpdate = 5L;
@@ -240,5 +253,46 @@ public class AdressTests {
             assertEquals(mockField.get(mockAdress), responseField.get(responseAdress),
                          "Field " + responseField.getName() + " should match the mock value");
         }
+    }
+
+    @Test
+    public void test_update_adress_route_with_invalid_id() throws Exception {
+        // Arrange
+        Long idToUpdate = 999L;
+        Adress mockAdress = new Adress();
+        mockAdress.setId(idToUpdate);
+        mockAdress.setAdressname("Updated Adress");
+        mockAdress.setStreetnumber("456");
+        mockAdress.setStreetname("Updated Street");
+        mockAdress.setZipcode("12345");
+        mockAdress.setCity("Lyon");
+        mockAdress.setCountry("France");
+        mockAdress.setRegion("Auvergne-Rhône-Alpes");
+        mockAdress.setAddendum("Bâtiment B");
+        mockAdress.setFloor(2);
+        mockAdress.setUserList(new ArrayList<>());
+
+        given(adressService.updateAdress(any(Long.class), any(Adress.class))).willReturn(Optional.empty());
+
+        // Create AdressDTO to send in the request
+        AdressDTO newAdressDTO = new AdressDTO();
+        newAdressDTO.setAdressname("Updated Adress");
+        newAdressDTO.setStreetnumber("456");
+        newAdressDTO.setStreetname("Updated Street");
+        newAdressDTO.setZipcode("12345");
+        newAdressDTO.setCity("Lyon");
+        newAdressDTO.setCountry("France");
+        newAdressDTO.setRegion("Auvergne-Rhône-Alpes");
+        newAdressDTO.setAddendum("Bâtiment B");
+        newAdressDTO.setFloor(2);
+        newAdressDTO.setUserList(new ArrayList<>());
+        
+        // Act & Assert
+        mockMvc.perform(put("/api/adresses/" + idToUpdate)
+                .content(new ObjectMapper().writeValueAsString(newAdressDTO))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
+                .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))
+                .andExpect(result -> assertTrue(result.getResponse().getContentAsString().isEmpty(), "Response body should be empty"));
     }
 }
