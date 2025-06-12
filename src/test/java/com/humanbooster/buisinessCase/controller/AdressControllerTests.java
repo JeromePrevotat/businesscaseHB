@@ -35,7 +35,7 @@ import com.humanbooster.buisinessCase.service.AdressService;
 
 @WebMvcTest(AdressController.class)
 @Import(AdressMapper.class)
-public class AdressTests {
+public class AdressControllerTests {
     @Autowired
     private MockMvc mockMvc;
 

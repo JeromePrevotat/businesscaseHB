@@ -12,17 +12,17 @@ import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes = com.humanbooster.buisinessCase.BuisinessCaseApplication.class,  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-public class ReservationTests {
+public class StationControllerTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
-    public void testReservation() {
+    public void testStation() {
         // Arrange & Act
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/reservations", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("/api/stations", String.class);
 
         // Assert
-        assertAll("Reservation API Response Validation",
+        assertAll("Station API Response Validation",
             () -> assertNotNull(response, "Response should not be null"),
             () -> assertEquals(HttpStatus.OK, response.getStatusCode(), "Status should be 200 OK"),
             () -> assertNotNull(response.getBody(), "Response body should not be null")

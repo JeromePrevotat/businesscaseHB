@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(classes = com.humanbooster.buisinessCase.BuisinessCaseApplication.class,  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-public class MediaTests {
+public class MediaControllerTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
