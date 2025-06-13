@@ -102,10 +102,7 @@ public class AdressRepositoryTests {
                             
                             // Compare contents (order doesn't matter)
                             for (Object expectedItem : expectedList) {
-                                if (!actualList.contains(expectedItem)) {
-                                    assertEquals(expectedList, actualList, 
-                                        "Field '" + field.getName() + "' lists have different contents");
-                                }
+                                if (!actualList.contains(expectedItem)) assertEquals(expectedList, actualList, "Field '" + field.getName() + "' lists have different contents");
                             }
                         }
                     } else {

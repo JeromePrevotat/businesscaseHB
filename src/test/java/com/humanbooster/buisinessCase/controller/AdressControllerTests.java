@@ -43,6 +43,7 @@ public class AdressControllerTests {
     private AdressService adressService;
     @MockitoBean
     private AdressRepository adressRepository;
+
     @Autowired
     private AdressMapper adressMapper;
 
@@ -259,19 +260,6 @@ public class AdressControllerTests {
     public void test_update_adress_route_with_invalid_id() throws Exception {
         // Arrange
         Long idToUpdate = 999L;
-        Adress mockAdress = new Adress();
-        mockAdress.setId(idToUpdate);
-        mockAdress.setAdressname("Updated Adress");
-        mockAdress.setStreetnumber("456");
-        mockAdress.setStreetname("Updated Street");
-        mockAdress.setZipcode("12345");
-        mockAdress.setCity("Lyon");
-        mockAdress.setCountry("France");
-        mockAdress.setRegion("Auvergne-Rhône-Alpes");
-        mockAdress.setAddendum("Bâtiment B");
-        mockAdress.setFloor(2);
-        mockAdress.setUserList(new ArrayList<>());
-
         given(adressService.updateAdress(any(Long.class), any(Adress.class))).willReturn(Optional.empty());
 
         // Create AdressDTO to send in the request
