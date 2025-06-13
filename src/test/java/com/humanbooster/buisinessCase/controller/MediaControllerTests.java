@@ -62,23 +62,23 @@ public class MediaControllerTests {
 
     @BeforeEach
     public void setUp() {
-        mockTemplateMedia = new Media();
-        mockTemplateMedia.setId(1L);
-        mockTemplateMedia.setUrl("http://example.com/test.jpg");
-        mockTemplateMedia.setType("image/jpeg");
-        mockTemplateMedia.setMediaName("Test Media");
-        mockTemplateMedia.setSize(1024L);
-        mockTemplateMedia.setUser(new User());
+        this.mockTemplateMedia = new Media();
+        this.mockTemplateMedia.setId(1L);
+        this.mockTemplateMedia.setUrl("http://example.com/test.jpg");
+        this.mockTemplateMedia.setType("image/jpeg");
+        this.mockTemplateMedia.setMediaName("Test Media");
+        this.mockTemplateMedia.setSize(1024L);
+        this.mockTemplateMedia.setUser(new User());
 
-        mockTemplateMediaDTO = new MediaDTO();
-        mockTemplateMediaDTO.setId(1L);
-        mockTemplateMediaDTO.setUrl("http://example.com/test.jpg");
-        mockTemplateMediaDTO.setType("image/jpeg");
-        mockTemplateMediaDTO.setMediaName("Test Media");
-        mockTemplateMediaDTO.setSize(1024L);
-        mockTemplateMediaDTO.setUser_id(1L);
-        mockTemplateMediaDTO.setSpot_id(null);
-        mockTemplateMediaDTO.setStation_id(null);
+        this.mockTemplateMediaDTO = new MediaDTO();
+        this.mockTemplateMediaDTO.setId(1L);
+        this.mockTemplateMediaDTO.setUrl("http://example.com/test.jpg");
+        this.mockTemplateMediaDTO.setType("image/jpeg");
+        this.mockTemplateMediaDTO.setMediaName("Test Media");
+        this.mockTemplateMediaDTO.setSize(1024L);
+        this.mockTemplateMediaDTO.setUser_id(1L);
+        this.mockTemplateMediaDTO.setSpot_id(null);
+        this.mockTemplateMediaDTO.setStation_id(null);
     }
 
     @Test
@@ -134,7 +134,7 @@ public class MediaControllerTests {
     public void test_get_media_route_with_invalid_id() throws Exception {
         // Arrange
         Long idToGet = 999L;
-        given(mediaService.getMediaById(idToGet)).willReturn(java.util.Optional.empty());
+        given(mediaService.getMediaById(idToGet)).willReturn(Optional.empty());
 
         // Act & Assert
         mockMvc.perform(get("/api/medias/" + idToGet))
@@ -240,9 +240,9 @@ public class MediaControllerTests {
             // Ignore immutable Fields
             if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
             responseField.setAccessible(true);
-            Field mockField = expectedMediaDTO.getClass().getDeclaredField(responseField.getName());
-            mockField.setAccessible(true);
-            assertEquals(mockField.get(expectedMediaDTO), responseField.get(responseMediaDTO),
+            Field expectedField = expectedMediaDTO.getClass().getDeclaredField(responseField.getName());
+            expectedField.setAccessible(true);
+            assertEquals(expectedField.get(expectedMediaDTO), responseField.get(responseMediaDTO),
                          "Field " + responseField.getName() + " should match the mock value");
         }
     }
