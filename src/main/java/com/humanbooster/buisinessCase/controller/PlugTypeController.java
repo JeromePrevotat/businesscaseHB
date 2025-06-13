@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
  * Provides endpoints for creating, retrieving, updating, and deleting plug types.
  */
 @RestController
-@RequestMapping("/api/plug-types")
+@RequestMapping("/api/plugtypes")
 @RequiredArgsConstructor
 public class PlugTypeController {
     private final PlugTypeService plugTypeService;

@@ -179,7 +179,7 @@ public class AdressControllerTests {
     @Test
     public void test_delete_adress_route_with_id() throws Exception {
         // Arrange
-        Long idToDelete = 2L;
+        Long idToDelete = 1L;
         Adress mockAdress = this.mockTemplateAdress;
         mockAdress.setId(idToDelete);
         given(adressService.deleteAdressById(idToDelete)).willReturn(Optional.of(mockAdress));
@@ -232,13 +232,13 @@ public class AdressControllerTests {
                 .andReturn();
 
         // Assert
+        AdressDTO expectedAdressDTO = adressMapper.toDTO(mockAdress);
         String content = mvcResult.getResponse().getContentAsString();
         AdressDTO responseAdress = new ObjectMapper().readValue(content, AdressDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        AdressDTO expectedAdressDTO = adressMapper.toDTO(mockAdress);
 
         // Check all Fields match
         Field[] responseFields = responseAdress.getClass().getDeclaredFields();
