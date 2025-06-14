@@ -2,7 +2,7 @@ package com.humanbooster.buisinessCase.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -48,6 +48,6 @@ public class Spot {
 
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="spot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference("medias-spots")
     private List<Media> mediaList;
 }

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.StationMapper;
 import com.humanbooster.buisinessCase.dto.StationDTO;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.service.StationService;
 
@@ -99,8 +99,8 @@ public class StationController {
      * @return ResponseEntity with the updated station if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<StationDTO> updateStation(@PathVariable Long id, @Valid @RequestBody Station newStation){
-        return stationService.updateStation(id, newStation)
+    public ResponseEntity<StationDTO> updateStation(@PathVariable Long id, @Valid @RequestBody StationDTO newStationDTO){
+        return stationService.updateStation(id, mapper.toEntity(newStationDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

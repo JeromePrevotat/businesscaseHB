@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
 import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;

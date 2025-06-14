@@ -1,5 +1,7 @@
 package com.humanbooster.buisinessCase.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -50,8 +52,10 @@ public class Media {
     private User user;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JsonBackReference("medias-spots")
     private Spot spot;
 
     @ManyToOne(fetch=FetchType.LAZY)
+    @JsonBackReference("medias-stations")
     private Station station;
 }

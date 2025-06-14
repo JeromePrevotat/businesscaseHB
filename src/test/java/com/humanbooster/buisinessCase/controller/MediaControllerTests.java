@@ -215,8 +215,8 @@ public class MediaControllerTests {
         newMediaDTO.setUrl("http://example.com/update-test.jpg");
         newMediaDTO.setType("image/jpeg");
         newMediaDTO.setMediaName("Updated Media");
-        newMediaDTO.setUser_id(1L);
-        newMediaDTO.setSpot_id(null);
+        newMediaDTO.setUser_id(null);
+        newMediaDTO.setSpot_id(1L);
         newMediaDTO.setStation_id(null);
 
         // Act

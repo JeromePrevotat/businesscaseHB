@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
+import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.service.PlugTypeService;
 
@@ -99,8 +99,8 @@ public class PlugTypeController {
      * @return ResponseEntity with the updated plug type if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<PlugTypeDTO> updatePlugType(@PathVariable Long id, @Valid @RequestBody PlugType newPlugType){
-        return plugTypeService.updatePlugType(id, newPlugType)
+    public ResponseEntity<PlugTypeDTO> updatePlugType(@PathVariable Long id, @Valid @RequestBody PlugTypeDTO newPlugTypeDTO){
+        return plugTypeService.updatePlugType(id, mapper.toEntity(newPlugTypeDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

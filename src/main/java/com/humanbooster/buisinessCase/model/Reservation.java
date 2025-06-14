@@ -17,7 +17,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,7 +51,7 @@ public class Reservation {
     @Column(name="end_date", nullable=false)
     private LocalDateTime endDate;
 
-    @NotEmpty(message="Hourly Rate Log is required")
+    @NotNull(message="Hourly Rate Log is required")
     @DecimalMin(value="0.1", message="Hourly Rate Log must be a positive number")
     @Column(name="hourly_rate_log", precision=10, scale=4, nullable=false)
     private BigDecimal hourlyRateLog;

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.SpotMapper;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
+import com.humanbooster.buisinessCase.mapper.SpotMapper;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.service.SpotService;
 
@@ -98,8 +98,8 @@ public class SpotController {
      * @return ResponseEntity with the updated spot if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<SpotDTO> updateSpot(@PathVariable Long id, @Valid @RequestBody Spot newSpot){
-        return spotService.updateSpot(id, newSpot)
+    public ResponseEntity<SpotDTO> updateSpot(@PathVariable Long id, @Valid @RequestBody SpotDTO newSpotDTO){
+        return spotService.updateSpot(id, mapper.toEntity(newSpotDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

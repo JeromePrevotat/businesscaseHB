@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.ReservationMapper;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
+import com.humanbooster.buisinessCase.mapper.ReservationMapper;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.service.ReservationService;
 
@@ -99,8 +99,8 @@ public class ReservationController {
      * @return ResponseEntity with the updated reservation if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationDTO> updateReservation(@PathVariable Long id, @Valid @RequestBody Reservation newReservation){
-        return reservationService.updateReservation(id, newReservation)
+    public ResponseEntity<ReservationDTO> updateReservation(@PathVariable Long id, @Valid @RequestBody ReservationDTO newReservationDTO){
+        return reservationService.updateReservation(id, mapper.toEntity(newReservationDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

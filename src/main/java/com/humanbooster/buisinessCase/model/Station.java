@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -100,7 +99,7 @@ public class Station {
     
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference("medias-stations")
     private List<Media> mediaList;
 
     @NotNull

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.dto.VehiculeDTO;
+import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.service.VehiculeService;
 
@@ -99,8 +99,8 @@ public class VehiculeController {
      * @return ResponseEntity with the updated vehicule if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<VehiculeDTO> updateVehicule(@PathVariable Long id, @Valid @RequestBody Vehicule newVehicule){
-        return vehiculeService.updateVehicule(id, newVehicule)
+    public ResponseEntity<VehiculeDTO> updateVehicule(@PathVariable Long id, @Valid @RequestBody VehiculeDTO newVehiculeDTO){
+        return vehiculeService.updateVehicule(id, mapper.toEntity(newVehiculeDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -99,8 +99,8 @@ public class UserController {
      * @return ResponseEntity with the updated user if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody User newUser){
-        return userService.updateUser(id, newUser)
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO newUserDTO){
+        return userService.updateUser(id, mapper.toEntity(newUserDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

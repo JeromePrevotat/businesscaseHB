@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.MediaMapper;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
+import com.humanbooster.buisinessCase.mapper.MediaMapper;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.service.MediaService;
 
@@ -99,8 +99,8 @@ public class MediaController {
      * @return ResponseEntity with the updated media if found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<MediaDTO> updateMedia(@PathVariable Long id, @Valid @RequestBody Media newMedia){
-        return mediaService.updateMedia(id, newMedia)
+    public ResponseEntity<MediaDTO> updateMedia(@PathVariable Long id, @Valid @RequestBody MediaDTO newMediaDTO){
+        return mediaService.updateMedia(id, mapper.toEntity(newMediaDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

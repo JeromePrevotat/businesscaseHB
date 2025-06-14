@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.mapper.AdressMapper;
 import com.humanbooster.buisinessCase.dto.AdressDTO;
+import com.humanbooster.buisinessCase.mapper.AdressMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.service.AdressService;
 
@@ -100,8 +100,7 @@ public class AdressController {
      */
     @PutMapping(value= "/{id}", consumes= "application/json")
     public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO newAdressDTO){
-        Adress newAdress = mapper.toEntity(newAdressDTO);
-        return adressService.updateAdress(id, newAdress)
+        return adressService.updateAdress(id, mapper.toEntity(newAdressDTO))
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
