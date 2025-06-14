@@ -56,6 +56,8 @@ public class MediaControllerTests {
     private StationRepository stationRepository;
     @Autowired
     private MediaMapper mediaMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private Media mockTemplateMedia;
     private MediaDTO mockTemplateMediaDTO;
@@ -110,7 +112,7 @@ public class MediaControllerTests {
         MvcResult mvcResult = mockMvc.perform(get("/api/medias/" + idToGet))
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        MediaDTO responseMediaDTO = new ObjectMapper().readValue(content, MediaDTO.class);
+        MediaDTO responseMediaDTO = objectMapper.readValue(content, MediaDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
@@ -161,12 +163,12 @@ public class MediaControllerTests {
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/medias")
-                .content(new ObjectMapper().writeValueAsString(newMediaDTO))
+                .content(objectMapper.writeValueAsString(newMediaDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         
         String content = mvcResult.getResponse().getContentAsString();
-        MediaDTO responseMedia = new ObjectMapper().readValue(content, MediaDTO.class);
+        MediaDTO responseMedia = objectMapper.readValue(content, MediaDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
@@ -221,13 +223,13 @@ public class MediaControllerTests {
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/medias/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newMediaDTO))
+                .content(objectMapper.writeValueAsString(newMediaDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         // Assert
         String content = mvcResult.getResponse().getContentAsString();
-        MediaDTO responseMediaDTO = new ObjectMapper().readValue(content, MediaDTO.class);
+        MediaDTO responseMediaDTO = objectMapper.readValue(content, MediaDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
@@ -259,7 +261,7 @@ public class MediaControllerTests {
         
         // Act & Assert
         mockMvc.perform(put("/api/medias/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newMediaDTO))
+                .content(objectMapper.writeValueAsString(newMediaDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))

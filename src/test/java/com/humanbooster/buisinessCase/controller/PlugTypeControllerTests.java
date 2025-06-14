@@ -53,7 +53,8 @@ public class PlugTypeControllerTests {
     @MockitoBean
     private StationRepository stationRepository;
 
-
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private PlugTypeMapper plugTypeMapper;
@@ -105,7 +106,7 @@ public class PlugTypeControllerTests {
         MvcResult mvcResult = mockMvc.perform(get("/api/plugtypes/" + idToGet))
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        PlugTypeDTO responsePlugTypeDTO = new ObjectMapper().readValue(content, PlugTypeDTO.class);
+        PlugTypeDTO responsePlugTypeDTO = objectMapper.readValue(content, PlugTypeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
@@ -152,12 +153,12 @@ public class PlugTypeControllerTests {
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/plugtypes")
-                .content(new ObjectMapper().writeValueAsString(newPlugTypeDTO))
+                .content(objectMapper.writeValueAsString(newPlugTypeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
-        PlugTypeDTO responsePlugType = new ObjectMapper().readValue(content, PlugTypeDTO.class);
+        PlugTypeDTO responsePlugType = objectMapper.readValue(content, PlugTypeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
@@ -208,12 +209,12 @@ public class PlugTypeControllerTests {
         // ACT
         PlugTypeDTO expectedPlugTypeDTO = plugTypeMapper.toDTO(mockPlugType);
         MvcResult mvcResult = mockMvc.perform(post("/api/plugtypes")
-                .content(new ObjectMapper().writeValueAsString(newPlugTypeDTO))
+                .content(objectMapper.writeValueAsString(newPlugTypeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         
         String content = mvcResult.getResponse().getContentAsString();
-        PlugTypeDTO responsePlugType = new ObjectMapper().readValue(content, PlugTypeDTO.class);
+        PlugTypeDTO responsePlugType = objectMapper.readValue(content, PlugTypeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
@@ -243,7 +244,7 @@ public class PlugTypeControllerTests {
 
         // Act & Assert
         mockMvc.perform(put("/api/plugtypes/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newPlugTypeDTO))
+                .content(objectMapper.writeValueAsString(newPlugTypeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))

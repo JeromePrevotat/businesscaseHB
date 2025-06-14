@@ -48,6 +48,9 @@ public class AdressControllerTests {
     @Autowired
     private AdressMapper adressMapper;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private Adress mockTemplateAdress;
     private AdressDTO mockTemplateAdressDTO;
 
@@ -108,7 +111,7 @@ public class AdressControllerTests {
         MvcResult mvcResult = mockMvc.perform(get("/api/adresses/" + idToGet))
                 .andReturn();
         String content = mvcResult.getResponse().getContentAsString();
-        AdressDTO responseAdressDTO = new ObjectMapper().readValue(content, AdressDTO.class);
+        AdressDTO responseAdressDTO = objectMapper.readValue(content, AdressDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
@@ -162,12 +165,12 @@ public class AdressControllerTests {
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/adresses")
-                .content(new ObjectMapper().writeValueAsString(newAdressDTO))
+                .content(objectMapper.writeValueAsString(newAdressDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         
         String content = mvcResult.getResponse().getContentAsString();
-        AdressDTO responseAdress = new ObjectMapper().readValue(content, AdressDTO.class);
+        AdressDTO responseAdress = objectMapper.readValue(content, AdressDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
@@ -226,14 +229,14 @@ public class AdressControllerTests {
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/adresses/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newAdressDTO))
+                .content(objectMapper.writeValueAsString(newAdressDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
         // Assert
         AdressDTO expectedAdressDTO = adressMapper.toDTO(mockAdress);
         String content = mvcResult.getResponse().getContentAsString();
-        AdressDTO responseAdress = new ObjectMapper().readValue(content, AdressDTO.class);
+        AdressDTO responseAdress = objectMapper.readValue(content, AdressDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
@@ -264,7 +267,7 @@ public class AdressControllerTests {
         
         // Act & Assert
         mockMvc.perform(put("/api/adresses/" + idToUpdate)
-                .content(new ObjectMapper().writeValueAsString(newAdressDTO))
+                .content(objectMapper.writeValueAsString(newAdressDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))
