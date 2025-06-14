@@ -32,7 +32,6 @@ import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.mapper.MediaMapper;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.User;
-import com.humanbooster.buisinessCase.repository.MediaRepository;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
@@ -46,8 +45,6 @@ public class MediaControllerTests {
 
     @MockitoBean
     private MediaService mediaService;
-    @MockitoBean
-    private MediaRepository mediaRepository;
     @MockitoBean
     private UserRepository userRepository;
     @MockitoBean

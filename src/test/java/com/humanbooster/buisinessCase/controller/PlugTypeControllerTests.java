@@ -32,8 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
 import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
-import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
-import com.humanbooster.buisinessCase.repository.StationRepository;
+
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
 import com.humanbooster.buisinessCase.service.PlugTypeService;
 
@@ -47,15 +46,10 @@ public class PlugTypeControllerTests {
     @MockitoBean
     private PlugTypeService plugTypeService;
     @MockitoBean
-    private PlugTypeRepository plugTypeRepository;
-    @MockitoBean
     private VehiculeRepository vehiculeRepository;
-    @MockitoBean
-    private StationRepository stationRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private PlugTypeMapper plugTypeMapper;
 
@@ -190,14 +184,12 @@ public class PlugTypeControllerTests {
                 .andExpect(result -> assertNotNull(result.getResponse(), "Response should not be null"))
                 .andExpect(result -> assertEquals(HttpStatus.NOT_FOUND.value(), result.getResponse().getStatus(), "Status should be 404 Not Found"))
                 .andExpect(result -> assertTrue(result.getResponse().getContentAsString().isEmpty(), "Response body should be empty"));
-    }
-
-    @Test
+    }    @Test
     public void test_update_plugtype_route() throws Exception {
         // Arrange
         Long idToUpdate = 1L;
         PlugType mockPlugType = this.mockTemplatePlugType;
-        given(plugTypeService.savePlugType(any(PlugType.class))).willReturn(mockPlugType);
+        given(plugTypeService.updatePlugType(any(Long.class), any(PlugType.class))).willReturn(Optional.of(mockPlugType));
 
         // Create PlugTypeDTO to send in the request
         PlugTypeDTO newPlugTypeDTO = new PlugTypeDTO();
@@ -208,7 +200,7 @@ public class PlugTypeControllerTests {
 
         // ACT
         PlugTypeDTO expectedPlugTypeDTO = plugTypeMapper.toDTO(mockPlugType);
-        MvcResult mvcResult = mockMvc.perform(post("/api/plugtypes")
+        MvcResult mvcResult = mockMvc.perform(put("/api/plugtypes/" + idToUpdate)
                 .content(objectMapper.writeValueAsString(newPlugTypeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -216,7 +208,7 @@ public class PlugTypeControllerTests {
         String content = mvcResult.getResponse().getContentAsString();
         PlugTypeDTO responsePlugType = objectMapper.readValue(content, PlugTypeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
-        assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
+        assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
         // Check all Fields match

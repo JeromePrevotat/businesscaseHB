@@ -37,9 +37,7 @@ import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.StationState;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
-import com.humanbooster.buisinessCase.repository.ReservationRepository;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
-import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.service.StationService;
 
 @WebMvcTest(StationController.class)
@@ -53,11 +51,7 @@ public class StationControllerTests {
     @MockitoBean
     private SpotRepository spotRepository;
     @MockitoBean
-    private StationRepository stationRepository;
-    @MockitoBean
     private MediaRepository mediaRepository;
-    @MockitoBean
-    private ReservationRepository reservationRepository;
     @MockitoBean
     private PlugTypeRepository plugTypeRepository;
 
@@ -239,7 +233,7 @@ public class StationControllerTests {
         newStationDTO.setManual(this.mockTemplateStationDTO.getManual());
         newStationDTO.setState(this.mockTemplateStationDTO.getState());
         newStationDTO.setGrounded(this.mockTemplateStationDTO.isGrounded());
-        newStationDTO.setBusy(this.mockTemplateStationDTO.isBusy());
+        newStationDTO.setBusy(true);
         newStationDTO.setWired(this.mockTemplateStationDTO.isWired());
         newStationDTO.setSpot_id(this.mockTemplateStationDTO.getSpot_id());
         newStationDTO.setReservationList(this.mockTemplateStationDTO.getReservationList());

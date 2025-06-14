@@ -34,7 +34,6 @@ import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.Vehicule;
-import com.humanbooster.buisinessCase.repository.VehiculeRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.service.VehiculeService;
@@ -47,8 +46,6 @@ public class VehiculeControllerTests {
 
     @MockitoBean
     private VehiculeService vehiculeService;
-    @MockitoBean
-    private VehiculeRepository vehiculeRepository;
     @MockitoBean
     private UserRepository userRepository;
     @MockitoBean
@@ -67,7 +64,7 @@ public class VehiculeControllerTests {
     public void setUp() {
         this.mockTemplateVehicule = new Vehicule();
         this.mockTemplateVehicule.setId(1L);
-        this.mockTemplateVehicule.setPlate("AB-123-CD");
+        this.mockTemplateVehicule.setPlate("WX-098-YZ");
         this.mockTemplateVehicule.setBrand("Tesla");
         this.mockTemplateVehicule.setBatteryCapacity(75);
         User user1 = new User();

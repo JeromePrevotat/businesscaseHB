@@ -36,9 +36,6 @@ import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
-import com.humanbooster.buisinessCase.repository.ReservationRepository;
-import com.humanbooster.buisinessCase.repository.SpotRepository;
-import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -51,11 +48,7 @@ public class UserControllerTests {
     @MockitoBean
     private UserService userService;
     @MockitoBean
-    private UserRepository userRepository;
-    @MockitoBean
     private MediaRepository mediaRepository;
-    @MockitoBean
-    private ReservationRepository reservationRepository;
     @MockitoBean
     private VehiculeRepository vehiculeRepository;
     @MockitoBean
@@ -229,7 +222,7 @@ public class UserControllerTests {
         given(userService.updateUser(any(Long.class), any(User.class))).willReturn(Optional.of(mockUser));        // Create StationDTO to send in the request
         UserDTO newUserDTO = new UserDTO();
         newUserDTO.setId(idToUpdate);
-        newUserDTO.setUsername(this.mockTemplateUserDTO.getUsername());
+        newUserDTO.setUsername("Papa Johny");
         newUserDTO.setFirstname(this.mockTemplateUserDTO.getFirstname());
         newUserDTO.setLastname(this.mockTemplateUserDTO.getLastname());
         newUserDTO.setEmail(this.mockTemplateUserDTO.getEmail());

@@ -33,8 +33,6 @@ import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
-import com.humanbooster.buisinessCase.repository.SpotRepository;
-import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.service.SpotService;
 
 @WebMvcTest(SpotController.class)
@@ -46,11 +44,7 @@ public class SpotControllerTests {
     @MockitoBean
     private SpotService spotService;
     @MockitoBean
-    private SpotRepository spotRepository;
-    @MockitoBean
     private AdressRepository adressRepository;
-    @MockitoBean
-    private StationRepository stationRepository;
     @MockitoBean
     private MediaRepository mediaRepository;
 
@@ -204,6 +198,10 @@ public class SpotControllerTests {
         // Create SpotDTO to send in the request
         SpotDTO newSpotDTO = new SpotDTO();
         newSpotDTO.setId(idToUpdate);
+        newSpotDTO.setInstruction("Instructions Updated");
+        newSpotDTO.setStationList(new ArrayList<>());
+        newSpotDTO.setAddress_id(1L);
+        newSpotDTO.setMediaList(new ArrayList<>());
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/spots/" + idToUpdate)

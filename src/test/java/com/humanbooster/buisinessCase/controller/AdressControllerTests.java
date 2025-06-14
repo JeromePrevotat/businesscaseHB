@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.mapper.AdressMapper;
 import com.humanbooster.buisinessCase.model.Adress;
-import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.service.AdressService;
 
 
@@ -42,12 +41,8 @@ public class AdressControllerTests {
 
     @MockitoBean
     private AdressService adressService;
-    @MockitoBean
-    private AdressRepository adressRepository;
-
     @Autowired
     private AdressMapper adressMapper;
-
     @Autowired
     private ObjectMapper objectMapper;
 

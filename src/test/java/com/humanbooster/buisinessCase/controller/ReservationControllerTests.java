@@ -35,8 +35,6 @@ import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.ReservationState;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
-import com.humanbooster.buisinessCase.repository.AdressRepository;
-import com.humanbooster.buisinessCase.repository.ReservationRepository;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.service.ReservationService;
@@ -50,11 +48,7 @@ public class ReservationControllerTests {
     @MockitoBean
     private ReservationService reservationService;
     @MockitoBean
-    private ReservationRepository reservationRepository;
-    @MockitoBean
     private UserRepository userRepository;
-    @MockitoBean
-    private AdressRepository adressRepository;
     @MockitoBean
     private StationRepository stationRepository;
 
@@ -245,8 +239,8 @@ public class ReservationControllerTests {
         newReservationDTO.setStartDate(this.mockTemplateReservation.getStartDate());
         newReservationDTO.setEndDate(this.mockTemplateReservation.getEndDate());
         newReservationDTO.setHourlyRateLog(this.mockTemplateReservation.getHourlyRateLog());
-        newReservationDTO.setState(this.mockTemplateReservation.getState());
-        newReservationDTO.setPayed(this.mockTemplateReservation.isPayed());
+        newReservationDTO.setState(ReservationState.PAST);
+        newReservationDTO.setPayed(true);
         newReservationDTO.setDatePayed(this.mockTemplateReservation.getDatePayed());
         newReservationDTO.setUser_id(1L);
         newReservationDTO.setStation_id(1L);
