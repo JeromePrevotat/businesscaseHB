@@ -3,6 +3,8 @@ package com.humanbooster.buisinessCase.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,5 +36,6 @@ public class PlugType {
     private Set<Vehicule> vehiculeList = new HashSet<>();
 
     @ManyToMany(mappedBy = "plugType")
+    @JsonBackReference("plugtypes-stations")
     private Set<Station> stationList = new HashSet<>();
 }

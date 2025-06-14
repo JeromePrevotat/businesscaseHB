@@ -109,5 +109,6 @@ public class Station {
         joinColumns = @JoinColumn(name = "station_id"),
         inverseJoinColumns = @JoinColumn(name = "plug_type_id")
     )
+    @JsonManagedReference("plugtypes-stations")
     private List<PlugType> plugType;
 }
