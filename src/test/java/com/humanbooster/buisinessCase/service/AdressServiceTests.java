@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,33 +30,39 @@ public class AdressServiceTests {
     @InjectMocks
     private AdressService adressService;
 
+    private Adress newMockAdress;
+
+    @BeforeEach
+    public void setUp() {
+        this.newMockAdress = new Adress();
+        newMockAdress.setAdressname("Test Adress");
+        newMockAdress.setStreetnumber("123");
+        newMockAdress.setStreetname("Test Street");
+        newMockAdress.setZipcode("12345");
+        newMockAdress.setCity("Lyon");
+        newMockAdress.setCountry("France");
+        newMockAdress.setRegion("Auvergne-Rhône-Alpes");
+        newMockAdress.setAddendum("Bâtiment B");
+        newMockAdress.setFloor(2);
+        newMockAdress.setUserList(new ArrayList<>());
+    }
+
     @Test
     void test_save_adress_service(){
         // Arrange
         Adress newAdress = new Adress();
-        newAdress.setAdressname("Test Adress");
-        newAdress.setStreetnumber("123");
-        newAdress.setStreetname("Test Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
+        newAdress.setAdressname(newMockAdress.getAdressname());
+        newAdress.setStreetnumber(newMockAdress.getStreetnumber());
+        newAdress.setStreetname(newMockAdress.getStreetname());
+        newAdress.setZipcode(newMockAdress.getZipcode());
+        newAdress.setCity(newMockAdress.getCity());
+        newAdress.setCountry(newMockAdress.getCountry());
+        newAdress.setRegion(newMockAdress.getRegion());
+        newAdress.setAddendum(newMockAdress.getAddendum());
+        newAdress.setFloor(newMockAdress.getFloor());
+        newAdress.setUserList(newMockAdress.getUserList());
 
-        Adress mockAdress = new Adress();
-        mockAdress.setId(1L);
-        mockAdress.setAdressname("Test Adress");
-        mockAdress.setStreetnumber("123");
-        mockAdress.setStreetname("Test Street");
-        mockAdress.setZipcode("12345");
-        mockAdress.setCity("Lyon");
-        mockAdress.setCountry("France");
-        mockAdress.setRegion("Auvergne-Rhône-Alpes");
-        mockAdress.setAddendum("Bâtiment B");
-        mockAdress.setFloor(2);
-        mockAdress.setUserList(new ArrayList<>());
+        Adress mockAdress = this.newMockAdress;
         when(adressRepository.save(newAdress)).thenReturn(mockAdress);
         
         // Act
@@ -76,7 +83,7 @@ public class AdressServiceTests {
             () -> assertEquals(mockAdress.getFloor(), savedAdress.getFloor(), "Saved floor should match")
         );
     }
-
+    
     @Test
     public void test_get_all_adresses_service() throws IllegalAccessException {
         // Arrange
@@ -125,19 +132,7 @@ public class AdressServiceTests {
     public void test_get_adress_by_id_service() {
         // Arrange
         Long adressId = 1L;
-        Adress mockAdress = new Adress();
-        mockAdress.setId(adressId);
-        mockAdress.setAdressname("Test Adress");
-        mockAdress.setStreetnumber("123");
-        mockAdress.setStreetname("Test Street");
-        mockAdress.setZipcode("12345");
-        mockAdress.setCity("Lyon");
-        mockAdress.setCountry("France");
-        mockAdress.setRegion("Auvergne-Rhône-Alpes");
-        mockAdress.setAddendum("Bâtiment B");
-        mockAdress.setFloor(2);
-        mockAdress.setUserList(new ArrayList<>());
-        
+        Adress mockAdress = this.newMockAdress;
         when(adressRepository.findById(adressId)).thenReturn(Optional.of(mockAdress));
 
         // Act
@@ -165,19 +160,7 @@ public class AdressServiceTests {
     public void test_delete_adress_by_id_service() {
         // Arrange
         Long adressId = 1L;
-        Adress mockAdress = new Adress();
-        mockAdress.setId(adressId);
-        mockAdress.setAdressname("Test Adress");
-        mockAdress.setStreetnumber("123");
-        mockAdress.setStreetname("Test Street");
-        mockAdress.setZipcode("12345");
-        mockAdress.setCity("Lyon");
-        mockAdress.setCountry("France");
-        mockAdress.setRegion("Auvergne-Rhône-Alpes");
-        mockAdress.setAddendum("Bâtiment B");
-        mockAdress.setFloor(2);
-        mockAdress.setUserList(new ArrayList<>());
-        
+        Adress mockAdress = this.newMockAdress;
         when(adressRepository.findById(adressId)).thenReturn(Optional.of(mockAdress));
         
         // Act
