@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,26 +29,32 @@ public class AdressRepositoryTests {
     @Autowired
     private TestEntityManager entityManager;
 
+    private Adress testAdress;
+
+    @BeforeEach
+    public void setUp() {
+        this.testAdress = new Adress();
+        this.testAdress.setAdressname("Test Adress");
+        this.testAdress.setStreetnumber("123");
+        this.testAdress.setStreetname("Test Street");
+        this.testAdress.setZipcode("12345");
+        this.testAdress.setCity("Lyon");
+        this.testAdress.setCountry("France");
+        this.testAdress.setRegion("Auvergne-Rhône-Alpes");
+        this.testAdress.setAddendum("Bâtiment B");
+        this.testAdress.setFloor(2);
+        this.testAdress.setUserList(new ArrayList<>());
+        this.testAdress.setSpotList(new ArrayList<>());
+    }
+
     @Test
     public void test_save_adress(){
         // Arrange
-        Adress newAdress = new Adress();
-        newAdress.setAdressname("Test Adress");
-        newAdress.setStreetnumber("123");
-        newAdress.setStreetname("Test Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
-        newAdress.setSpotList(new ArrayList<>());
+        Adress newAdress = this.testAdress;
 
-        
         // Act
         Adress resultAdress = adressRepository.saveAndFlush(newAdress);
-        
+
         // Clear the Hibernate cache so we test the DB interaction
         // Instead of testing the Hibernate cache which contains the object
         entityManager.clear();
@@ -61,20 +69,8 @@ public class AdressRepositoryTests {
     @Test
     public void test_find_adress_by_id() {
         // Arrange
-        Adress newAdress = new Adress();
-        newAdress.setAdressname("Test Adress");
-        newAdress.setStreetnumber("123");
-        newAdress.setStreetname("Test Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
-        newAdress.setSpotList(new ArrayList<>());
+        Adress newAdress = this.testAdress;
 
-        
         Adress savedAdress = adressRepository.saveAndFlush(newAdress);
         
         entityManager.clear();
@@ -175,27 +171,14 @@ public class AdressRepositoryTests {
     @Test
     public void test_update_adress(){
         // Arrange
-        Adress newAdress = new Adress();
-        newAdress.setAdressname("Test Adress");
-        newAdress.setStreetnumber("123");
-        newAdress.setStreetname("Test Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
-        newAdress.setSpotList(new ArrayList<>());
+        Adress newAdress = this.testAdress;
 
         Adress savedAdress = adressRepository.saveAndFlush(newAdress);
-        
         entityManager.clear();
         
         // Act
         savedAdress.setCity("Marseille");
         Adress updatedAdress = adressRepository.saveAndFlush(savedAdress);
-
         entityManager.clear();
 
         // Assert
@@ -206,18 +189,7 @@ public class AdressRepositoryTests {
     @Test
     public void test_delete_adress_by_id() {
         // Arrange
-        Adress newAdress = new Adress();
-        newAdress.setAdressname("Test Adress");
-        newAdress.setStreetnumber("123");
-        newAdress.setStreetname("Test Street");
-        newAdress.setZipcode("12345");
-        newAdress.setCity("Lyon");
-        newAdress.setCountry("France");
-        newAdress.setRegion("Auvergne-Rhône-Alpes");
-        newAdress.setAddendum("Bâtiment B");
-        newAdress.setFloor(2);
-        newAdress.setUserList(new ArrayList<>());
-        newAdress.setSpotList(new ArrayList<>());
+        Adress newAdress = this.testAdress;
 
         Adress resultAdress = adressRepository.saveAndFlush(newAdress);
         
@@ -225,7 +197,8 @@ public class AdressRepositoryTests {
 
         // Act
         adressRepository.deleteById(resultAdress.getId());
-        adressRepository.flush(); // Ensure the delete operation is executed        entityManager.clear();
+        adressRepository.flush(); // Ensure the delete operation is executed
+        entityManager.clear();
 
         // Assert
         assertThat(adressRepository.findById(resultAdress.getId())).isEmpty();
