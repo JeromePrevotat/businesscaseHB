@@ -22,10 +22,11 @@ INSERT INTO users (id, username, firstname,
                     banned)
 VALUES
     (1, 'jdoe', 'John', 'Doe', 'password123', 'jdoe@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'GUEST', 'FR7612345678901234567890123', false),
-    (2, 'asmith', 'Alice', 'Smith', 'alicepwd', 'asmith@example.com', '1985-05-15', '2025-06-10 10:05:00', false, 'VAL456', 'ADMIN', 'FR7612345678901234567890456', false),
-    (3, 'Batman', 'Bruce', 'Wayne', 'batpass', 'bwayne@example.com', '1975-02-19', '2025-06-10 10:10:00', true, 'VAL789', 'REGISTERED', 'FR7612345678901234567890789', true),
-    (4, 'Superman', 'Clark', 'Kent', 'superpass', 'ckent@example.com', '1978-06-18', '2025-06-10 10:15:00', true, 'VAL101', 'REGISTERED', 'FR7612345678901234567891011', true),
-    (5, 'Flash', 'Barry', 'Allen', 'flashpass', 'ballen@example.com', '1990-03-14', '2025-06-10 10:20:00', true, 'VAL102', 'REGISTERED', 'FR7612345678901234567891022', true);
+    (2, 'asmith', 'Alice', 'Smith', 'alicepwd', 'asmith@example.com', '1985-05-15', '2025-06-10 10:05:00', false, 'VAL456', 'REGISTERED', 'FR7612345678901234567890456', false),
+    (3, 'Batman', 'Bruce', 'Wayne', 'batpass', 'bwayne@example.com', '1975-02-19', '2025-06-10 10:10:00', true, 'VAL789', 'ADMIN', 'FR7612345678901234567890789', false),
+    (4, 'Superman', 'Clark', 'Kent', 'superpass', 'ckent@example.com', '1978-06-18', '2025-06-10 10:15:00', true, 'VAL101', 'REGISTERED', 'FR7612345678901234567891011', false),
+    (5, 'Flash', 'Barry', 'Allen', 'flashpass', 'ballen@example.com', '1990-03-14', '2025-06-10 10:20:00', true, 'VAL102', 'REGISTERED', 'FR7612345678901234567891022', false);
+    (6, 'Joker', 'Joe', 'Kerr', 'jokerpass', 'joker@example.com', '1990-03-14', '2025-06-10 10:20:00', false, 'VAL103', 'GUEST', 'FR7612345678901234567891022', true);
 
 INSERT INTO adresses (
     id, adress_name, street_number, street_name, zipcode, city, country, region, addendum, floor
