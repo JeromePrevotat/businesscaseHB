@@ -44,7 +44,6 @@ import lombok.ToString;
  * User entity representing a user in the system.
  */
 @Entity
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -155,5 +154,4 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ADMIN"));
     }
-
 }

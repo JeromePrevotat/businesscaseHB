@@ -21,7 +21,7 @@ INSERT INTO users (id, username, firstname,
                     validation_code, role, iban,
                     banned)
 VALUES
-    (1, 'admin', 'Admin', 'Admin', 'admin', 'admin@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'ADMIN', 'FR7612345678901234567890623', false),
+    (1, 'admin', 'Admin', 'Admin', '$2y$10$V74dRsCZ9dQSroSgVNZIIem5m6dYib.tMdYHmGUiWg1aeLnKAdXoC', 'admin@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'ADMIN', 'FR7612345678901234567890623', false),
     (2, 'jdoe', 'John', 'Doe', 'password123', 'jdoe@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'GUEST', 'FR7612345678901234567890123', false),
     (3, 'asmith', 'Alice', 'Smith', 'alicepwd', 'asmith@example.com', '1985-05-15', '2025-06-10 10:05:00', false, 'VAL456', 'REGISTERED', 'FR7612345678901234567890456', false),
     (4, 'Batman', 'Bruce', 'Wayne', 'batpass', 'bwayne@example.com', '1975-02-19', '2025-06-10 10:10:00', true, 'VAL789', 'ADMIN', 'FR7612345678901234567890789', false),
