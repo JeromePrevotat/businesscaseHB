@@ -30,21 +30,21 @@ public class SecurityConfig {
             return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-            .username("testadmin")
-            .password(passwordEncoder().encode("testadminpwd"))
-            .roles("ADMIN", "USER")
-            .build();
-        UserDetails user = User.builder()
-            .username("testuser")
-            .password(passwordEncoder().encode("testuserpwd"))
-            .roles("USER")
-            .build();
+    // @Bean
+    // public UserDetailsService userDetailsService() {
+    //     UserDetails admin = User.builder()
+    //         .username("testadmin")
+    //         .password(passwordEncoder().encode("testadminpwd"))
+    //         .roles("ADMIN", "USER")
+    //         .build();
+    //     UserDetails user = User.builder()
+    //         .username("testuser")
+    //         .password(passwordEncoder().encode("testuserpwd"))
+    //         .roles("USER")
+    //         .build();
         
-        return new InMemoryUserDetailsManager(admin, user);
-    }
+    //     return new InMemoryUserDetailsManager(admin, user);
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

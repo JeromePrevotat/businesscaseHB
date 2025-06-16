@@ -2,9 +2,14 @@ package com.humanbooster.buisinessCase.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -46,7 +51,7 @@ import lombok.ToString;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @ToString(exclude = {"reservationList", "adressList", "vehiculeList", "media"})
 @Table(name="users")
-public class User {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -141,5 +146,14 @@ public class User {
         
         this.role = UserRole.REGISTERED;
     }
-    
+
+    /**
+     * Returns the authorities granted to the user.
+     * @return a collection of granted authorities
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ADMIN"));
+    }
+
 }
