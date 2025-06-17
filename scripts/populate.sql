@@ -12,22 +12,37 @@ TRUNCATE TABLE medias;
 TRUNCATE TABLE vehicules;
 TRUNCATE TABLE adresses;
 TRUNCATE TABLE users;
+TRUNCATE TABLE roles_users;
+TRUNCATE TABLE roles;
 SET FOREIGN_KEY_CHECKS=1;
 
+INSERT INTO roles (id, role_name) VALUES
+    (1, 'ADMIN'),
+    (2, 'USER'), 
+    (3, 'GUEST');
 
 INSERT INTO users (id, username, firstname,
                     lastname, password, email,
                     birthdate, inscription_date, account_valid,
-                    validation_code, role, iban,
+                    validation_code, iban,
                     banned)
 VALUES
-    (1, 'admin', 'Admin', 'Admin', '$2y$10$V74dRsCZ9dQSroSgVNZIIem5m6dYib.tMdYHmGUiWg1aeLnKAdXoC', 'admin@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'ADMIN', 'FR7612345678901234567890623', false),
-    (2, 'jdoe', 'John', 'Doe', 'password123', 'jdoe@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'GUEST', 'FR7612345678901234567890123', false),
-    (3, 'asmith', 'Alice', 'Smith', 'alicepwd', 'asmith@example.com', '1985-05-15', '2025-06-10 10:05:00', false, 'VAL456', 'REGISTERED', 'FR7612345678901234567890456', false),
-    (4, 'Batman', 'Bruce', 'Wayne', 'batpass', 'bwayne@example.com', '1975-02-19', '2025-06-10 10:10:00', true, 'VAL789', 'ADMIN', 'FR7612345678901234567890789', false),
-    (5, 'Superman', 'Clark', 'Kent', 'superpass', 'ckent@example.com', '1978-06-18', '2025-06-10 10:15:00', true, 'VAL101', 'REGISTERED', 'FR7612345678901234567891011', false),
-    (6, 'Flash', 'Barry', 'Allen', 'flashpass', 'ballen@example.com', '1990-03-14', '2025-06-10 10:20:00', true, 'VAL102', 'REGISTERED', 'FR7612345678901234567891022', false),
-    (7, 'Joker', 'Joe', 'Kerr', 'jokerpass', 'joker@example.com', '1990-03-14', '2025-06-10 10:20:00', false, 'VAL103', 'GUEST', 'FR7612345678901234567891042', true);
+    (1, 'admin', 'Admin', 'Admin', '$2y$10$V74dRsCZ9dQSroSgVNZIIem5m6dYib.tMdYHmGUiWg1aeLnKAdXoC', 'admin@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'FR7612345678901234567890623', false),
+    (2, 'jdoe', 'John', 'Doe', '$2y$10$l5agaan9SZLoFlAng9h0z.RUJXo4EwhnuEw82brUu05D5YIdvgVjK', 'jdoe@example.com', '1990-01-01', '2025-06-10 10:00:00', true, 'VAL123', 'FR7612345678901234567890123', false),
+    (3, 'asmith', 'Alice', 'Smith', '$2y$10$GOOSlWIekmWS2aOLRLHw.uI2MSCbVJ6XDB6BH5hVIjo8F/n/M7Ud6', 'asmith@example.com', '1985-05-15', '2025-06-10 10:05:00', false, 'VAL456', 'FR7612345678901234567890456', false),
+    (4, 'Batman', 'Bruce', 'Wayne', '$2y$10$B2GWx/BZtESlhbgVsLStHOOp2RcW2e.F7j9RgeiLpzsY3wYVpFJ.S', 'bwayne@example.com', '1975-02-19', '2025-06-10 10:10:00', true, 'VAL789', 'FR7612345678901234567890789', false),
+    (5, 'Superman', 'Clark', 'Kent', '$2y$10$9PDAaOLaBbhB3KNQ392dTu2YnrwCkf6nju8BMM1SZ3kANEmcpWQTK', 'ckent@example.com', '1978-06-18', '2025-06-10 10:15:00', true, 'VAL101', 'FR7612345678901234567891011', false),
+    (6, 'Flash', 'Barry', 'Allen', '$2y$10$9nAmv0j6uNKdzLI7kSGCieuNNwy7ah3mBYPbQSVcXVUyNONvs/SuG', 'ballen@example.com', '1990-03-14', '2025-06-10 10:20:00', true, 'VAL102', 'FR7612345678901234567891022', false),
+    (7, 'Joker', 'Joe', 'Kerr', '$2y$10$afkX2y1WVA1z5/lCLv5R9OaIfZe1j1kEpbMi.jp.4y6rOsKJap.AG', 'joker@example.com', '1990-03-14', '2025-06-10 10:20:00', false, 'VAL103', 'FR7612345678901234567891042', true);
+
+INSERT INTO roles_users (user, role) VALUES
+    (1, 1), (1, 2),  -- admin as ADMIN & USER
+    (2, 3),          -- jdoe as GUEST
+    (3, 2),          -- asmith as USER
+    (4, 1), (4, 2),  -- Batman as ADMIN & USER
+    (5, 2),          -- Superman as USER
+    (6, 2),          -- Flash as USER
+    (7, 3);          -- Joker as GUEST
 
 INSERT INTO adresses (
     id, adress_name, street_number, street_name, zipcode, city, country, region, addendum, floor

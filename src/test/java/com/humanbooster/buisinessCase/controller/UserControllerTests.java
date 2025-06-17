@@ -32,10 +32,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
+import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.repository.ReservationRepository;
+import com.humanbooster.buisinessCase.repository.RoleRepository;
+import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -48,11 +52,17 @@ public class UserControllerTests {
     @MockitoBean
     private UserService userService;
     @MockitoBean
+    private UserRepository userRepository;
+    @MockitoBean
     private MediaRepository mediaRepository;
+    @MockitoBean
+    private ReservationRepository reservationRepository;
     @MockitoBean
     private VehiculeRepository vehiculeRepository;
     @MockitoBean
     private AdressRepository adressRepository;
+    @MockitoBean
+    private RoleRepository roleRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -65,6 +75,9 @@ public class UserControllerTests {
     @BeforeEach
     public void setUp() {
         LocalDateTime now = LocalDateTime.now();
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(UserRole.ADMIN);
 
         this.mockTemplateUser = new User();
         this.mockTemplateUser.setId(1L);
@@ -77,7 +90,7 @@ public class UserControllerTests {
         this.mockTemplateUser.setInscriptionDate(now);
         this.mockTemplateUser.setAccountValid(true);
         this.mockTemplateUser.setValidationCode("ABC123");
-        this.mockTemplateUser.setRole(UserRole.REGISTERED);
+        this.mockTemplateUser.setRoleList(List.of(role));
         this.mockTemplateUser.setIban("FR1420041010050500013M02606");
         this.mockTemplateUser.setBanned(false);
         this.mockTemplateUser.setVehiculeList(new HashSet<>());
@@ -93,7 +106,7 @@ public class UserControllerTests {
         this.mockTemplateUserDTO.setBirthDate(LocalDate.of(1990, 1, 1));
         this.mockTemplateUserDTO.setInscriptionDate(now);
         this.mockTemplateUserDTO.setAccountValid(true);
-        this.mockTemplateUserDTO.setRole(UserRole.REGISTERED);
+        this.mockTemplateUserDTO.setRoleList(List.of(role.getId()));
         this.mockTemplateUserDTO.setBanned(false);
         this.mockTemplateUserDTO.setVehiculeList(new ArrayList<>());
         this.mockTemplateUserDTO.setMedia_id(1L);
@@ -222,14 +235,13 @@ public class UserControllerTests {
         given(userService.updateUser(any(Long.class), any(User.class))).willReturn(Optional.of(mockUser));        // Create StationDTO to send in the request
         UserDTO newUserDTO = new UserDTO();
         newUserDTO.setId(idToUpdate);
-        newUserDTO.setUsername("Papa Johny");
         newUserDTO.setFirstname(this.mockTemplateUserDTO.getFirstname());
         newUserDTO.setLastname(this.mockTemplateUserDTO.getLastname());
         newUserDTO.setEmail(this.mockTemplateUserDTO.getEmail());
         newUserDTO.setBirthDate(this.mockTemplateUserDTO.getBirthDate());
         newUserDTO.setInscriptionDate(this.mockTemplateUserDTO.getInscriptionDate());
         newUserDTO.setAccountValid(this.mockTemplateUserDTO.getAccountValid());
-        newUserDTO.setRole(this.mockTemplateUserDTO.getRole());
+        newUserDTO.setRoleList(this.mockTemplateUserDTO.getRoleList());
         newUserDTO.setBanned(this.mockTemplateUserDTO.getBanned());
         newUserDTO.setVehiculeList(this.mockTemplateUserDTO.getVehiculeList());
         newUserDTO.setAdressList(this.mockTemplateUserDTO.getAdressList());

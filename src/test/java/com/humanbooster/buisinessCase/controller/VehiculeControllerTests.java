@@ -30,16 +30,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.VehiculeDTO;
+import com.humanbooster.buisinessCase.mapper.RoleMapper;
 import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
+import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
+import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.service.VehiculeService;
 
 @WebMvcTest(VehiculeController.class)
-@Import(VehiculeMapper.class)
+@Import({VehiculeMapper.class, RoleMapper.class})
 public class VehiculeControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -67,8 +70,13 @@ public class VehiculeControllerTests {
         this.mockTemplateVehicule.setPlate("WX-098-YZ");
         this.mockTemplateVehicule.setBrand("Tesla");
         this.mockTemplateVehicule.setBatteryCapacity(75);
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(UserRole.ADMIN);
+        role.setUserList(new ArrayList<>());
         User user1 = new User();
         user1.setId(1L);
+        user1.setRoleList(new ArrayList<>(Arrays.asList(role)));
         this.mockTemplateVehicule.setUser(new HashSet<>(Arrays.asList(user1)));
         PlugType plugType1 = new PlugType();
         plugType1.setId(1L);
@@ -108,15 +116,15 @@ public class VehiculeControllerTests {
         Long idToGet = 1L;
         Vehicule mockVehicule = this.mockTemplateVehicule;
         given(vehiculeService.getVehiculeById(idToGet)).willReturn(Optional.of(mockVehicule));
-
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/vehicules/" + idToGet))
                 .andReturn();
-        String content = mvcResult.getResponse().getContentAsString();
-        VehiculeDTO responseVehiculeDTO = objectMapper.readValue(content, VehiculeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
+        
+        String content = mvcResult.getResponse().getContentAsString();
         assertNotNull(content, "Response body should not be null");
+        VehiculeDTO responseVehiculeDTO = objectMapper.readValue(content, VehiculeDTO.class);
 
         VehiculeDTO expectedVehiculeDTO = vehiculeMapper.toDTO(mockVehicule);
 
@@ -155,18 +163,18 @@ public class VehiculeControllerTests {
         mockVehicule.setId(1L);
 
         given(vehiculeService.saveVehicule(any(Vehicule.class))).willReturn(mockVehicule);
-
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/vehicules")
                 .content(objectMapper.writeValueAsString(newVehiculeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         
-        String content = mvcResult.getResponse().getContentAsString();
-        VehiculeDTO responseVehicule = objectMapper.readValue(content, VehiculeDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
+        
+        String content = mvcResult.getResponse().getContentAsString();
         assertNotNull(content, "Response body should not be null");
+        VehiculeDTO responseVehicule = objectMapper.readValue(content, VehiculeDTO.class);
         assertEquals(newVehiculeDTO.getId(), responseVehicule.getId(), "ID should match the mock value");
     }
 
@@ -222,15 +230,14 @@ public class VehiculeControllerTests {
         MvcResult mvcResult = mockMvc.perform(put("/api/vehicules/" + idToUpdate)
                 .content(objectMapper.writeValueAsString(newVehiculeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        // Assert
-        VehiculeDTO expectedVehiculeDTO = vehiculeMapper.toDTO(mockVehicule);
-        String content = mvcResult.getResponse().getContentAsString();
-        VehiculeDTO responseVehicule = objectMapper.readValue(content, VehiculeDTO.class);
+                .andReturn();        // Assert
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
+        
+        String content = mvcResult.getResponse().getContentAsString();
         assertNotNull(content, "Response body should not be null");
+        VehiculeDTO responseVehicule = objectMapper.readValue(content, VehiculeDTO.class);
+        VehiculeDTO expectedVehiculeDTO = vehiculeMapper.toDTO(mockVehicule);
 
 
         // Check all Fields match

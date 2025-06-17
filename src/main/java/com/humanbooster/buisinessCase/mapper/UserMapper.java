@@ -2,6 +2,7 @@ package com.humanbooster.buisinessCase.mapper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -9,10 +10,12 @@ import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
+import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.repository.RoleRepository;
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +26,7 @@ public class UserMapper {
     private final VehiculeRepository vehiculeRepository;
     private final MediaRepository mediaRepository;
     private final AdressRepository adressRepository;
+    private final RoleRepository roleRepository;
 
     public UserDTO toDTO(User user) {
         if (user == null) return null;
@@ -35,7 +39,11 @@ public class UserMapper {
             user.getBirthDate(),
             user.getInscriptionDate(),
             user.isAccountValid(),
-            user.getRole(),
+            user.getRoleList() != null ? user.getRoleList()
+                                        .stream()
+                                        .map(Role::getId)
+                                        .toList()
+                                        : null,
             user.isBanned(),
             user.getVehiculeList() != null ? user.getVehiculeList()
                                                 .stream()
@@ -67,7 +75,19 @@ public class UserMapper {
         user.setBirthDate(dto.getBirthDate());
         user.setInscriptionDate(dto.getInscriptionDate());
         user.setAccountValid(dto.getAccountValid());
-        user.setRole(dto.getRole());
+        if (dto.getRoleList() != null && !dto.getRoleList().isEmpty()){
+            user.setRoleList(
+                dto.getRoleList()
+                .stream()
+                    .map(id -> {
+                        Role role = roleRepository.findById(id).orElse(null);
+                        return role;
+                    })
+                    .filter(role -> role != null)
+                    .collect(Collectors.toList())
+            );
+        }
+        else user.setRoleList(new ArrayList<>());
         user.setBanned(dto.getBanned());
         if (dto.getVehiculeList() != null && !dto.getVehiculeList().isEmpty()) {
             user.setVehiculeList(new HashSet<>(

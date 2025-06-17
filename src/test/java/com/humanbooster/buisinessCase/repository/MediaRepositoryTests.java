@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
+import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
@@ -33,6 +34,8 @@ public class MediaRepositoryTests {
     private MediaRepository mediaRepository;
     @Autowired
     private TestEntityManager entityManager;
+    @Autowired
+    private RoleRepository roleRepository;
 
     private Media testMedia;
     private Media testMedia2;
@@ -40,6 +43,10 @@ public class MediaRepositoryTests {
     @BeforeEach
     public void setUp() {
         LocalDateTime now = LocalDateTime.now();
+        Role role = new Role();
+        role.setName(UserRole.ADMIN);
+        role = roleRepository.saveAndFlush(role);
+
         User user1 = new User();
         user1.setUsername("testuser");
         user1.setFirstname("Jean");
@@ -50,7 +57,7 @@ public class MediaRepositoryTests {
         user1.setInscriptionDate(now);
         user1.setAccountValid(true);
         user1.setBanned(false);
-        user1.setRole(UserRole.REGISTERED);
+        user1.setRoleList(List.of(role));
         user1.setVehiculeList(new HashSet<>());
         user1.setAdressList(new HashSet<>());
         User persistedUser1 = entityManager.persistAndFlush(user1);

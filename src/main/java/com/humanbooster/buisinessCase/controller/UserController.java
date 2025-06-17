@@ -23,8 +23,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * REST Controller for managing Vehicule entities.
- * Provides endpoints for creating, retrieving, updating, and deleting vehicules.
+ * REST Controller for managing User entities.
+ * Provides endpoints for creating, retrieving, updating, and deleting users    .
  */
 @RestController
 @RequestMapping("/api/users")

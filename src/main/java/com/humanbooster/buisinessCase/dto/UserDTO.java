@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.humanbooster.buisinessCase.model.UserRole;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -45,7 +43,7 @@ public class UserDTO {
     private Boolean accountValid;
 
     @NotNull(message = "Role is required")
-    private UserRole role;
+    private List<Long> roleList;
 
     private Boolean banned;
     private List<Long> vehiculeList;

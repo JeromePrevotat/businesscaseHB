@@ -65,11 +65,11 @@ services:
             mysql-test:
                 condition: service_healthy # Wait for the test db to be healthy
         restart: on-failure
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8080/api/healthy"]
-            interval: 10s
-            timeout: 5s
-            retries: 10
+        # healthcheck:
+        #     test: ["CMD", "curl", "-f", "http://localhost:8080/api/healthy"]
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 10
         environment:
             DB_HOST: mysql
             DB_PORT: 3306

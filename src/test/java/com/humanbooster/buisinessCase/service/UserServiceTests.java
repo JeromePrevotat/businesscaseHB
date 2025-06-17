@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.repository.UserRepository;
@@ -51,7 +52,10 @@ public class UserServiceTests {
         this.mockTemplateUser.setInscriptionDate(now);
         this.mockTemplateUser.setAccountValid(true);
         this.mockTemplateUser.setValidationCode("ABC123");
-        this.mockTemplateUser.setRole(UserRole.REGISTERED);
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(UserRole.ADMIN);
+        this.mockTemplateUser.setRoleList(List.of(role));
         this.mockTemplateUser.setIban("FR1420041010050500013M02606");
         this.mockTemplateUser.setBanned(false);
         this.mockTemplateUser.setVehiculeList(new HashSet<>());
@@ -73,7 +77,7 @@ public class UserServiceTests {
         newUser.setInscriptionDate(mockTemplateUser.getInscriptionDate());
         newUser.setAccountValid(mockTemplateUser.isAccountValid());
         newUser.setValidationCode(mockTemplateUser.getValidationCode());
-        newUser.setRole(mockTemplateUser.getRole());
+        newUser.setRoleList(mockTemplateUser.getRoleList());
         newUser.setIban(mockTemplateUser.getIban());
         newUser.setBanned(mockTemplateUser.isBanned());
         newUser.setVehiculeList(mockTemplateUser.getVehiculeList());
@@ -99,7 +103,7 @@ public class UserServiceTests {
             () -> assertEquals(mockUser.getInscriptionDate(), savedUser.getInscriptionDate(), "Saved user inscription date should match"),
             () -> assertEquals(mockUser.isAccountValid(), savedUser.isAccountValid(), "Saved user account validity should match"),
             () -> assertEquals(mockUser.getValidationCode(), savedUser.getValidationCode(), "Saved user validation code should match"),
-            () -> assertEquals(mockUser.getRole(), savedUser.getRole(), "Saved user role should match"),
+            () -> assertEquals(mockUser.getRoleList(), savedUser.getRoleList(), "Saved user role should match"),
             () -> assertEquals(mockUser.getIban(), savedUser.getIban(), "Saved user IBAN should match"),
             () -> assertEquals(mockUser.isBanned(), savedUser.isBanned(), "Saved user banned status should match"),
             () -> assertEquals(mockUser.getVehiculeList(), savedUser.getVehiculeList(), "Saved user vehicle list should match"),
@@ -112,7 +116,9 @@ public class UserServiceTests {
     public void test_get_all_users_service() throws IllegalAccessException {
         // Arrange
         LocalDateTime now = LocalDateTime.now();
-
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(UserRole.ADMIN);
         User user1 = new User();
         user1.setUsername("Test User 1");
         user1.setFirstname("Test");
@@ -123,7 +129,7 @@ public class UserServiceTests {
         user1.setInscriptionDate(now);
         user1.setAccountValid(true);
         user1.setValidationCode("code1");
-        user1.setRole(UserRole.REGISTERED);
+        user1.setRoleList(List.of(role));
         user1.setIban("FR7612345678901234567890123");
         user1.setBanned(false);
         user1.setVehiculeList(new HashSet<>());
@@ -140,7 +146,7 @@ public class UserServiceTests {
         user2.setInscriptionDate(now);
         user2.setAccountValid(true);
         user2.setValidationCode("code2");
-        user2.setRole(UserRole.REGISTERED);
+        user2.setRoleList(List.of(role));
         user2.setIban("FR7612345678901234567890124");
         user2.setBanned(false);
         user2.setVehiculeList(new HashSet<>());
@@ -223,6 +229,9 @@ public class UserServiceTests {
     @Test
     public void test_update_user_service() {
         // Arrange
+        Role role = new Role();
+        role.setId(1L);
+        role.setName(UserRole.ADMIN);
         Long userId = 1L;
         User existingUser = new User();
         existingUser.setId(userId);
@@ -235,7 +244,7 @@ public class UserServiceTests {
         existingUser.setInscriptionDate(this.mockTemplateUser.getInscriptionDate());
         existingUser.setAccountValid(true);
         existingUser.setValidationCode("OldCode");
-        existingUser.setRole(UserRole.REGISTERED);
+        existingUser.setRoleList(List.of(role));
         existingUser.setIban("FR7612345678901234567890123");
         existingUser.setBanned(false);
         existingUser.setVehiculeList(new HashSet<>());
@@ -254,7 +263,7 @@ public class UserServiceTests {
         mockUser.setInscriptionDate(this.mockTemplateUser.getInscriptionDate());
         mockUser.setAccountValid(true);
         mockUser.setValidationCode("UpdatedCode");
-        mockUser.setRole(UserRole.REGISTERED);
+        mockUser.setRoleList(List.of(role));
         mockUser.setIban("FR7612345678901234567890123");
         mockUser.setBanned(false);
         mockUser.setVehiculeList(new HashSet<>());
@@ -286,7 +295,7 @@ public class UserServiceTests {
         assertEquals(mockUser.getValidationCode(), newUser.getValidationCode(), "Updated validation code should match");
         assertEquals(mockUser.getIban(), newUser.getIban(), "Updated IBAN should match");
         assertEquals(mockUser.isBanned(), newUser.isBanned(), "Updated banned status should match");
-        assertEquals(mockUser.getRole(), newUser.getRole(), "Updated role should match");
+        assertEquals(mockUser.getRoleList(), newUser.getRoleList(), "Updated role should match");
         assertEquals(mockUser.getVehiculeList(), newUser.getVehiculeList(), "Updated vehicle list should match");
         assertEquals(mockUser.getAdressList(), newUser.getAdressList(), "Updated address list should match");
         assertEquals(mockUser.getReservationList(), newUser.getReservationList(), "Updated reservation list should match");

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 
 
@@ -23,11 +24,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
        http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                 .requestMatchers("/profile").authenticated()
                 .requestMatchers("/", "/home").permitAll()
                 .anyRequest().authenticated()
             )
+            .httpBasic(Customizer.withDefaults())
             .formLogin(Customizer.withDefaults());
             return http.build();
     }
