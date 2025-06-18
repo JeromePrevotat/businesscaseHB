@@ -24,18 +24,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
        http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                 // Sping Boot Actuator monitoring endpoints
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasRole(UserRole.ADMIN.name())
-                
-                .requestMatchers("/profile").authenticated()
-                
-
-                .requestMatchers("/", "/home").permitAll()
-                // .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults())
             .formLogin(Customizer.withDefaults());
