@@ -1,6 +1,5 @@
 package com.humanbooster.buisinessCase.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,15 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.humanbooster.buisinessCase.model.UserRole;
-import com.humanbooster.buisinessCase.repository.UserRepository;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private UserRepository userRepository;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
        http
@@ -28,7 +23,9 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
-                .requestMatchers("/actuator/**").hasRole(UserRole.ADMIN.name())
+                .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults())
             .formLogin(Customizer.withDefaults());
