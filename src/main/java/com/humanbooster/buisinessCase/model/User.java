@@ -91,7 +91,7 @@ public class User implements UserDetails {
     private String validationCode;
 
     @NotNull(message = "Role is required")
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "roles_users",
         joinColumns = @JoinColumn(name = "user"),

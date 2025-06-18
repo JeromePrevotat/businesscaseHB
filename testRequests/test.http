@@ -1,3 +1,6 @@
+### Test Healthcheck
+GET http://localhost:8080/actuator/health
+
 ### Adress
 GET http://localhost:8081/api/adresses
 

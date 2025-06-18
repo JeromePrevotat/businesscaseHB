@@ -30,19 +30,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.VehiculeDTO;
-import com.humanbooster.buisinessCase.mapper.RoleMapper;
 import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
-import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
+import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.service.VehiculeService;
 
 @WebMvcTest(VehiculeController.class)
-@Import({VehiculeMapper.class, RoleMapper.class})
+@Import(VehiculeMapper.class)
 public class VehiculeControllerTests {
     @Autowired
     private MockMvc mockMvc;

@@ -12,6 +12,7 @@ import com.humanbooster.buisinessCase.model.User;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
+    // @Query("SELECT u FROM User u JOIN fetch u.roleList WHERE u.username = :username")
     Optional<User> findByUsername(String username);
     
     Optional<User> findByEmail(String email);
