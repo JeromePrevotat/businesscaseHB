@@ -11,6 +11,17 @@ Content-Type: application/json
   "password": "admin"
 }
 
+### Login JWT
+### Banned User
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "joker",
+  "password": "jokerpass"
+}
+
 ###
 @jtw_token = {{login.response.body.token}}
 
