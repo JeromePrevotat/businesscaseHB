@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -31,16 +32,21 @@ import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.mapper.AdressMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.service.AdressService;
+import com.humanbooster.buisinessCase.service.JwtService;
 
 
 @WebMvcTest(AdressController.class)
 @Import(AdressMapper.class)
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class AdressControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private AdressService adressService;
+    @MockitoBean
+    private JwtService jwtService;
     @Autowired
     private AdressMapper adressMapper;
     @Autowired

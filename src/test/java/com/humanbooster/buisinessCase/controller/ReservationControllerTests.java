@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,21 @@ import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.ReservationService;
 
 @WebMvcTest(ReservationController.class)
 @Import(ReservationMapper.class)
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class ReservationControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private ReservationService reservationService;
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private UserRepository userRepository;
     @MockitoBean

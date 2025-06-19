@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -34,15 +35,20 @@ import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.PlugTypeService;
 
 
 @WebMvcTest(PlugTypeController.class)
 @Import(PlugTypeMapper.class)
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class PlugTypeControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private PlugTypeService plugTypeService;
     @MockitoBean

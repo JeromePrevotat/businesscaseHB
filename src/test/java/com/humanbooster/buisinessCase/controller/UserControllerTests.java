@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
+import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
@@ -41,22 +43,25 @@ import com.humanbooster.buisinessCase.repository.ReservationRepository;
 import com.humanbooster.buisinessCase.repository.RoleRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.UserService;
 
 @WebMvcTest(UserController.class)
 @Import(UserMapper.class)
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private UserService userService;
     @MockitoBean
     private UserRepository userRepository;
     @MockitoBean
     private MediaRepository mediaRepository;
-    @MockitoBean
-    private ReservationRepository reservationRepository;
     @MockitoBean
     private VehiculeRepository vehiculeRepository;
     @MockitoBean
@@ -79,6 +84,9 @@ public class UserControllerTests {
         role.setId(1L);
         role.setName(UserRole.ADMIN);
 
+        Media media = new Media();
+        media.setId(1L);
+
         this.mockTemplateUser = new User();
         this.mockTemplateUser.setId(1L);
         this.mockTemplateUser.setUsername("testuser");
@@ -96,6 +104,7 @@ public class UserControllerTests {
         this.mockTemplateUser.setVehiculeList(new HashSet<>());
         this.mockTemplateUser.setAdressList(new HashSet<>());
         this.mockTemplateUser.setReservationList(new ArrayList<>());
+        this.mockTemplateUser.setMedia(media);
 
         this.mockTemplateUserDTO = new UserDTO();
         this.mockTemplateUserDTO.setId(1L);
@@ -109,9 +118,9 @@ public class UserControllerTests {
         this.mockTemplateUserDTO.setRoleList(List.of(role.getId()));
         this.mockTemplateUserDTO.setBanned(false);
         this.mockTemplateUserDTO.setVehiculeList(new ArrayList<>());
-        this.mockTemplateUserDTO.setMedia_id(1L);
         this.mockTemplateUserDTO.setAdressList(new ArrayList<>());
         this.mockTemplateUserDTO.setReservationList(new ArrayList<>());
+        this.mockTemplateUserDTO.setMedia_id(media.getId());
     }
 
     @Test
@@ -232,9 +241,11 @@ public class UserControllerTests {
         Long idToUpdate = 1L;
         User mockUser = this.mockTemplateUser;
 
-        given(userService.updateUser(any(Long.class), any(User.class))).willReturn(Optional.of(mockUser));        // Create StationDTO to send in the request
+        given(userService.updateUser(any(Long.class), any(User.class))).willReturn(Optional.of(mockUser));
+        // Create UserDTO to send in the request
         UserDTO newUserDTO = new UserDTO();
         newUserDTO.setId(idToUpdate);
+        newUserDTO.setUsername("Updated Username");
         newUserDTO.setFirstname(this.mockTemplateUserDTO.getFirstname());
         newUserDTO.setLastname(this.mockTemplateUserDTO.getLastname());
         newUserDTO.setEmail(this.mockTemplateUserDTO.getEmail());
@@ -246,6 +257,7 @@ public class UserControllerTests {
         newUserDTO.setVehiculeList(this.mockTemplateUserDTO.getVehiculeList());
         newUserDTO.setAdressList(this.mockTemplateUserDTO.getAdressList());
         newUserDTO.setReservationList(this.mockTemplateUserDTO.getReservationList());
+        newUserDTO.setMedia_id(this.mockTemplateUserDTO.getMedia_id());
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/users/" + idToUpdate)

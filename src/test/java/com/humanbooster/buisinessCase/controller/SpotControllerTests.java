@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -33,14 +34,19 @@ import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.SpotService;
 
 @WebMvcTest(SpotController.class)
 @Import(SpotMapper.class)
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class SpotControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private SpotService spotService;
     @MockitoBean
