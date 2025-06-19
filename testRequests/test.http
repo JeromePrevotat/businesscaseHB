@@ -1,15 +1,40 @@
 ### Test Healthcheck
 GET http://localhost:8080/actuator/health
 
+### Login JWT
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+###
+@jtw_token = {{login.response.body.token}}
+
+### Login JWT
+### Invalid Credentials
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "wrongpassword"
+}
+
+
 ### Adress
-GET http://localhost:8081/api/adresses
+GET http://localhost:8080/api/adresses
+Authorization: Bearer {{jtw_token}}
 
 
 ###
-GET http://localhost:8081/api/adresses/1
+GET http://localhost:8080/api/adresses/1
 
 ###
-POST http://localhost:8081/api/adresses
+POST http://localhost:8080/api/adresses
 Content-Type: application/json
 
 {
@@ -27,7 +52,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:8081/api/adresses/1
+PUT http://localhost:8080/api/adresses/1
 Content-Type: application/json
 
 {
@@ -45,14 +70,14 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8081/api/adresses/1
+DELETE http://localhost:8080/api/adresses/1
 
 ### Media
-GET http://localhost:8081/api/medias
+GET http://localhost:8080/api/medias
 ###
-GET http://localhost:8081/api/medias/1
+GET http://localhost:8080/api/medias/1
 ###
-POST http://localhost:8081/api/medias
+POST http://localhost:8080/api/medias
 Content-Type: application/json
 
 {
@@ -65,7 +90,7 @@ Content-Type: application/json
   "station_id": 1
 }
 ###
-PUT http://localhost:8081/api/medias/1
+PUT http://localhost:8080/api/medias/1
 Content-Type: application/json
 
 {
@@ -78,14 +103,14 @@ Content-Type: application/json
   "station_id": 1
 }
 ###
-DELETE http://localhost:8081/api/medias/1
+DELETE http://localhost:8080/api/medias/1
 
 ### PlugType
-GET http://localhost:8081/api/plug-types
+GET http://localhost:8080/api/plug-types
 ###
-GET http://localhost:8081/api/plug-types/1
+GET http://localhost:8080/api/plug-types/1
 ###
-POST http://localhost:8081/api/plug-types
+POST http://localhost:8080/api/plug-types
 Content-Type: application/json
 
 {
@@ -94,7 +119,7 @@ Content-Type: application/json
   "station_id": []
 }
 ###
-PUT http://localhost:8081/api/plug-types/1
+PUT http://localhost:8080/api/plug-types/1
 Content-Type: application/json
 
 {
@@ -103,14 +128,14 @@ Content-Type: application/json
   "station_id": []
 }
 ###
-DELETE http://localhost:8081/api/plug-types/1
+DELETE http://localhost:8080/api/plug-types/1
 
 ### Reservation
-GET http://localhost:8081/api/reservations
+GET http://localhost:8080/api/reservations
 ###         
-GET http://localhost:8081/api/reservations/1
+GET http://localhost:8080/api/reservations/1
 ###
-POST http://localhost:8081/api/reservations
+POST http://localhost:8080/api/reservations
 Content-Type: application/json
 
 {
@@ -126,7 +151,7 @@ Content-Type: application/json
   "station_id": 1
 }
 ###
-PUT http://localhost:8081/api/reservations/1
+PUT http://localhost:8080/api/reservations/1
 Content-Type: application/json
 
 {
@@ -142,14 +167,14 @@ Content-Type: application/json
   "station_id": 1
 }
 ###
-DELETE http://localhost:8081/api/reservations/1
+DELETE http://localhost:8080/api/reservations/1
 
 ### Spot
-GET http://localhost:8081/api/spots
+GET http://localhost:8080/api/spots
 ###
-GET http://localhost:8081/api/spots/1
+GET http://localhost:8080/api/spots/1
 ###
-POST http://localhost:8081/api/spots
+POST http://localhost:8080/api/spots
 Content-Type: application/json
 
 {
@@ -159,7 +184,7 @@ Content-Type: application/json
   "mediaList": []
 }
 ###
-PUT http://localhost:8081/api/spots/1
+PUT http://localhost:8080/api/spots/1
 Content-Type: application/json
 
 {
@@ -169,14 +194,14 @@ Content-Type: application/json
   "mediaList": []
 }
 ###
-DELETE http://localhost:8081/api/spots/1
+DELETE http://localhost:8080/api/spots/1
 
 ### Station
-GET http://localhost:8081/api/stations
+GET http://localhost:8080/api/stations
 ###
-GET http://localhost:8081/api/stations/1
+GET http://localhost:8080/api/stations/1
 ###
-POST http://localhost:8081/api/stations
+POST http://localhost:8080/api/stations
 Content-Type: application/json
 
 {
@@ -196,7 +221,7 @@ Content-Type: application/json
   "plugTypeList": []
 }
 ###
-PUT http://localhost:8081/api/stations/1
+PUT http://localhost:8080/api/stations/1
 Content-Type: application/json
 
 {
@@ -216,14 +241,14 @@ Content-Type: application/json
   "plugTypeList": []
 }
 ###
-DELETE http://localhost:8081/api/stations/1
+DELETE http://localhost:8080/api/stations/1
 
 ### User
-GET http://localhost:8081/api/users
+GET http://localhost:8080/api/users
 ###
-GET http://localhost:8081/api/users/1
+GET http://localhost:8080/api/users/1
 ###
-POST http://localhost:8081/api/users
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -242,7 +267,7 @@ Content-Type: application/json
   "reservationList": []
 }
 ###
-PUT http://localhost:8081/api/users/1
+PUT http://localhost:8080/api/users/1
 Content-Type: application/json
 
 {
@@ -261,14 +286,14 @@ Content-Type: application/json
   "reservationList": []
 }
 ###     
-DELETE http://localhost:8081/api/users/1
+DELETE http://localhost:8080/api/users/1
 
 ### Vehicule
-GET http://localhost:8081/api/vehicules
+GET http://localhost:8080/api/vehicules
 ###
-GET http://localhost:8081/api/vehicules/1
+GET http://localhost:8080/api/vehicules/1
 ###
-POST http://localhost:8081/api/vehicules
+POST http://localhost:8080/api/vehicules
 Content-Type: application/json
 
 {
@@ -279,7 +304,7 @@ Content-Type: application/json
   "plugTypeList": []
 }
 ###
-PUT http://localhost:8081/api/vehicules/1
+PUT http://localhost:8080/api/vehicules/1
 Content-Type: application/json
 
 {
@@ -290,4 +315,4 @@ Content-Type: application/json
   "plugTypeList": []
 }
 ###
-DELETE http://localhost:8081/api/vehicules/1 
+DELETE http://localhost:8080/api/vehicules/1

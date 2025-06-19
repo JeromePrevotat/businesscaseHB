@@ -17,17 +17,17 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // CANNOT COMPILE : Variable not initialized
-    @Value("${jwt.secret}")
-    private static final String SECRET_KEY;
-    @Value("${jwt.expiration}")
-    private static final long EXPIRATION_TIME;
+    // CANNOT COMPILE : Static Final Variable not initialized
+    // @Value("${jwt.secret}")
+    private final String SECRET_KEY;
+    // @Value("${jwt.expiration}")
+    private final long EXPIRATION_TIME;
 
-    // public JwtService(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") long expirationTime){
-    //     // CANNOT ASSIGN VALUE TO STATIC FINAL FIELDS
-    //     SECRET_KEY = secretKey;
-    //     EXPIRATION_TIME = expirationTime;
-    // }
+    public JwtService(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") long expirationTime){
+        // CANNOT ASSIGN VALUE TO STATIC FINAL FIELDS
+        SECRET_KEY = secretKey;
+        EXPIRATION_TIME = expirationTime;
+    }
 
     public String generateToken(String username) {
         return Jwts.builder()

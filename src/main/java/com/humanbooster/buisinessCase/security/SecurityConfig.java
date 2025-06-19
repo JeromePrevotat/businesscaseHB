@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
+                
                 .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .anyRequest().authenticated()
             )

@@ -1,5 +1,6 @@
 package com.humanbooster.buisinessCase.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +27,7 @@ public class AuthController {
     private final UserDetailsService userDetailsService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<TokenDTO> authenticate(@RequestBody AuthRequest authRequest) {
         // Authenticate the user with Spring Manager
         // CAN THROW BADCREDENTIALSEXCEPTION IF AUTHENTICATION FAILS
         authenticationManager.authenticate(
@@ -35,7 +36,8 @@ public class AuthController {
         // If authentication is successful, generate a JWT token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwtToken = jwtService.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(jwtToken);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new TokenDTO(jwtToken));
     }
 }
 
@@ -48,6 +50,13 @@ record AuthRequest(String username, String password) {
 
     public String getPassword() {
         return password;
+    }
+}
+
+record TokenDTO (String token) {
+
+    public String getToken() {
+        return token;
     }
     
 }
