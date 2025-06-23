@@ -121,6 +121,13 @@ public class User implements UserDetails {
     @JsonManagedReference("reservations-users")
     private List<Reservation> reservationList;
 
+    // JWT Refresh Token association
+    // OneToMany for Security Purposes
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("jwtrefresh-users")
+    @Column(name = "jwt_refresh")
+    private JwtRefresh jwtRefresh;
+
     public User(String userName,
             String firstName,
             String lastName,

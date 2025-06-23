@@ -39,7 +39,9 @@ public class SecurityConfig {
                 // Sping Boot Actuator monitoring endpoints
                 .requestMatchers("/actuator/health",
                                 "/actuator/health/**",
-                                "/api/auth/**").permitAll()
+                                "/api/auth/login",
+                                "/api/auth/register",
+                                "/api/auth/refresh").permitAll()
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())

@@ -17,14 +17,10 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // CANNOT COMPILE : Static Final Variable not initialized
-    // @Value("${jwt.secret}")
     private final String SECRET_KEY;
-    // @Value("${jwt.expiration}")
-    private final long EXPIRATION_TIME;
+    private final Long EXPIRATION_TIME;
 
-    public JwtService(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") long expirationTime){
-        // CANNOT ASSIGN VALUE TO STATIC FINAL FIELDS
+    public JwtService(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") Long expirationTime){
         SECRET_KEY = secretKey;
         EXPIRATION_TIME = expirationTime;
     }
