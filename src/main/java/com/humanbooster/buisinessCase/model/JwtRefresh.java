@@ -28,8 +28,8 @@ public class JwtRefresh {
 
     @NotNull(message = "User ID must not be null")
     @ManyToOne
-    @JoinColumn(name = "user")
-    private User user;
+    @JoinColumn(name = "user_id")
+    private Long user_id;
 
     @NotNull(message = "Issued At must not be null")
     @Column(name = "issued_at")

@@ -66,7 +66,7 @@ public class JwtRefreshService{
         JwtRefresh newJwtRefresh = new JwtRefresh();
         newJwtRefresh.setRefreshToken(token);
         newJwtRefresh.setIssuedAt(now);
-        newJwtRefresh.setUser(userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("User not found")));
+        newJwtRefresh.setUser_id(userRepository.findByUsername(username).get().getId());
         jwtRefreshRepository.save(newJwtRefresh);
         return token;
     }
@@ -86,7 +86,6 @@ public class JwtRefreshService{
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 
     // "Protype" methode to wich we give another method to extract specific claims
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

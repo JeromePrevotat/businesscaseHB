@@ -123,7 +123,7 @@ public class User implements UserDetails {
 
     // JWT Refresh Token association
     // OneToMany for Security Purposes
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("jwtrefresh-users")
     @Column(name = "jwt_refresh")
     private JwtRefresh jwtRefresh;
