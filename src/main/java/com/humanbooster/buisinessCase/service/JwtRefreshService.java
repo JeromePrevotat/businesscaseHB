@@ -66,7 +66,7 @@ public class JwtRefreshService{
         JwtRefresh newJwtRefresh = new JwtRefresh();
         newJwtRefresh.setRefreshToken(token);
         newJwtRefresh.setIssuedAt(now);
-        newJwtRefresh.setUser_id(userRepository.findByUsername(username).get().getId());
+        newJwtRefresh.setUserId(userRepository.findByUsername(username).get().getId());
         jwtRefreshRepository.save(newJwtRefresh);
         return token;
     }

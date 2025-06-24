@@ -68,8 +68,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             // Refresh Token Valid ?
             else{
-                Long user_id = userRepository.findByUsername(username).get().getId();
-                JwtRefresh refreshToken = jwtRefreshRepository.findByUserIdOrderByCreatedAtDesc(user_id).get(0);
+                Long userId = userRepository.findByUsername(username).get().getId();
+                JwtRefresh refreshToken = jwtRefreshRepository.findByUserIdOrderByIssuedAtDesc(userId).get(0);
+                System.out.println("REFRESH TOKEN: " + refreshToken.getRefreshToken());
                 // Valid generate a new Access Token
                 if (jwtRefreshService.isTokenValid(refreshToken.getRefreshToken(), userDetails)) {
                     String newAccessToken = jwtService.generateToken(userDetails.getUsername());
