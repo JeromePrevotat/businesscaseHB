@@ -46,7 +46,8 @@ public class JwtRefreshService{
         this.EXPIRATION_TIME = expirationTime;
     }
 
-    public String generateToken(String username) {
+    @Transactional
+    public JwtRefresh generateToken(String username) {
         if (username == null || username.isEmpty()) throw new IllegalArgumentException("Username must not be null or empty");
 
         /* Generate a new jwt Refresh token
@@ -67,8 +68,7 @@ public class JwtRefreshService{
         newJwtRefresh.setRefreshToken(token);
         newJwtRefresh.setIssuedAt(now);
         newJwtRefresh.setUserId(userRepository.findByUsername(username).get().getId());
-        jwtRefreshRepository.save(newJwtRefresh);
-        return token;
+        return newJwtRefresh;
     }
 
     private Key getSigningKey() {

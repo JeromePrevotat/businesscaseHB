@@ -11,10 +11,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.humanbooster.buisinessCase.model.JwtRefresh;
-import com.humanbooster.buisinessCase.repository.JwtRefreshRepository;
-import com.humanbooster.buisinessCase.repository.UserRepository;
-import com.humanbooster.buisinessCase.service.JwtRefreshService;
 import com.humanbooster.buisinessCase.service.JwtService;
 
 import jakarta.servlet.FilterChain;
@@ -28,10 +24,7 @@ import lombok.AllArgsConstructor;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final JwtRefreshService jwtRefreshService;
-    private final JwtRefreshRepository jwtRefreshRepository;
     private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -54,7 +47,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // User not authenticated yet, loads it from DB
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            // Valid Get the Access Token
             // Check Access Token validity, if valid, set the authentication in the context
             if (jwtService.isTokenValid(token, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -65,18 +57,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     // Save auth to the Spring Context
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-            // Refresh Token Valid ?
-            else{
-                Long userId = userRepository.findByUsername(username).get().getId();
-                JwtRefresh refreshToken = jwtRefreshRepository.findByUserIdOrderByIssuedAtDesc(userId).get(0);
-                System.out.println("REFRESH TOKEN: " + refreshToken.getRefreshToken());
-                // Valid generate a new Access Token
-                if (jwtRefreshService.isTokenValid(refreshToken.getRefreshToken(), userDetails)) {
-                    String newAccessToken = jwtService.generateToken(userDetails.getUsername());
-                    // Set the new access token in the response header
-                    response.setHeader("Authorization", "Bearer " + newAccessToken);
-                }
             }
         }
         // Continue with the filter chain

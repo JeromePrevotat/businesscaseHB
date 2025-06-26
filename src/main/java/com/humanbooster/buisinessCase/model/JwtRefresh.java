@@ -31,7 +31,7 @@ public class JwtRefresh {
     private String refreshToken;
 
     @NotNull(message = "User ID must not be null")
-    @JoinColumn(name = "user_id")
+    @Column(name = "user_id")
     private Long userId;
 
     @NotNull(message = "Issued At must not be null")
