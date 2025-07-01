@@ -1,8 +1,5 @@
 package com.humanbooster.buisinessCase.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,14 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.humanbooster.buisinessCase.dto.JwtRefreshDTO;
-import com.humanbooster.buisinessCase.mapper.JwtRefreshMapper;
 import com.humanbooster.buisinessCase.model.JwtRefresh;
 import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.AuthResponseDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
 import com.humanbooster.buisinessCase.service.JwtRefreshService;
 import com.humanbooster.buisinessCase.service.JwtService;
-import com.humanbooster.buisinessCase.service.UserService;
 
 import lombok.AllArgsConstructor;
 

@@ -2,6 +2,7 @@ package com.humanbooster.buisinessCase.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 @EnableWebSecurity
 @EnableMethodSecurity
 @AllArgsConstructor
+@Profile("!repository-test")
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -69,7 +71,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authtenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }
