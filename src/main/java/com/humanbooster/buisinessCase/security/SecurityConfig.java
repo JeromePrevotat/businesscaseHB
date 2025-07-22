@@ -36,14 +36,14 @@ public class SecurityConfig {
        http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/auth/**").permitAll()
                 // Sping Boot Actuator monitoring endpoints
                 .requestMatchers("/actuator/health",
-                                "/actuator/health/**",
-                                "/api/auth/**").permitAll()
+                                "/actuator/health/**").permitAll()
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
-                
+                // All other API endpoints require authentication
                 .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .anyRequest().authenticated()
             )

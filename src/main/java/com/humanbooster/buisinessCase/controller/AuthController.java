@@ -9,14 +9,15 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
+import com.humanbooster.buisinessCase.service.JwtService;
 
 import lombok.AllArgsConstructor;
 
@@ -49,5 +50,11 @@ public class AuthController {
         final String jwtToken = jwtService.generateToken(userDetails.getUsername());
 
         return ResponseEntity.status(HttpStatus.OK).body(new JwtDTO(jwtToken));
+    }
+
+    // Debug
+    @GetMapping("/login")
+    public ResponseEntity<?> login(){
+        return ResponseEntity.status(HttpStatus.OK).body("Login successful");
     }
 }
