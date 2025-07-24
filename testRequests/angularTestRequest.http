@@ -1,6 +1,10 @@
 ### Test Healthcheck
 GET http://localhost:8080/actuator/health
 
+### Test Login
+GET http://localhost:8080/api/auth/login
+
+
 ### Login JWT
 # @name login
 POST http://localhost:8080/api/auth/login

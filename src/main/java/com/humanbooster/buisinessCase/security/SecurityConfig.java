@@ -37,6 +37,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/stations/**").permitAll()
                 // Sping Boot Actuator monitoring endpoints
                 .requestMatchers("/actuator/health",
                                 "/actuator/health/**").permitAll()
