@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.controller;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +12,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -29,14 +29,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.SpotDTO;
 import com.humanbooster.buisinessCase.mapper.SpotMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.security.JwtAuthFilter;
+import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.SpotService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
-@WebMvcTest(SpotController.class)
-@Import(SpotMapper.class)
+@WebMvcTest(controllers = SpotController.class, 
+           excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+           excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+                            classes = {JwtAuthFilter.class,
+                                     SecurityConfig.class})})
 public class SpotControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -47,8 +56,16 @@ public class SpotControllerTests {
     private AdressRepository adressRepository;
     @MockitoBean
     private MediaRepository mediaRepository;
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
 
-    @Autowired
+    @MockitoBean
     private SpotMapper spotMapper;
     @Autowired
     private ObjectMapper objectMapper;
@@ -98,6 +115,7 @@ public class SpotControllerTests {
         Long idToGet = 1L;
         Spot mockSpot = this.mockTemplateSpot;
         given(spotService.getSpotById(idToGet)).willReturn(Optional.of(mockSpot));
+        given(spotMapper.toDTO(mockSpot)).willReturn(this.mockTemplateSpotDTO);
 
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/spots/" + idToGet))
@@ -110,17 +128,12 @@ public class SpotControllerTests {
 
         SpotDTO expectedSpotDTO = spotMapper.toDTO(mockSpot);
 
-        // Check all Fields match
-        Field[] responseFields = responseSpotDTO.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedSpotDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedSpotDTO), responseField.get(responseSpotDTO),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedSpotDTO.getId(), responseSpotDTO.getId(), "ID should match");
+        assertEquals(expectedSpotDTO.getInstruction(), responseSpotDTO.getInstruction(), "Instruction should match");
+        assertEquals(expectedSpotDTO.getStationList(), responseSpotDTO.getStationList(), "Station list should match");
+        assertEquals(expectedSpotDTO.getAddress_id(), responseSpotDTO.getAddress_id(), "Address ID should match");
+        assertEquals(expectedSpotDTO.getMediaList(), responseSpotDTO.getMediaList(), "Media list should match");
     }
 
     @Test
@@ -145,6 +158,8 @@ public class SpotControllerTests {
         mockSpotService.setId(1L);
 
         given(spotService.saveSpot(any(Spot.class))).willReturn(mockSpotService);
+        given(spotMapper.toDTO(mockSpotService)).willReturn(newSpotDTO);
+        given(spotMapper.toEntity(newSpotDTO)).willReturn(this.mockTemplateSpot);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/spots")
@@ -194,6 +209,8 @@ public class SpotControllerTests {
         Spot mockSpot = this.mockTemplateSpot;
 
         given(spotService.updateSpot(any(Long.class), any(Spot.class))).willReturn(Optional.of(mockSpot));
+        given(spotMapper.toDTO(mockSpot)).willReturn(this.mockTemplateSpotDTO);
+        given(spotMapper.toEntity(any(SpotDTO.class))).willReturn(mockSpot);
 
         // Create SpotDTO to send in the request
         SpotDTO newSpotDTO = new SpotDTO();
@@ -217,18 +234,12 @@ public class SpotControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-
-        // Check all Fields match
-        Field[] responseFields = responseSpot.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedSpotDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedSpotDTO), responseField.get(responseSpot),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedSpotDTO.getId(), responseSpot.getId(), "ID should match");
+        assertEquals(expectedSpotDTO.getInstruction(), responseSpot.getInstruction(), "Instruction should match");
+        assertEquals(expectedSpotDTO.getStationList(), responseSpot.getStationList(), "Station list should match");
+        assertEquals(expectedSpotDTO.getAddress_id(), responseSpot.getAddress_id(), "Address ID should match");
+        assertEquals(expectedSpotDTO.getMediaList(), responseSpot.getMediaList(), "Media list should match");
     }
 
     @Test

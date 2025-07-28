@@ -35,14 +35,31 @@ Content-Type: application/json
   "password": "wrongpassword"
 }
 
-
-### Adress
-GET http://localhost:8080/api/adresses
+###
+GET http://localhost:8080/api/stations
 Authorization: Bearer {{jtw_token}}
 
+###
+GET http://localhost:8080/api/stations/1
+Authorization: Bearer {{jtw_token}}
 
 ###
-GET http://localhost:8080/api/adresses/1
+POST http://localhost:8080/api/stations
+Content-Type: application/json
+
+{
+    "borneName": "Borne de Recharge test",
+    "hourlyPrice": 2.5,
+    "powerOutput": 22,
+    "instruction": "Veuillez insérer votre carte de recharge.",
+    "grounded": true,
+    "state": "DECENT",
+    "busy": false,
+    "wired": false,
+    "reservationList": {},
+    "lieuList": {},
+    "mediaList": {}
+}
 
 ###
 POST http://localhost:8080/api/adresses

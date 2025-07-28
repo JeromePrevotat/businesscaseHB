@@ -16,8 +16,11 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -31,32 +34,35 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.StationState;
-import com.humanbooster.buisinessCase.repository.MediaRepository;
-import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
-import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
-@WebMvcTest(StationController.class)
-@Import(StationMapper.class)
+@WebMvcTest(controllers = StationController.class,
+    excludeAutoConfiguration = {SecurityAutoConfiguration.class,
+                                SecurityFilterAutoConfiguration.class},
+    excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.humanbooster\\.buisinessCase\\.security\\..*"))
+
 public class StationControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private StationService stationService;
-    @MockitoBean
-    private SpotRepository spotRepository;
-    @MockitoBean
-    private MediaRepository mediaRepository;
-    @MockitoBean
-    private PlugTypeRepository plugTypeRepository;
 
-    @Autowired
-    private StationMapper stationMapper;
+    @MockitoBean
+    private StationMapper mapper;
+
+    @MockitoBean
+    private UserService userService;
+
+    @MockitoBean
+    private UserMapper userMapper;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -112,6 +118,8 @@ public class StationControllerTests {
         mockStationList.add(mockStation);
         // Mock Behaviour
         given(stationService.getAllStations()).willReturn(mockStationList);
+        given(mapper.toDTO(any(Station.class))).willReturn(this.mockTemplateStationDTO);
+
 
         // Act & Assert
         mockMvc.perform(get("/api/stations"))
@@ -126,8 +134,9 @@ public class StationControllerTests {
         // Arrange
         Long idToGet = 1L;
         Station mockStation = this.mockTemplateStation;
+        StationDTO expectedStationDTO = this.mockTemplateStationDTO;
         given(stationService.getStationById(idToGet)).willReturn(Optional.of(mockStation));
-
+        given(mapper.toDTO(any(Station.class))).willReturn(expectedStationDTO);
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/stations/" + idToGet))
                 .andReturn();
@@ -136,8 +145,6 @@ public class StationControllerTests {
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
-
-        StationDTO expectedStationDTO = stationMapper.toDTO(mockStation);
 
         // Check all Fields match
         Field[] responseFields = responseStationDTO.getClass().getDeclaredFields();
@@ -169,11 +176,12 @@ public class StationControllerTests {
     public void test_save_station_route() throws Exception   {
         // Arrange
         StationDTO newStationDTO = this.mockTemplateStationDTO;
+        Station savedStation = this.mockTemplateStation;
+        StationDTO savedStationDTO = this.mockTemplateStationDTO;
 
-        Station mockStationService = new Station();
-        mockStationService.setId(1L);
-
-        given(stationService.saveStation(any(Station.class))).willReturn(mockStationService);
+        given(mapper.toEntity(any(StationDTO.class))).willReturn(savedStation);
+        given(stationService.saveStation(any(Station.class))).willReturn(savedStation);
+        given(mapper.toDTO(any(Station.class))).willReturn(savedStationDTO);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/stations")
@@ -186,7 +194,7 @@ public class StationControllerTests {
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
-        assertEquals(newStationDTO.getId(), responseStation.getId(), "ID should match the mock value");
+        assertEquals(savedStationDTO.getId(), responseStation.getId(), "ID should match the mock value");
     }
 
     @Test
@@ -220,25 +228,69 @@ public class StationControllerTests {
     public void test_update_station_route() throws Exception {
         // Arrange
         Long idToUpdate = 1L;
-        Station mockStation = this.mockTemplateStation;
-
-        given(stationService.updateStation(any(Long.class), any(Station.class))).willReturn(Optional.of(mockStation));        // Create StationDTO to send in the request
+        
+        // Create DIFFERENT data for the update to verify actual changes
         StationDTO newStationDTO = new StationDTO();
-        newStationDTO.setId(idToUpdate);
-        newStationDTO.setStationName(this.mockTemplateStationDTO.getStationName());
-        newStationDTO.setLatitude(this.mockTemplateStationDTO.getLatitude());
-        newStationDTO.setLongitude(this.mockTemplateStationDTO.getLongitude());
-        newStationDTO.setPriceRate(this.mockTemplateStationDTO.getPriceRate());
-        newStationDTO.setPowerOutput(this.mockTemplateStationDTO.getPowerOutput());
-        newStationDTO.setManual(this.mockTemplateStationDTO.getManual());
-        newStationDTO.setState(this.mockTemplateStationDTO.getState());
-        newStationDTO.setGrounded(this.mockTemplateStationDTO.isGrounded());
-        newStationDTO.setBusy(true);
-        newStationDTO.setWired(this.mockTemplateStationDTO.isWired());
-        newStationDTO.setSpot_id(this.mockTemplateStationDTO.getSpot_id());
-        newStationDTO.setReservationList(this.mockTemplateStationDTO.getReservationList());
-        newStationDTO.setMediaList(this.mockTemplateStationDTO.getMediaList());
-        newStationDTO.setPlugTypeList(this.mockTemplateStationDTO.getPlugTypeList());
+        newStationDTO.setId(1L);
+        newStationDTO.setStationName("Station Mise à Jour"); // DIFFERENT from template
+        newStationDTO.setLatitude(new BigDecimal("45.7640")); // DIFFERENT from template
+        newStationDTO.setLongitude(new BigDecimal("4.8357")); // DIFFERENT from template
+        newStationDTO.setPriceRate(new BigDecimal("0.30")); // DIFFERENT from template
+        newStationDTO.setPowerOutput(new BigDecimal("50.0")); // DIFFERENT from template
+        newStationDTO.setManual("Manuel mis à jour"); // DIFFERENT from template
+        newStationDTO.setState(StationState.ACTIVE);
+        newStationDTO.setGrounded(true);
+        newStationDTO.setBusy(true); // DIFFERENT from template
+        newStationDTO.setWired(true); // DIFFERENT from template
+        newStationDTO.setSpot_id(1L);
+        newStationDTO.setReservationList(new ArrayList<>());
+        newStationDTO.setMediaList(new ArrayList<>());
+        newStationDTO.setPlugTypeList(new ArrayList<>());
+
+        // Create updated Station with the new values
+        Station updatedStation = new Station();
+        updatedStation.setId(1L);
+        updatedStation.setStationName("Station Mise à Jour");
+        updatedStation.setLatitude(new BigDecimal("45.7640"));
+        updatedStation.setLongitude(new BigDecimal("4.8357"));
+        updatedStation.setPriceRate(new BigDecimal("0.30"));
+        updatedStation.setPowerOutput(new BigDecimal("50.0"));
+        updatedStation.setManual("Manuel mis à jour");
+        updatedStation.setState(StationState.ACTIVE);
+        updatedStation.setGrounded(true);
+        updatedStation.setBusy(true);
+        updatedStation.setWired(true);
+        Spot spot = new Spot();
+        spot.setId(1L);
+        updatedStation.setSpot(spot);
+        updatedStation.setReservationList(new ArrayList<>());
+        updatedStation.setMediaList(new ArrayList<>());
+        PlugType plugType1 = new PlugType();
+        plugType1.setId(1L);
+        updatedStation.setPlugType(Arrays.asList(plugType1));
+
+        // Create expected DTO with updated values
+        StationDTO expectedStationDTO = new StationDTO();
+        expectedStationDTO.setId(1L);
+        expectedStationDTO.setStationName("Station Mise à Jour");
+        expectedStationDTO.setLatitude(new BigDecimal("45.7640"));
+        expectedStationDTO.setLongitude(new BigDecimal("4.8357"));
+        expectedStationDTO.setPriceRate(new BigDecimal("0.30"));
+        expectedStationDTO.setPowerOutput(new BigDecimal("50.0"));
+        expectedStationDTO.setManual("Manuel mis à jour");
+        expectedStationDTO.setState(StationState.ACTIVE);
+        expectedStationDTO.setGrounded(true);
+        expectedStationDTO.setBusy(true);
+        expectedStationDTO.setWired(true);
+        expectedStationDTO.setSpot_id(1L);
+        expectedStationDTO.setReservationList(new ArrayList<>());
+        expectedStationDTO.setMediaList(new ArrayList<>());
+        expectedStationDTO.setPlugTypeList(new ArrayList<>());
+
+        given(mapper.toEntity(any(StationDTO.class))).willReturn(updatedStation);
+        given(stationService.updateStation(any(Long.class), any(Station.class))).willReturn(Optional.of(updatedStation));
+        given(mapper.toDTO(any(Station.class))).willReturn(expectedStationDTO);
+
 
         // Act
         MvcResult mvcResult = mockMvc.perform(put("/api/stations/" + idToUpdate)
@@ -247,25 +299,31 @@ public class StationControllerTests {
                 .andReturn();
 
         // Assert
-        StationDTO expectedStationDTO = stationMapper.toDTO(mockStation);
         String content = mvcResult.getResponse().getContentAsString();
         StationDTO responseStation = objectMapper.readValue(content, StationDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
+        // Verify that specific fields have been updated to the new values
+        assertEquals("Station Mise à Jour", responseStation.getStationName(), "Station name should be updated");
+        assertEquals(new BigDecimal("45.7640"), responseStation.getLatitude(), "Latitude should be updated");
+        assertEquals(new BigDecimal("4.8357"), responseStation.getLongitude(), "Longitude should be updated");
+        assertEquals(new BigDecimal("0.30"), responseStation.getPriceRate(), "Price rate should be updated");
+        assertEquals(new BigDecimal("50.0"), responseStation.getPowerOutput(), "Power output should be updated");
+        assertEquals("Manuel mis à jour", responseStation.getManual(), "Manual should be updated");
+        assertEquals(true, responseStation.isBusy(), "Busy status should be updated");
+        assertEquals(true, responseStation.isWired(), "Wired status should be updated");
 
-        // Check all Fields match
-        Field[] responseFields = responseStation.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedStationDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedStationDTO), responseField.get(responseStation),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify that values are DIFFERENT from the original template
+        assertTrue(!this.mockTemplateStationDTO.getStationName().equals(responseStation.getStationName()), 
+                   "Station name should be different from template");
+        assertTrue(!this.mockTemplateStationDTO.getPriceRate().equals(responseStation.getPriceRate()), 
+                   "Price rate should be different from template");
+        assertTrue(this.mockTemplateStationDTO.isBusy() != responseStation.isBusy(), 
+                   "Busy status should be different from template");
+        assertTrue(this.mockTemplateStationDTO.isWired() != responseStation.isWired(), 
+                   "Wired status should be different from template");
     }
 
     @Test

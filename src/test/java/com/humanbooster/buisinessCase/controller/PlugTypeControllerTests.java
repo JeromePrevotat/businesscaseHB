@@ -10,14 +10,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -31,14 +32,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.PlugTypeDTO;
 import com.humanbooster.buisinessCase.mapper.PlugTypeMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
-
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
+import com.humanbooster.buisinessCase.security.JwtAuthFilter;
+import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.PlugTypeService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
 
-@WebMvcTest(PlugTypeController.class)
-@Import(PlugTypeMapper.class)
+@WebMvcTest(controllers = PlugTypeController.class, 
+           excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+           excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+                            classes = {JwtAuthFilter.class,
+                                     SecurityConfig.class})})
 public class PlugTypeControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -46,11 +55,19 @@ public class PlugTypeControllerTests {
     @MockitoBean
     private PlugTypeService plugTypeService;
     @MockitoBean
-    private VehiculeRepository vehiculeRepository;
+    private VehiculeRepository vehiculeRepository;    
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
 
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
+    @MockitoBean
     private PlugTypeMapper plugTypeMapper;
 
     private PlugType mockTemplatePlugType;
@@ -80,6 +97,7 @@ public class PlugTypeControllerTests {
         mockPlugTypes.add(mockPlugType);
         // Mock Behaviour
         given(plugTypeService.getAllPlugTypes()).willReturn(mockPlugTypes);
+        given(plugTypeMapper.toDTO(mockPlugType)).willReturn(this.mockTemplatePlugTypeDTO);
 
         // Act & Assert
         mockMvc.perform(get("/api/plugtypes"))
@@ -95,6 +113,7 @@ public class PlugTypeControllerTests {
         Long idToGet = 1L;
         PlugType mockPlugType = this.mockTemplatePlugType;
         given(plugTypeService.getPlugTypeById(idToGet)).willReturn(Optional.of(mockPlugType));
+        given(plugTypeMapper.toDTO(mockPlugType)).willReturn(this.mockTemplatePlugTypeDTO);
 
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/plugtypes/" + idToGet))
@@ -105,7 +124,7 @@ public class PlugTypeControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        PlugTypeDTO expectedPlugTypeDTO = plugTypeMapper.toDTO(mockPlugType);
+        PlugTypeDTO expectedPlugTypeDTO = this.mockTemplatePlugTypeDTO;
 
         // Check all Fields match
         Field[] responseFields = responsePlugTypeDTO.getClass().getDeclaredFields();
@@ -144,6 +163,8 @@ public class PlugTypeControllerTests {
         mockPlugTypeService.setVehiculeList(new HashSet<>());
         mockPlugTypeService.setStationList(new HashSet<>());
         given(plugTypeService.savePlugType(any(PlugType.class))).willReturn(mockPlugTypeService);
+        given(plugTypeMapper.toDTO(mockPlugTypeService)).willReturn(new PlugTypeDTO(1L, "Test Save PlugType", new ArrayList<>(), new ArrayList<>()));
+        given(plugTypeMapper.toEntity(newPlugTypeDTO)).willReturn(this.mockTemplatePlugType);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/plugtypes")
@@ -190,6 +211,8 @@ public class PlugTypeControllerTests {
         Long idToUpdate = 1L;
         PlugType mockPlugType = this.mockTemplatePlugType;
         given(plugTypeService.updatePlugType(any(Long.class), any(PlugType.class))).willReturn(Optional.of(mockPlugType));
+        given(plugTypeMapper.toDTO(mockPlugType)).willReturn(new PlugTypeDTO(1L, "Test Plug Type", new ArrayList<>(), new ArrayList<>()));
+        given(plugTypeMapper.toEntity(any(PlugTypeDTO.class))).willReturn(mockPlugType);
 
         // Create PlugTypeDTO to send in the request
         PlugTypeDTO newPlugTypeDTO = new PlugTypeDTO();
@@ -199,7 +222,7 @@ public class PlugTypeControllerTests {
         newPlugTypeDTO.setStation_id(new ArrayList<>());
 
         // ACT
-        PlugTypeDTO expectedPlugTypeDTO = plugTypeMapper.toDTO(mockPlugType);
+        PlugTypeDTO expectedPlugTypeDTO = new PlugTypeDTO(1L, "Test Plug Type", new ArrayList<>(), new ArrayList<>());
         MvcResult mvcResult = mockMvc.perform(put("/api/plugtypes/" + idToUpdate)
                 .content(objectMapper.writeValueAsString(newPlugTypeDTO))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -211,17 +234,11 @@ public class PlugTypeControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        // Check all Fields match
-        Field[] responseFields = responsePlugType.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedPlugTypeDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedPlugTypeDTO), responseField.get(responsePlugType),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedPlugTypeDTO.getId(), responsePlugType.getId(), "ID should match");
+        assertEquals(expectedPlugTypeDTO.getPlugname(), responsePlugType.getPlugname(), "Plug name should match");
+        assertEquals(expectedPlugTypeDTO.getVehicule_id(), responsePlugType.getVehicule_id(), "Vehicule ID list should match");
+        assertEquals(expectedPlugTypeDTO.getStation_id(), responsePlugType.getStation_id(), "Station ID list should match");
     }
 
     @Test

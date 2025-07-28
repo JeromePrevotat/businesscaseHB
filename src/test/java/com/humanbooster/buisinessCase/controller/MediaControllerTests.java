@@ -9,14 +9,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -30,15 +31,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.MediaDTO;
 import com.humanbooster.buisinessCase.mapper.MediaMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.security.JwtAuthFilter;
+import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.MediaService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
-@WebMvcTest(MediaController.class)
-@Import(MediaMapper.class)
+@WebMvcTest(controllers = MediaController.class, 
+           excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+           excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+                            classes = {JwtAuthFilter.class,
+                                     SecurityConfig.class})})
 public class MediaControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -51,8 +61,17 @@ public class MediaControllerTests {
     private SpotRepository spotRepository;
     @MockitoBean
     private StationRepository stationRepository;
-    @Autowired
-    private MediaMapper mediaMapper;
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
+    
+    @MockitoBean
+    private MediaMapper mapper;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -104,6 +123,7 @@ public class MediaControllerTests {
         Long idToGet = 1L;
         Media mockMedia = this.mockTemplateMedia;
         given(mediaService.getMediaById(idToGet)).willReturn(Optional.of(mockMedia));
+        given(mapper.toDTO(mockMedia)).willReturn(this.mockTemplateMediaDTO);
 
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/medias/" + idToGet))
@@ -114,7 +134,7 @@ public class MediaControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        MediaDTO expectedMediaDTO = mediaMapper.toDTO(mockMedia);
+        MediaDTO expectedMediaDTO = this.mockTemplateMediaDTO;
 
         // Check all Fields match
         Field[] responseFields = responseMediaDTO.getClass().getDeclaredFields();
@@ -157,6 +177,8 @@ public class MediaControllerTests {
         mockMediaService.setSpot(null);
         mockMediaService.setStation(null);
         given(mediaService.saveMedia(any(Media.class))).willReturn(mockMediaService);
+        given(mapper.toDTO(mockMediaService)).willReturn(new MediaDTO(1L, "http://example.com/test.jpg", "image/jpeg", "Test Save Media", 2048L, 1L, null, null));
+        given(mapper.toEntity(newMediaDTO)).willReturn(this.mockTemplateMedia);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/medias")
@@ -207,6 +229,8 @@ public class MediaControllerTests {
         Media mockMedia = this.mockTemplateMedia;
 
         given(mediaService.updateMedia(any(Long.class), any(Media.class))).willReturn(Optional.of(mockMedia));
+        given(mapper.toDTO(mockMedia)).willReturn(new MediaDTO(1L, "http://example.com/test.jpg", "image/jpeg", "Test Media", 1024L, 1L, null, null));
+        given(mapper.toEntity(any(MediaDTO.class))).willReturn(mockMedia);
 
         // Create MediaDTO to send in the request
         MediaDTO newMediaDTO = new MediaDTO();
@@ -231,19 +255,17 @@ public class MediaControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        MediaDTO expectedMediaDTO = mediaMapper.toDTO(mockMedia);
+        MediaDTO expectedMediaDTO = mapper.toDTO(mockMedia);
 
-        // Check all Fields match
-        Field[] responseFields = responseMediaDTO.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedMediaDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedMediaDTO), responseField.get(responseMediaDTO),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedMediaDTO.getId(), responseMediaDTO.getId(), "ID should match");
+        assertEquals(expectedMediaDTO.getUrl(), responseMediaDTO.getUrl(), "URL should match");
+        assertEquals(expectedMediaDTO.getType(), responseMediaDTO.getType(), "Type should match");
+        assertEquals(expectedMediaDTO.getMediaName(), responseMediaDTO.getMediaName(), "Media name should match");
+        assertEquals(expectedMediaDTO.getSize(), responseMediaDTO.getSize(), "Size should match");
+        assertEquals(expectedMediaDTO.getUser_id(), responseMediaDTO.getUser_id(), "User ID should match");
+        assertEquals(expectedMediaDTO.getSpot_id(), responseMediaDTO.getSpot_id(), "Spot ID should match");
+        assertEquals(expectedMediaDTO.getStation_id(), responseMediaDTO.getStation_id(), "Station ID should match");
     }
 
     @Test

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.humanbooster.buisinessCase.dto.StationDTO;
 import com.humanbooster.buisinessCase.mapper.StationMapper;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
  * Provides endpoints for creating, retrieving, updating, and deleting stations.
  */
 @RestController
+@RestControllerAdvice
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/stations")
 @RequiredArgsConstructor

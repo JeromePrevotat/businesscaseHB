@@ -16,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -30,6 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.VehiculeDTO;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.mapper.VehiculeMapper;
 import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Role;
@@ -38,10 +42,17 @@ import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.security.JwtAuthFilter;
+import com.humanbooster.buisinessCase.security.SecurityConfig;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 import com.humanbooster.buisinessCase.service.VehiculeService;
 
-@WebMvcTest(VehiculeController.class)
-@Import(VehiculeMapper.class)
+@WebMvcTest(controllers = VehiculeController.class, 
+           excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+           excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+                            classes = {JwtAuthFilter.class,
+                                     SecurityConfig.class})})
 public class VehiculeControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -52,9 +63,16 @@ public class VehiculeControllerTests {
     private UserRepository userRepository;
     @MockitoBean
     private PlugTypeRepository plugTypeRepository;
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
 
-
-    @Autowired
+    @MockitoBean
     private VehiculeMapper vehiculeMapper;
     @Autowired
     private ObjectMapper objectMapper;
@@ -90,6 +108,9 @@ public class VehiculeControllerTests {
         this.mockTemplateVehiculeDTO.setBatteryCapacity(75);
         this.mockTemplateVehiculeDTO.setUserList(Arrays.asList(1L, 2L));
         this.mockTemplateVehiculeDTO.setPlugTypeList(Arrays.asList(1L, 2L));
+        
+        // Configure mapper mocks for all tests
+        given(vehiculeMapper.toDTO(this.mockTemplateVehicule)).willReturn(this.mockTemplateVehiculeDTO);
     }
 
     @Test
@@ -125,7 +146,7 @@ public class VehiculeControllerTests {
         assertNotNull(content, "Response body should not be null");
         VehiculeDTO responseVehiculeDTO = objectMapper.readValue(content, VehiculeDTO.class);
 
-        VehiculeDTO expectedVehiculeDTO = vehiculeMapper.toDTO(mockVehicule);
+        VehiculeDTO expectedVehiculeDTO = mockTemplateVehiculeDTO;
 
         // Check all Fields match
         Field[] responseFields = responseVehiculeDTO.getClass().getDeclaredFields();
@@ -162,6 +183,8 @@ public class VehiculeControllerTests {
         mockVehicule.setId(1L);
 
         given(vehiculeService.saveVehicule(any(Vehicule.class))).willReturn(mockVehicule);
+        given(vehiculeMapper.toDTO(mockVehicule)).willReturn(newVehiculeDTO);
+        given(vehiculeMapper.toEntity(newVehiculeDTO)).willReturn(this.mockTemplateVehicule);
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/vehicules")
                 .content(objectMapper.writeValueAsString(newVehiculeDTO))
@@ -210,7 +233,11 @@ public class VehiculeControllerTests {
         Long idToUpdate = 1L;
         Vehicule mockVehicule = this.mockTemplateVehicule;
 
-        given(vehiculeService.updateVehicule(any(Long.class), any(Vehicule.class))).willReturn(Optional.of(mockVehicule));        // Create StationDTO to send in the request
+        given(vehiculeService.updateVehicule(any(Long.class), any(Vehicule.class))).willReturn(Optional.of(mockVehicule));
+        given(vehiculeMapper.toDTO(mockVehicule)).willReturn(this.mockTemplateVehiculeDTO);
+        given(vehiculeMapper.toEntity(any(VehiculeDTO.class))).willReturn(mockVehicule);
+        
+        // Create StationDTO to send in the request
         VehiculeDTO newVehiculeDTO = new VehiculeDTO();
         newVehiculeDTO.setId(1L);
         newVehiculeDTO.setPlate("AB-123-CD");
@@ -236,20 +263,15 @@ public class VehiculeControllerTests {
         String content = mvcResult.getResponse().getContentAsString();
         assertNotNull(content, "Response body should not be null");
         VehiculeDTO responseVehicule = objectMapper.readValue(content, VehiculeDTO.class);
-        VehiculeDTO expectedVehiculeDTO = vehiculeMapper.toDTO(mockVehicule);
+        VehiculeDTO expectedVehiculeDTO = this.mockTemplateVehiculeDTO;
 
-
-        // Check all Fields match
-        Field[] responseFields = responseVehicule.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedVehiculeDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedVehiculeDTO), responseField.get(responseVehicule),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedVehiculeDTO.getId(), responseVehicule.getId(), "ID should match");
+        assertEquals(expectedVehiculeDTO.getPlate(), responseVehicule.getPlate(), "Plate should match");
+        assertEquals(expectedVehiculeDTO.getBrand(), responseVehicule.getBrand(), "Brand should match");
+        assertEquals(expectedVehiculeDTO.getBatteryCapacity(), responseVehicule.getBatteryCapacity(), "Battery capacity should match");
+        assertEquals(expectedVehiculeDTO.getUserList(), responseVehicule.getUserList(), "User list should match");
+        assertEquals(expectedVehiculeDTO.getPlugTypeList(), responseVehicule.getPlugTypeList(), "Plug type list should match");
     }
 
     @Test

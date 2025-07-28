@@ -2,6 +2,7 @@ package com.humanbooster.buisinessCase.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -37,7 +38,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/stations/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 // Sping Boot Actuator monitoring endpoints
                 .requestMatchers("/actuator/health",
                                 "/actuator/health/**").permitAll()

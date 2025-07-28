@@ -16,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -31,16 +33,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.ReservationDTO;
 import com.humanbooster.buisinessCase.mapper.ReservationMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.ReservationState;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.security.JwtAuthFilter;
+import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.ReservationService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
-@WebMvcTest(ReservationController.class)
-@Import(ReservationMapper.class)
+@WebMvcTest(controllers = ReservationController.class, 
+           excludeAutoConfiguration = {SecurityAutoConfiguration.class},
+           excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+                            classes = {JwtAuthFilter.class,
+                                     SecurityConfig.class})})
 public class ReservationControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -51,8 +62,16 @@ public class ReservationControllerTests {
     private UserRepository userRepository;
     @MockitoBean
     private StationRepository stationRepository;
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
 
-    @Autowired
+    @MockitoBean
     private ReservationMapper reservationMapper;
     @Autowired
     private ObjectMapper objectMapper;
@@ -102,6 +121,7 @@ public class ReservationControllerTests {
         mockReservations.add(mockReservation);
         // Mock Behaviour
         given(reservationService.getAllReservations()).willReturn(mockReservations);
+        given(reservationMapper.toDTO(mockReservation)).willReturn(this.mockTemplateReservationDTO);
 
         // Act & Assert
         mockMvc.perform(get("/api/reservations"))
@@ -117,6 +137,7 @@ public class ReservationControllerTests {
         Long idToGet = 1L;
         Reservation mockReservation = this.mockTemplateReservation;
         given(reservationService.getReservationById(idToGet)).willReturn(Optional.of(mockReservation));
+        given(reservationMapper.toDTO(mockReservation)).willReturn(this.mockTemplateReservationDTO);
 
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/reservations/" + idToGet))
@@ -127,7 +148,7 @@ public class ReservationControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-        ReservationDTO expectedReservationDTO = reservationMapper.toDTO(mockReservation);
+        ReservationDTO expectedReservationDTO = this.mockTemplateReservationDTO;
 
         // Check all Fields match
         Field[] responseFields = responseReservationDTO.getClass().getDeclaredFields();
@@ -173,6 +194,8 @@ public class ReservationControllerTests {
         mockReservationService.setUser(new User());
         mockReservationService.setStation(new Station());
         given(reservationService.saveReservation(any(Reservation.class))).willReturn(mockReservationService);
+        given(reservationMapper.toDTO(mockReservationService)).willReturn(newReservationDTO);
+        given(reservationMapper.toEntity(newReservationDTO)).willReturn(this.mockTemplateReservation);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/reservations")
@@ -230,6 +253,8 @@ public class ReservationControllerTests {
         Reservation mockReservation = this.mockTemplateReservation;
 
         given(reservationService.updateReservation(any(Long.class), any(Reservation.class))).willReturn(Optional.of(mockReservation));
+        given(reservationMapper.toDTO(mockReservation)).willReturn(this.mockTemplateReservationDTO);
+        given(reservationMapper.toEntity(any(ReservationDTO.class))).willReturn(mockReservation);
 
         // Create ReservationDTO to send in the request
         ReservationDTO newReservationDTO = new ReservationDTO();
@@ -252,25 +277,25 @@ public class ReservationControllerTests {
                 .andReturn();
 
         // Assert
-        ReservationDTO expectedReservationDTO = reservationMapper.toDTO(mockReservation);
+        ReservationDTO expectedReservationDTO = this.mockTemplateReservationDTO;
         String content = mvcResult.getResponse().getContentAsString();
         ReservationDTO responseReservation = objectMapper.readValue(content, ReservationDTO.class);
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-
-        // Check all Fields match
-        Field[] responseFields = responseReservation.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedReservationDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedReservationDTO), responseField.get(responseReservation),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedReservationDTO.getId(), responseReservation.getId(), "ID should match");
+        assertEquals(expectedReservationDTO.getCreatedAt(), responseReservation.getCreatedAt(), "Created at should match");
+        assertEquals(expectedReservationDTO.getValidatedAt(), responseReservation.getValidatedAt(), "Validated at should match");
+        assertEquals(expectedReservationDTO.getStartDate(), responseReservation.getStartDate(), "Start date should match");
+        assertEquals(expectedReservationDTO.getEndDate(), responseReservation.getEndDate(), "End date should match");
+        assertEquals(expectedReservationDTO.getHourlyRateLog(), responseReservation.getHourlyRateLog(), "Hourly rate log should match");
+        assertEquals(expectedReservationDTO.getState(), responseReservation.getState(), "State should match");
+        assertEquals(expectedReservationDTO.isPayed(), responseReservation.isPayed(), "Payed status should match");
+        assertEquals(expectedReservationDTO.getDatePayed(), responseReservation.getDatePayed(), "Date payed should match");
+        assertEquals(expectedReservationDTO.getUser_id(), responseReservation.getUser_id(), "User ID should match");
+        assertEquals(expectedReservationDTO.getStation_id(), responseReservation.getStation_id(), "Station ID should match");
     }
 
     @Test

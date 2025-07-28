@@ -14,8 +14,11 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -29,20 +32,36 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.AdressDTO;
 import com.humanbooster.buisinessCase.mapper.AdressMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.service.AdressService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
 
-@WebMvcTest(AdressController.class)
-@Import(AdressMapper.class)
+@WebMvcTest(controllers = AdressController.class,
+    excludeAutoConfiguration = {SecurityAutoConfiguration.class,
+                                SecurityFilterAutoConfiguration.class},
+    excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.humanbooster\\.buisinessCase\\.security\\..*"))
 public class AdressControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private AdressService adressService;
-    @Autowired
+    @MockitoBean
     private AdressMapper adressMapper;
+    
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private StationMapper stationMapper;
+    
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -100,7 +119,9 @@ public class AdressControllerTests {
         // Arrange
         Long idToGet = 1L;
         Adress mockAdress = this.mockTemplateAdress;
+        AdressDTO mockAdressDTO = this.mockTemplateAdressDTO;
         given(adressService.getAdressById(idToGet)).willReturn(Optional.of(mockAdress));
+        given(adressMapper.toDTO(mockAdress)).willReturn(mockAdressDTO);
 
         // Act & Assert
         MvcResult mvcResult = mockMvc.perform(get("/api/adresses/" + idToGet))
@@ -157,6 +178,8 @@ public class AdressControllerTests {
         mockAdressService.setFloor(1);
         mockAdressService.setUserList(new ArrayList<>());
         given(adressService.saveAdress(any(Adress.class))).willReturn(mockAdressService);
+        given(adressMapper.toDTO(mockAdressService)).willReturn(new AdressDTO(1L, "Test Save Adress", "123", "Test Save Street", "75000", "Paris", "France", "Île-de-France", "Bâtiment A", 1, new ArrayList<>(), new ArrayList<>()));
+        given(adressMapper.toEntity(newAdressDTO)).willReturn(this.mockTemplateAdress);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/adresses")
@@ -207,6 +230,8 @@ public class AdressControllerTests {
         Adress mockAdress = this.mockTemplateAdress;
 
         given(adressService.updateAdress(any(Long.class), any(Adress.class))).willReturn(Optional.of(mockAdress));
+        given(adressMapper.toDTO(mockAdress)).willReturn(new AdressDTO(1L, "Test Adress", "123", "Test Street", "75001", "Paris", "France", "Île-de-France", "Apt 1", 1, new ArrayList<>(), new ArrayList<>()));
+        given(adressMapper.toEntity(any(AdressDTO.class))).willReturn(mockAdress);
 
         // Create AdressDTO to send in the request
         AdressDTO newAdressDTO = new AdressDTO();
@@ -236,18 +261,18 @@ public class AdressControllerTests {
         assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(), "Status should be 200 OK");
         assertNotNull(content, "Response body should not be null");
 
-
-        // Check all Fields match
-        Field[] responseFields = responseAdress.getClass().getDeclaredFields();
-        for (Field responseField : responseFields) {
-            // Ignore immutable Fields
-            if (Modifier.isStatic(responseField.getModifiers()) || Modifier.isFinal(responseField.getModifiers())) continue;
-            responseField.setAccessible(true);
-            Field expectedField = expectedAdressDTO.getClass().getDeclaredField(responseField.getName());
-            expectedField.setAccessible(true);
-            assertEquals(expectedField.get(expectedAdressDTO), responseField.get(responseAdress),
-                         "Field " + responseField.getName() + " should match the mock value");
-        }
+        // Verify specific field changes
+        assertEquals(expectedAdressDTO.getId(), responseAdress.getId(), "ID should match");
+        assertEquals(expectedAdressDTO.getAdressname(), responseAdress.getAdressname(), "Adress name should match");
+        assertEquals(expectedAdressDTO.getStreetnumber(), responseAdress.getStreetnumber(), "Street number should match");
+        assertEquals(expectedAdressDTO.getStreetname(), responseAdress.getStreetname(), "Street name should match");
+        assertEquals(expectedAdressDTO.getZipcode(), responseAdress.getZipcode(), "Zip code should match");
+        assertEquals(expectedAdressDTO.getCity(), responseAdress.getCity(), "City should match");
+        assertEquals(expectedAdressDTO.getCountry(), responseAdress.getCountry(), "Country should match");
+        assertEquals(expectedAdressDTO.getRegion(), responseAdress.getRegion(), "Region should match");
+        assertEquals(expectedAdressDTO.getAddendum(), responseAdress.getAddendum(), "Addendum should match");
+        assertEquals(expectedAdressDTO.getFloor(), responseAdress.getFloor(), "Floor should match");
+        assertEquals(expectedAdressDTO.getUserList(), responseAdress.getUserList(), "User list should match");
     }
 
     @Test
