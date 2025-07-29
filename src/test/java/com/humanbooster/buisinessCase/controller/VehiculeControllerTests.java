@@ -45,7 +45,7 @@ import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.security.JwtAuthFilter;
 import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.StationService;
@@ -64,7 +64,7 @@ public class VehiculeControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private VehiculeService vehiculeService;
     @MockitoBean

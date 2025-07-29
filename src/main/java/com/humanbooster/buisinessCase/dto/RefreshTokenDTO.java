@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtRefreshDTO {
+public class RefreshTokenDTO {
     private Long id;
-    private String refreshToken;
+    private String token;
     private Long userId;
     private Date issuedAt;
 }

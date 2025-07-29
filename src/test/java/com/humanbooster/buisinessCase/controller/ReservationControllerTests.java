@@ -44,7 +44,7 @@ import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.security.JwtAuthFilter;
 import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.ReservationService;
@@ -65,7 +65,7 @@ public class ReservationControllerTests {
     @MockitoBean
     private ReservationService reservationService;
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private UserRepository userRepository;
     @MockitoBean

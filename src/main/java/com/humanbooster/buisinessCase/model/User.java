@@ -47,7 +47,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@ToString(exclude = { "reservationList", "adressList", "vehiculeList", "media" })
+@ToString(exclude = { "reservationList", "adressList", "vehiculeList", "media", "token" })
 @Table(name = "users")
 public class User implements UserDetails {
     @Id

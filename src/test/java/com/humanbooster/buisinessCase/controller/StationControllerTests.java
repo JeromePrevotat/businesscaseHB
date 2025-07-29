@@ -42,7 +42,7 @@ import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.StationState;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.service.StationService;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -58,7 +58,7 @@ public class StationControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private StationService stationService;
 

@@ -78,36 +78,7 @@ services:
             DB_PASSWORD: password
         ports:
             - "8080:8080"
-        command: ["tail", "-f", "/dev/null"] # == WHile True to keep the process alive with minimal resources consumption
-
-    # Optional: Seed database container
-    seeddb:
-        image: mysql:8.3
-        depends_on:
-            app:
-                condition: service_healthy
-        volumes:
-            - ./scripts:/scripts
-        entrypoint:
-            [
-                "sh",
-                "-c",
-                "mysql -hmysql -uuser -ppassword db < /scripts/populate.sql",
-            ]
-
-    # mysql client container for testing
-    mysql-client:
-        image: mysql:8.3
-        container_name: mysql-client
-        depends_on:
-            - mysql
-        entrypoint: ["mysql", "-h", "mysql", "-u", "user", "-p", "password"]
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-
+        command: ["tail", "-f", "/dev/null"] # == While True to keep the process alive with minimal resources consumption
 volumes:
     mysql_data:
     mysql-test_data:

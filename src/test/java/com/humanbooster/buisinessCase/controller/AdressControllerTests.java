@@ -14,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,7 +37,7 @@ import com.humanbooster.buisinessCase.mapper.StationMapper;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.service.AdressService;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.service.StationService;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -57,7 +55,7 @@ public class AdressControllerTests {
     @MockitoBean
     private AdressService adressService;
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private AdressMapper adressMapper;
     

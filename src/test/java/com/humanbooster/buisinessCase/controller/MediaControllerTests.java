@@ -14,10 +14,8 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -41,7 +39,7 @@ import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
 import com.humanbooster.buisinessCase.repository.StationRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.security.JwtAuthFilter;
 import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.MediaService;
@@ -60,7 +58,7 @@ public class MediaControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private MediaService mediaService;
     @MockitoBean

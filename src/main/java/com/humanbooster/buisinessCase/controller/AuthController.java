@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.humanbooster.buisinessCase.dto.JwtRefreshDTO;
-import com.humanbooster.buisinessCase.model.JwtRefresh;
+import com.humanbooster.buisinessCase.dto.RefreshTokenDTO;
+import com.humanbooster.buisinessCase.model.RefreshToken;
 import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.AuthResponseDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
-import com.humanbooster.buisinessCase.service.JwtRefreshService;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 
 import lombok.AllArgsConstructor;
 
@@ -33,8 +32,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AuthController {
 
-    private final JwtService jwtService;
-    private final JwtRefreshService jwtRefreshService;
+    private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
 
@@ -53,12 +51,31 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
         // If authentication is successful, generate a Refresh Token
-        final JwtRefresh refreshToken = jwtRefreshService.generateToken(authRequest.getUsername());
-        JwtRefresh savedRefreshToken = jwtRefreshService.saveJwtRefresh(refreshToken);
+        final RefreshToken refreshToken = refreshTokenService.generateToken(authRequest.getUsername());
+        RefreshToken savedRefreshToken = refreshTokenService.saveRefreshToken(refreshToken);
         // Also generate a JWT Token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String jwtToken = jwtService.generateToken(userDetails.getUsername());
+        final String accessToken = refreshTokenService.generateToken(userDetails.getUsername()).getToken();
+        // Put Tokens in AuthResponseDTO
+        AuthResponseDTO response = new AuthResponseDTO();
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(savedRefreshToken.getToken());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new JwtDTO(jwtToken));
+        return ResponseEntity.status(HttpStatus.OK).header("Authorization", "Bearer " + accessToken).body(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtDTO> refreshToken(@RequestBody RefreshTokenDTO refreshToken){
+        // GET THE TOKEN FROM DB NOT FROM BODY IDIOT
+        String username = refreshTokenService.extractUsername(refreshToken.getToken());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        // GET USER INFO FROM EXPIRED
+        if (refreshTokenService.isTokenValid(refreshToken.getToken(), userDetails)) {
+            String newAccessToken = refreshTokenService.generateToken(username).getToken();
+            return ResponseEntity.status(HttpStatus.OK)
+            .header("Authorization", "Bearer " + newAccessToken)
+            .body(new JwtDTO(newAccessToken));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 }

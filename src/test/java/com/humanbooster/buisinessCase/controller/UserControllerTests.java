@@ -19,8 +19,8 @@ import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -49,7 +49,8 @@ import com.humanbooster.buisinessCase.repository.ReservationRepository;
 import com.humanbooster.buisinessCase.repository.RoleRepository;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.repository.VehiculeRepository;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
+import com.humanbooster.buisinessCase.service.StationService;
 import com.humanbooster.buisinessCase.service.UserService;
 
 @WebMvcTest(controllers = UserController.class,
@@ -63,7 +64,7 @@ public class UserControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private UserService userService;
     @MockitoBean

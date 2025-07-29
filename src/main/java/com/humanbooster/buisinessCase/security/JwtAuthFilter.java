@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -42,13 +42,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Get Access Token from Authorization Header
         // Remove Bearer prefix
         final String token = authHeader.substring(7);
-        final String username = jwtService.extractUsername(token);
+        final String username = refreshTokenService.extractUsername(token);
         
         // User not authenticated yet, loads it from DB
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             // Check Access Token validity, if valid, set the authentication in the context
-            if (jwtService.isTokenValid(token, userDetails)){
+            if (refreshTokenService.isTokenValid(token, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     // Hides password

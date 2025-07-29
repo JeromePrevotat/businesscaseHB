@@ -18,7 +18,7 @@ import com.humanbooster.buisinessCase.security.JpaUserDetailsService;
 import com.humanbooster.buisinessCase.security.JwtAuthFilter;
 import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.AdressService;
-import com.humanbooster.buisinessCase.service.JwtService;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +32,7 @@ public class AdressControllerSecurityTests {
     @MockitoBean
     private AdressService adressService;
     @MockitoBean
-    private JwtService jwtService;
+    private RefreshTokenService refreshTokenService;
     @MockitoBean
     private AdressMapper adressMapper;
     @MockitoBean
