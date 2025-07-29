@@ -120,6 +120,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("reservations-users")
     private List<Reservation> reservationList;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference("tokens-users")
+    private RefreshToken token;
 
     public User(String userName,
             String firstName,

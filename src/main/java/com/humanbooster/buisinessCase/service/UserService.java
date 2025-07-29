@@ -3,6 +3,7 @@ package com.humanbooster.buisinessCase.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class UserService{
     private final UserRepository userRepository;
+    private final RefreshTokenService refreshTokenService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Saves a new User.
@@ -30,6 +33,10 @@ public class UserService{
      */
     @Transactional
     public User saveUser(User user){
+        if(user.getPassword() != null) {
+            System.out.println("\nUSER PWD :" + user.getPassword() + "\n");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
 
@@ -50,6 +57,16 @@ public class UserService{
     @Transactional(readOnly = true)
     public Optional<User> getUserById(Long id){
         return userRepository.findById(id);
+    }
+
+    /**
+     * Retrieves a User by its Token.
+     * @param token the Token of the User to retrieve
+     * @return  an Optional containing the User if found, or empty if not found
+     */
+    @Transactional(readOnly = true)
+    public Optional<User> getUserByToken(String token){
+        return refreshTokenService.getUserByToken(token);
     }
 
     /**
