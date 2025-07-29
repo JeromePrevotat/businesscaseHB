@@ -14,6 +14,7 @@ TRUNCATE TABLE adresses;
 TRUNCATE TABLE users;
 TRUNCATE TABLE roles_users;
 TRUNCATE TABLE roles;
+TRUNCATE TABLE jwt_refresh;
 SET FOREIGN_KEY_CHECKS=1;
 
 INSERT INTO roles (id, role_name) VALUES
@@ -43,6 +44,9 @@ INSERT INTO roles_users (user, role) VALUES
     (5, 2),          -- Superman as USER
     (6, 2),          -- Flash as USER
     (7, 3);          -- Joker as GUEST
+
+INSERT INTO jwt_refresh (id, refresh_token, user_id, issued_at) VALUES
+(1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxOTIzMDQwMCwiZXhwIjoxNzE5ODM1MjAwfQ.4iBq_sD-F8gZ7kY9xJ6vH5tW3cR2bA1fL0oE9jD4kGc', 1, '2025-06-24 12:00:00');
 
 INSERT INTO adresses (
     id, adress_name, street_number, street_name, zipcode, city, country, region, addendum, floor

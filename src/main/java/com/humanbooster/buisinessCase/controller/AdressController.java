@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -98,6 +99,7 @@ public class AdressController {
      * @param newAdress The updated adress entity
      * @return ResponseEntity with the updated adress if found, or 404 Not Found if not found
      */
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @PutMapping(value= "/{id}", consumes= "application/json")
     public ResponseEntity<AdressDTO> updateAdress(@PathVariable Long id, @Valid @RequestBody AdressDTO newAdressDTO){
         return adressService.updateAdress(id, mapper.toEntity(newAdressDTO))

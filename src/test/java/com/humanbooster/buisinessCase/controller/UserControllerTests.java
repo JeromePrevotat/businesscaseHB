@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,20 +39,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.mapper.StationMapper;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
+import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
-import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.repository.AdressRepository;
+import com.humanbooster.buisinessCase.repository.MediaRepository;
+import com.humanbooster.buisinessCase.repository.ReservationRepository;
+import com.humanbooster.buisinessCase.repository.RoleRepository;
+import com.humanbooster.buisinessCase.repository.UserRepository;
+import com.humanbooster.buisinessCase.repository.VehiculeRepository;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.UserService;
 
 @WebMvcTest(controllers = UserController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class,
                                 SecurityFilterAutoConfiguration.class},
     excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.humanbooster\\.buisinessCase\\.security\\..*"))
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private UserService userService;
     @MockitoBean
@@ -72,6 +86,9 @@ public class UserControllerTests {
         role.setId(1L);
         role.setName(UserRole.ADMIN);
 
+        Media media = new Media();
+        media.setId(1L);
+
         this.mockTemplateUser = new User();
         this.mockTemplateUser.setId(1L);
         this.mockTemplateUser.setUsername("testuser");
@@ -89,6 +106,7 @@ public class UserControllerTests {
         this.mockTemplateUser.setVehiculeList(new HashSet<>());
         this.mockTemplateUser.setAdressList(new HashSet<>());
         this.mockTemplateUser.setReservationList(new ArrayList<>());
+        this.mockTemplateUser.setMedia(media);
 
         this.mockTemplateUserDTO = new UserDTO();
         this.mockTemplateUserDTO.setId(1L);
@@ -102,9 +120,9 @@ public class UserControllerTests {
         this.mockTemplateUserDTO.setRoleList(List.of(role.getId()));
         this.mockTemplateUserDTO.setBanned(false);
         this.mockTemplateUserDTO.setVehiculeList(new ArrayList<>());
-        this.mockTemplateUserDTO.setMedia_id(1L);
         this.mockTemplateUserDTO.setAdressList(new ArrayList<>());
         this.mockTemplateUserDTO.setReservationList(new ArrayList<>());
+        this.mockTemplateUserDTO.setMedia_id(media.getId());
     }
 
     @Test

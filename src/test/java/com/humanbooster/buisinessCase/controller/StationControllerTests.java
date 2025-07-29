@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -39,6 +42,7 @@ import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.StationState;
+import com.humanbooster.buisinessCase.service.JwtService;
 import com.humanbooster.buisinessCase.service.StationService;
 import com.humanbooster.buisinessCase.service.UserService;
 
@@ -47,10 +51,14 @@ import com.humanbooster.buisinessCase.service.UserService;
                                 SecurityFilterAutoConfiguration.class},
     excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.humanbooster\\.buisinessCase\\.security\\..*"))
 
+// Disable security filters for testing
+@AutoConfigureMockMvc(addFilters = false)
 public class StationControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private JwtService jwtService;
     @MockitoBean
     private StationService stationService;
 

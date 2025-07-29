@@ -11,9 +11,12 @@ Content-Type: application/json
   "password": "admin"
 }
 
+###
+@accessToken = {{login.response.headers.Authorization}}
+@refreshToken = {{login.response.body.refreshToken}}
+
 ### Login JWT
 ### Banned User
-# @name login
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -23,7 +26,6 @@ Content-Type: application/json
 }
 
 ###
-@jtw_token = {{login.response.body.token}}
 
 ### Login JWT
 ### Invalid Credentials
@@ -35,10 +37,22 @@ Content-Type: application/json
   "password": "wrongpassword"
 }
 
+### Refresh JWT
+# @name refresh_response
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+@new_access_token = {{refresh_response.response.headers.Authorization}}
 ###
 GET http://localhost:8080/api/stations
-Authorization: Bearer {{jtw_token}}
-
+Content-Type: application/json
+Authorization: {{new_access_token}}
+# Authorization: {{accessToken}}
 ###
 GET http://localhost:8080/api/stations/1
 Authorization: Bearer {{jtw_token}}
@@ -60,10 +74,13 @@ Content-Type: application/json
     "lieuList": {},
     "mediaList": {}
 }
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ###
 POST http://localhost:8080/api/adresses
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "adressname": "12 rue de la Paix",
@@ -82,6 +99,7 @@ Content-Type: application/json
 ###
 PUT http://localhost:8080/api/adresses/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "adressname": "13 rue de la Paix",
@@ -99,14 +117,23 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/api/adresses/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### Media
 GET http://localhost:8080/api/medias
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/medias/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/medias
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "url": "http://example.com/image.jpg",
@@ -117,9 +144,11 @@ Content-Type: application/json
   "spot_id": 1,
   "station_id": 1
 }
+
 ###
 PUT http://localhost:8080/api/medias/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "url": "http://example.com/image2.jpg",
@@ -130,41 +159,63 @@ Content-Type: application/json
   "spot_id": 1,
   "station_id": 1
 }
+
 ###
 DELETE http://localhost:8080/api/medias/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### PlugType
 GET http://localhost:8080/api/plug-types
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/plug-types/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/plug-types
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "plugname": "Type 2",
   "vehicule_id": [],
   "station_id": []
 }
+
 ###
 PUT http://localhost:8080/api/plug-types/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "plugname": "Type 2 modifié",
   "vehicule_id": [],
   "station_id": []
 }
+
 ###
 DELETE http://localhost:8080/api/plug-types/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### Reservation
 GET http://localhost:8080/api/reservations
-###         
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+###
 GET http://localhost:8080/api/reservations/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/reservations
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "createdAt": "2024-06-01T10:00:00",
@@ -178,9 +229,11 @@ Content-Type: application/json
   "user_id": 1,
   "station_id": 1
 }
+
 ###
 PUT http://localhost:8080/api/reservations/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "createdAt": "2024-06-01T10:00:00",
@@ -194,16 +247,26 @@ Content-Type: application/json
   "user_id": 1,
   "station_id": 1
 }
+
 ###
 DELETE http://localhost:8080/api/reservations/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### Spot
 GET http://localhost:8080/api/spots
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/spots/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/spots
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "instruction": "Se garer à droite",
@@ -211,9 +274,11 @@ Content-Type: application/json
   "address_id": 1,
   "mediaList": []
 }
+
 ###
 PUT http://localhost:8080/api/spots/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "instruction": "Se garer à gauche",
@@ -221,16 +286,26 @@ Content-Type: application/json
   "address_id": 1,
   "mediaList": []
 }
+
 ###
 DELETE http://localhost:8080/api/spots/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### Station
 GET http://localhost:8080/api/stations
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/stations/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/stations
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "stationName": "Station République",
@@ -248,9 +323,11 @@ Content-Type: application/json
   "mediaList": [],
   "plugTypeList": []
 }
+
 ###
 PUT http://localhost:8080/api/stations/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "stationName": "Station Bastille",
@@ -268,16 +345,26 @@ Content-Type: application/json
   "mediaList": [],
   "plugTypeList": []
 }
+
 ###
 DELETE http://localhost:8080/api/stations/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### User
 GET http://localhost:8080/api/users
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/users/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/users
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "username": "jdupont",
@@ -294,9 +381,11 @@ Content-Type: application/json
   "adressList": [],
   "reservationList": []
 }
+
 ###
 PUT http://localhost:8080/api/users/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "username": "jdupont2",
@@ -313,16 +402,26 @@ Content-Type: application/json
   "adressList": [],
   "reservationList": []
 }
-###     
+
+###
 DELETE http://localhost:8080/api/users/1
+Content-Type: application/json
+Authorization: {{accessToken}}
 
 ### Vehicule
 GET http://localhost:8080/api/vehicules
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 GET http://localhost:8080/api/vehicules/1
+Content-Type: application/json
+Authorization: {{accessToken}}
+
 ###
 POST http://localhost:8080/api/vehicules
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "plate": "AB-123-CD",
@@ -331,9 +430,11 @@ Content-Type: application/json
   "userList": [],
   "plugTypeList": []
 }
+
 ###
 PUT http://localhost:8080/api/vehicules/1
 Content-Type: application/json
+Authorization: {{accessToken}}
 
 {
   "plate": "AB-123-EF",
@@ -342,5 +443,8 @@ Content-Type: application/json
   "userList": [],
   "plugTypeList": []
 }
+
 ###
 DELETE http://localhost:8080/api/vehicules/1
+Content-Type: application/json
+Authorization: {{accessToken}}
