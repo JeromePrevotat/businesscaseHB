@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.service.UserService;
@@ -72,8 +73,8 @@ public class UserController {
      * @return ResponseEntity with the saved user and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserDTO userDTO){
-        User newUser = mapper.toEntity(userDTO);
+    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
+        User newUser = mapper.toEntity(userRegisterDTO);
         User savedUser = userService.saveUser(newUser);
         UserDTO savedUserDTO = mapper.toDTO(savedUser);
         // Conform RESTful practices, we should return a URI to the created resource.

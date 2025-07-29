@@ -1,17 +1,21 @@
 package com.humanbooster.buisinessCase.mapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
+import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
 import com.humanbooster.buisinessCase.repository.AdressRepository;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
@@ -126,6 +130,34 @@ public class UserMapper {
                     })
                     .toList());
         } else user.setReservationList(new ArrayList<>());
+        return user;
+    }
+
+    public User toEntity(UserRegisterDTO dto) {
+        if (dto == null) return null;
+        User user = new User();
+        user.setId(dto.getId());
+        user.setUsername(dto.getUsername());
+        user.setFirstname(dto.getFirstname());
+        user.setLastname(dto.getLastname());
+        user.setEmail(dto.getEmail());
+        user.setBirthDate(dto.getBirthdate());
+        user.setPassword(dto.getPassword());
+        // Inscription date and account validity are not part of UserRegisterDTO
+        // as they are typically set during registration and not provided by the user.
+        user.setInscriptionDate(LocalDateTime.now());
+        user.setAccountValid(true);
+        Role roleUser = roleRepository.findByName(UserRole.USER);
+        if (roleUser != null) {
+            user.setRoleList(List.of(roleUser));
+        } else {
+            user.setRoleList(new ArrayList<>());
+        }
+        user.setBanned(false);
+        user.setVehiculeList(new HashSet<>());
+        user.setMedia(null);
+        user.setAdressList(new HashSet<>());
+        user.setReservationList(new ArrayList<>());
         return user;
     }
 
