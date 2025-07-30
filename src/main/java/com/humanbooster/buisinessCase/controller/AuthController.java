@@ -1,5 +1,7 @@
 package com.humanbooster.buisinessCase.controller;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,7 +54,11 @@ public class AuthController {
         }
         // If authentication is successful, generate a Refresh Token
         final RefreshToken refreshToken = refreshTokenService.generateToken(authRequest.getUsername());
-        RefreshToken savedRefreshToken = refreshTokenService.saveRefreshToken(refreshToken);
+        // Retrieves & Deletes the old token
+        Long tokenOwnerId = refreshToken.getUser().getId();
+        refreshTokenService.deleteRefreshTokenByUserId(tokenOwnerId);
+        // Saves the newly generated Refresh Token
+        RefreshToken savedRefreshToken = refreshTokenService.createOrUpdateRefreshToken(tokenOwnerId);
         // Also generate a JWT Token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String accessToken = refreshTokenService.generateToken(userDetails.getUsername()).getToken();

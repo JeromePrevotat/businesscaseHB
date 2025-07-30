@@ -21,6 +21,7 @@ import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.User;
+import com.humanbooster.buisinessCase.service.RefreshTokenService;
 import com.humanbooster.buisinessCase.service.UserService;
 
 import jakarta.validation.Valid;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
+    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
     private final UserMapper mapper;
 
@@ -75,7 +77,9 @@ public class UserController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUserByToken(@RequestHeader("Authorization") String token){
-        return userService.getUserByToken(token)
+        String tokenValue = token.substring(7);
+        String username = refreshTokenService.extractUsername(tokenValue);
+        return userService.getUserByUsername(username)
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

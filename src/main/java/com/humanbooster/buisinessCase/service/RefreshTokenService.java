@@ -121,6 +121,21 @@ public class RefreshTokenService {
                 .map(RefreshToken::getUser)
                 .or(() -> Optional.empty());
     }
+
+    @Transactional(readOnly = true)
+    public Optional<RefreshToken> getRefreshTokenByUserId(Long userId) {
+        return refreshTokenRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public Optional<RefreshToken> deleteRefreshTokenByUserId(Long userId) {
+        Optional<RefreshToken> refreshTokenOpt = refreshTokenRepository.findByUserId(userId);
+        if (refreshTokenOpt.isPresent()) {
+            refreshTokenRepository.delete(refreshTokenOpt.get());
+            refreshTokenRepository.flush(); // Force the delete query to be sent to the database immediately.
+        }
+        return refreshTokenOpt;
+    }
     /* Check jwt validity
     *
     * Check if User has a jwt
@@ -183,6 +198,35 @@ public class RefreshTokenService {
                     ModelUtil.copyFields(newRefreshToken, existingRefreshToken);
                     return refreshTokenRepository.save(existingRefreshToken);
                 });
+    }
+
+    /**
+     * Creates a new Refresh Token or updates the existing one for a given user.
+     * This "upsert" logic avoids unique constraint violations.
+     * @param userId The ID of the user for whom to create or update the token
+     * @return The newly created or updated Refresh Token
+     */
+    @Transactional
+    public RefreshToken createOrUpdateRefreshToken(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Check if token already exists
+        Optional<RefreshToken> existingTokenOpt = refreshTokenRepository.findByUserId(userId);
+        
+        if (existingTokenOpt.isPresent()) {
+            // Update existing token with new token values
+            RefreshToken existingToken = existingTokenOpt.get();
+            RefreshToken newTokenData = generateToken(user.getUsername());
+            
+            existingToken.setToken(newTokenData.getToken());
+            existingToken.setIssuedAt(newTokenData.getIssuedAt());
+            return refreshTokenRepository.save(existingToken);
+        } else {
+            // Create and save new token
+            RefreshToken newToken = generateToken(user.getUsername());
+            return refreshTokenRepository.save(newToken);
+        }
     }
 
     /**

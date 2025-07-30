@@ -34,7 +34,6 @@ public class UserService{
     @Transactional
     public User saveUser(User user){
         if(user.getPassword() != null) {
-            System.out.println("\nUSER PWD :" + user.getPassword() + "\n");
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
@@ -67,6 +66,16 @@ public class UserService{
     @Transactional(readOnly = true)
     public Optional<User> getUserByToken(String token){
         return refreshTokenService.getUserByToken(token);
+    }
+    
+    /**
+     * Retrieves a User by its Username.
+     * @param username the Username of the User to retrieve
+     * @return  an Optional containing the User if found, or empty if not found
+     */
+    @Transactional(readOnly = true)
+    public Optional<User> getUserByUsername(String username){
+        return userRepository.findByUsername(username);
     }
 
     /**

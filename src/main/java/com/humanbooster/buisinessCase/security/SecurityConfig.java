@@ -2,7 +2,6 @@ package com.humanbooster.buisinessCase.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -48,7 +47,7 @@ public class SecurityConfig {
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
                 // All other API endpoints require authentication
-                .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                // .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
