@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Router } from 'express';
+import { Router } from '@angular/router';
 import { SsrService } from './ssr.service';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../models/user';
