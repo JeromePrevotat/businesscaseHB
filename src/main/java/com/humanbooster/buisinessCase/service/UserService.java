@@ -1,12 +1,15 @@
 package com.humanbooster.buisinessCase.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.humanbooster.buisinessCase.exception.UserValidationException;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.utils.ModelUtil;
@@ -33,10 +36,18 @@ public class UserService{
      */
     @Transactional
     public User saveUser(User user){
-        if(user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user != null){
+            Map<String, String> errors = new HashMap<>();
+            if (userRepository.existsByUsername(user.getUsername())) errors.put("username", "Username already exists");
+            if (userRepository.existsByEmail(user.getEmail())) errors.put("email", "Email already exists");
+            if (!errors.isEmpty()) throw new UserValidationException(errors);
+    
+            if(user.getPassword() != null) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            return userRepository.save(user);
         }
-        return userRepository.save(user);
+        throw new IllegalArgumentException("User must not be null");
     }
 
     /**

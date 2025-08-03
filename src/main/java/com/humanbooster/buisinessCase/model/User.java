@@ -91,7 +91,7 @@ public class User implements UserDetails {
     private String validationCode;
 
     @NotNull(message = "Role is required")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name = "roles_users",
         joinColumns = @JoinColumn(name = "user"),
@@ -104,7 +104,7 @@ public class User implements UserDetails {
     @Column(name = "banned", nullable = false)
     private boolean banned = false;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "users_vehicules", joinColumns = @JoinColumn(name = "user"), inverseJoinColumns = @JoinColumn(name = "vehicule"))
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Vehicule> vehiculeList = new HashSet<>();
@@ -112,12 +112,12 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Media media;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "adresses_users", joinColumns = @JoinColumn(name = "user"), inverseJoinColumns = @JoinColumn(name = "adress"))
     // @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Adress> adressList = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference("reservations-users")
     private List<Reservation> reservationList;
     
