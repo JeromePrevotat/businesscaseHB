@@ -59,7 +59,11 @@ export class RegisterFormComponent {
     const password = formGroup.get('password');
     const confirmPassword = formGroup.get('confirmPassword');
     if (password && confirmPassword && password.value !== confirmPassword.value) {
-      return { 'passwordMismatch': true };
+      confirmPassword.setErrors({ 'passwordMismatch': true });
+    }
+    // Reset error message
+    else if (confirmPassword && confirmPassword.hasError('passwordMismatch')) {
+      confirmPassword.setErrors(null);
     }
     return null;
   }

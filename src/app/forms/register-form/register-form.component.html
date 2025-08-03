@@ -5,7 +5,7 @@
             <label for="name">User Name: </label>
             <input id="name" type="text" formControlName="username" [class.border-red-500]="isFieldInvalid('username')"/>
             @if (isFieldInvalid('username')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('username') }}
                 </div>
             }
@@ -14,7 +14,7 @@
             <label for="firstname">First Name: </label>
             <input id="firstname" type="text" formControlName="firstname" [class.border-red-500]="isFieldInvalid('firstname')"/>
             @if (isFieldInvalid('firstname')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('firstname') }}
                 </div>
             }
@@ -23,7 +23,7 @@
             <label for="lastname">Last Name: </label>
             <input id="lastname" type="text" formControlName="lastname" [class.border-red-500]="isFieldInvalid('lastname')"/>
             @if (isFieldInvalid('lastname')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('lastname') }}
                 </div>
             }
@@ -32,7 +32,7 @@
             <label for="email">Email: </label>
             <input id="email" type="email" formControlName="email" [class.border-red-500]="isFieldInvalid('email')"/>
             @if (isFieldInvalid('email')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('email') }}
                 </div>
             }
@@ -41,7 +41,7 @@
             <label for="birthdate">Birthdate: </label>
             <input id="birthdate" type="date" formControlName="birthdate" [class.border-red-500]="isFieldInvalid('birthdate')"/>
             @if (isFieldInvalid('birthdate')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('birthdate') }}
                 </div>
             }
@@ -50,7 +50,7 @@
             <label for="password">Password: </label>
             <input id="password" type="password" formControlName="password" [class.border-red-500]="isFieldInvalid('password')"/>
             @if (isFieldInvalid('password')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('password') }}
                 </div>
             }
@@ -59,7 +59,7 @@
             <label for="confirmPassword">Confirm Password: </label>
             <input id="confirmPassword" type="password" formControlName="confirmPassword" [class.border-red-500]="isFieldInvalid('confirmPassword')"/>
             @if (isFieldInvalid('confirmPassword')) {
-                <div class="mt-1 text-sm text-red-600">
+                <div class="form-validation-message">
                     {{ getFieldError('confirmPassword') }}
                 </div>
             }

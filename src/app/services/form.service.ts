@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Form, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { toTitleCase } from '../utils/strUtils';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class FormService {
     if (!form) return '';
     const field = form.get(fieldName);
     if (field && field.errors) {
-      if (field.errors['required']) return `${fieldName} is required`;
+      if (field.errors['required']) return `${toTitleCase(fieldName)} is required`;
       if (field.errors['minlength']) return `Minimum ${field.errors['minlength'].requiredLength} characters`;
       if (field.errors['maxlength']) return `Maximum ${field.errors['maxlength'].requiredLength} characters`;
       if (field.errors['email']) return `Invalid email format`;
@@ -26,7 +27,7 @@ export class FormService {
       if (field.errors['passwordMismatch']) return `Passwords do not match`;
 
       // Fallback for any other errors
-      return `${fieldName} is invalid`;
+      return `${toTitleCase(fieldName)} is invalid`;
     }
       return '';
   }

@@ -40,3 +40,7 @@ input, select, textarea {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.form-validation-message {
+    color: red;
+}
