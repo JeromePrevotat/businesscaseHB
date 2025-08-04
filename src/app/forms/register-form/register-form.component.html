@@ -2,7 +2,7 @@
     <form [formGroup]="registerForm" action="">
         <h2>Register</h2>
         <div class="form-field">
-            <label for="name">User Name: </label>
+            <label for="name">Username: </label>
             <input id="name" type="text" formControlName="username" [class.border-red-500]="isFieldInvalid('username')"/>
             @if (isFieldInvalid('username')) {
                 <div class="form-validation-message">

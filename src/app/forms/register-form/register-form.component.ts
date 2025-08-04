@@ -41,15 +41,24 @@ export class RegisterFormComponent {
       this.userService.createUser(newUser).subscribe({
         next: (response) => {
           console.log('User created successfully:', response);
+          this.registerForm.reset();
         },
         error: (error) => {
           console.log("USER: ", newUser);
           console.error('Error creating user:', error);
+          const username = this.registerForm.get("username");
+          const email = this.registerForm.get("email");
+          if (username && error.error && error.error.errors && error.error.errors.username) {
+            username.setErrors({ server: error.error.errors.username });
+          }
+          if (email && error.error && error.error.errors && error.error.errors.email) {
+            email.setErrors({ server: error.error.errors.email });
+          }
         }
       });
       this.isLoading = false;
-      this.registerForm.reset();
       this.isSubmitted = false;
+      // this.registerForm.reset();
     } else {
       console.error('Form is invalid:', this.registerForm.errors);
     }
