@@ -28,7 +28,7 @@ public class UserService{
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
-
+    
     /**
      * Saves a new User.
      * @param user the User to save
@@ -40,8 +40,7 @@ public class UserService{
             Map<String, String> errors = new HashMap<>();
             if (userRepository.existsByUsername(user.getUsername())) errors.put("username", "Username already exists");
             if (userRepository.existsByEmail(user.getEmail())) errors.put("email", "Email already exists");
-            if (!errors.isEmpty()) throw new UserValidationException(errors);
-    
+            if (!errors.isEmpty()) throw new UserValidationException(errors);    
             if(user.getPassword() != null) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
             }
