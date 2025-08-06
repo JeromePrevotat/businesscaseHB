@@ -48,11 +48,15 @@ export class RegisterFormComponent {
           console.error('Error creating user:', error);
           const username = this.registerForm.get("username");
           const email = this.registerForm.get("email");
+          const birthdate = this.registerForm.get("birthdate");
           if (username && error.error && error.error.errors && error.error.errors.username) {
             username.setErrors({ server: error.error.errors.username });
           }
           if (email && error.error && error.error.errors && error.error.errors.email) {
             email.setErrors({ server: error.error.errors.email });
+          }
+          if (birthdate && error.error && error.error.errors && error.error.errors.birthdate) {
+            birthdate.setErrors({ server: error.error.errors.birthdate });
           }
         }
       });

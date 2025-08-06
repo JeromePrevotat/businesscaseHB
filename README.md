@@ -4,6 +4,8 @@
 
 ### Register Form + Login Form + Token management
 
+Left to Do : Catch Server Error for Future Birthdate
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.20.
 
 ## Development server
