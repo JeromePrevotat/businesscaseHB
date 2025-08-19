@@ -1,0 +1,25 @@
+<div class="form-container">
+    <form [formGroup]="loginForm" action="">
+        <h2>Login</h2>
+        <div class="form-field">
+            <label for="name">Username: </label>
+            <input id="name" type="text" formControlName="username" [class.border-red-500]="isFieldInvalid('username')"/>
+            @if (isFieldInvalid('username')) {
+                <div class="form-validation-message">
+                    {{ getFieldError('username') }}
+                </div>
+            }
+        </div>
+        <div class="form-field">
+            <label for="password">Password: </label>
+            <input id="password" type="password" formControlName="password" [class.border-red-500]="isFieldInvalid('password')"/>
+            @if (isFieldInvalid('password')) {
+                <div class="form-validation-message">
+                    {{ getFieldError('password') }}
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="submit-btn" (click)="submitLogin()">Login</button>
+    </form>
+</div>

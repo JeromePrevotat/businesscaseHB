@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { FormService } from '../../services/form.service';
+import { Router } from '@angular/router';
+import { ROUTE_PATHS } from '../../utils/routeMapping';
 
 @Component({
   selector: 'app-register-form',
@@ -16,6 +18,7 @@ export class RegisterFormComponent {
   userService = inject(UserService);
   authService = inject(AuthService);
   registerForm: FormGroup;
+  router = inject(Router);
   isSubmitted = false;
   isLoading = false;
 
@@ -42,6 +45,7 @@ export class RegisterFormComponent {
         next: (response) => {
           console.log('User created successfully:', response);
           this.registerForm.reset();
+          this.router.navigate([ROUTE_PATHS.home]);
         },
         error: (error) => {
           console.log("USER: ", newUser);

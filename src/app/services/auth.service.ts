@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SsrService } from './ssr.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user';
 import { UserService } from './user.service';
 import { AuthResponse } from '../models/auth-reponse';
+import { ROUTE_PATHS } from '../utils/routeMapping';
 
 export const accessTokenSubject = new BehaviorSubject<string | null>(null);
 
@@ -26,13 +27,13 @@ export class AuthService {
   private userSubject = new BehaviorSubject<User | null>(null);
   public user$ = this.userSubject.asObservable();
 
+  private _currentRefreshToken: string | null = null;
   private currentAccessToken$ = accessTokenSubject.asObservable();
 
-  // private currentRefreshToken: string | null = null;
   private authenticated: boolean = false;
 
   constructor() {
-    this.verifyAuth(null);
+    this.verifyAuth(ROUTE_PATHS.home);
    }
 
   verifyAuth(redirectRoute: string | null) {
@@ -62,7 +63,7 @@ export class AuthService {
     }
   }
 
-  login({ username, password }: { username: string; password: string }){
+  login({ username, password }: { username: string; password: string }): Observable<AuthResponse> {
     const response = this.http.post<AuthResponse>(`${this.apiUrl}/login`, { username, password });
     response.subscribe({
       next: (authResponse) => {
@@ -75,6 +76,7 @@ export class AuthService {
         this.userService.getUserByToken(this.currentRefreshToken).subscribe({
           next: (user) => {
             this.setCurrentUser = user;
+            this.router.navigate([ROUTE_PATHS.home]);
           },
           error: (error) => {
             console.error('Error fetching user by token:', error);
@@ -85,6 +87,7 @@ export class AuthService {
         console.error('Login failed:', error);
       }
     });
+    return response;
   }
 
   logout() {
@@ -120,11 +123,11 @@ export class AuthService {
   }
 
   get currentRefreshToken(): string | null {
-    return this.currentRefreshToken;
+    return this._currentRefreshToken;
   }
 
   set currentRefreshToken(token: string | null) {
-    this.currentRefreshToken = token;
+    this._currentRefreshToken = token;
   }
 
   get currentAccessToken(): string | null {
