@@ -14,7 +14,7 @@
     <div class="navbar-right">
         @if(currentUser){
             <p>Welcome, {{ currentUser.username }}</p>
-            <a (click)="authService.logout()">Logout</a>
+            <button (click)="authService.logout()">Logout</button>
         } @else {
             <a routerLink="auth/login">Login</a>
             <a routerLink="auth/register">Register</a>

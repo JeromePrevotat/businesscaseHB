@@ -92,8 +92,16 @@ export class AuthService {
 
   logout() {
     if(this.ssrService.isClientSide) {
+      // Clean tokens
       localStorage.removeItem('token');
+      this._currentRefreshToken = null;
+      accessTokenSubject.next(null);
+      this.currentAccessToken = null;
+      // Clean User
       this.setCurrentUser = null;
+      // Set Authenticated to False
+      this.isAuthenticated = false;
+
       this.router.navigate([ROUTE_PATHS.home]);
     }
   }

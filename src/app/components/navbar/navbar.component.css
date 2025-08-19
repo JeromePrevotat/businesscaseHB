@@ -34,8 +34,19 @@
 
 .navbar-right {
     grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
+.navbar-right button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: medium;
+}
+
+.navbar-right button,
 .navbar-right a,
 .navbar-right p {
     display: flex;
