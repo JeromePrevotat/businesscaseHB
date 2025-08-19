@@ -94,7 +94,7 @@ export class AuthService {
     if(this.ssrService.isClientSide) {
       localStorage.removeItem('token');
       this.setCurrentUser = null;
-      this.router.navigate(['/login']);
+      this.router.navigate([ROUTE_PATHS.home]);
     }
   }
 

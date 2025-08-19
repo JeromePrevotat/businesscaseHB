@@ -36,7 +36,8 @@
     grid-column: 3;
 }
 
-.navbar-right a{
+.navbar-right a,
+.navbar-right p {
     display: flex;
     align-items: center;
     justify-content: flex-end;
