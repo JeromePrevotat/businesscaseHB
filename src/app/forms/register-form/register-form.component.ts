@@ -6,6 +6,8 @@ import { User } from '../../models/user';
 import { FormService } from '../../services/form.service';
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../utils/routeMapping';
+import { AuthResponse } from '../../models/auth-reponse';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register-form',
@@ -44,8 +46,23 @@ export class RegisterFormComponent {
       this.userService.createUser(newUser).subscribe({
         next: (response) => {
           console.log('User created successfully:', response);
-          this.registerForm.reset();
-          this.router.navigate([ROUTE_PATHS.home]);
+          // Auto Login
+          this.autoLogin().subscribe({
+            next: (response) => {
+              console.log('Auto login successful:', response);
+              this.registerForm.reset();
+              this.isLoading = false;
+              this.isSubmitted = false;
+              this.router.navigate([ROUTE_PATHS.home]);
+            },
+            error: (error) => {
+              console.error('Error during auto login:', error);
+              this.registerForm.reset();
+              this.isLoading = false;
+              this.isSubmitted = false;
+              this.router.navigate([ROUTE_PATHS.login]);
+            }
+          });
         },
         error: (error) => {
           console.log("USER: ", newUser);
@@ -62,14 +79,17 @@ export class RegisterFormComponent {
           if (birthdate && error.error && error.error.errors && error.error.errors.birthdate) {
             birthdate.setErrors({ server: error.error.errors.birthdate });
           }
+          this.isLoading = false;
         }
       });
-      this.isLoading = false;
-      this.isSubmitted = false;
-      // this.registerForm.reset();
     } else {
       console.error('Form is invalid:', this.registerForm.errors);
     }
+  }
+
+  autoLogin(): Observable<AuthResponse>{
+      return this.authService.login({username: this.registerForm.value.username,
+                                      password: this.registerForm.value.password});
   }
 
   private passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
