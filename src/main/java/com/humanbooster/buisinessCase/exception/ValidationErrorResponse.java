@@ -23,6 +23,4 @@ public class ValidationErrorResponse {
     public void setErrors(Map<String, String> errors) {
         this.errors = errors;
     }
-
-    
 }

@@ -34,16 +34,19 @@ public class RefreshTokenService {
     private final UserRepository userRepository;
     private final String SECRET_KEY;
     private final Long EXPIRATION_TIME;
+    private final Long ACCESS_TOKEN_EXPIRATION_TIME;
 
     public RefreshTokenService(
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
             @Value("${jwtrefresh.secret}") String secretKey,
-            @Value("${jwtrefresh.expiration}") Long expirationTime) {
+            @Value("${jwtrefresh.expiration}") Long expirationTime,
+            @Value("${jwt.expiration}") Long accessTokenExpirationTime) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.SECRET_KEY = secretKey;
         this.EXPIRATION_TIME = expirationTime;
+        this.ACCESS_TOKEN_EXPIRATION_TIME = accessTokenExpirationTime;
     }
 
     @Transactional
@@ -69,6 +72,18 @@ public class RefreshTokenService {
         newRefreshToken.setIssuedAt(now);
         newRefreshToken.setUser(userRepository.findByUsername(username).get());
         return newRefreshToken;
+    }
+
+    public String generateAccessToken(String username) {
+        Date now = new Date(System.currentTimeMillis());
+        Date expireAt = new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME);
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expireAt)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Key getSigningKey() {

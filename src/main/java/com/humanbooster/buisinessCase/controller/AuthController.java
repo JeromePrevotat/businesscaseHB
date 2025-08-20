@@ -61,7 +61,7 @@ public class AuthController {
         RefreshToken savedRefreshToken = refreshTokenService.createOrUpdateRefreshToken(tokenOwnerId);
         // Also generate a JWT Token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-        final String accessToken = refreshTokenService.generateToken(userDetails.getUsername()).getToken();
+        final String accessToken = refreshTokenService.generateAccessToken(userDetails.getUsername());
         // Put Tokens in AuthResponseDTO
         AuthResponseDTO response = new AuthResponseDTO();
         response.setAccessToken(accessToken);
