@@ -47,22 +47,10 @@ export class RegisterFormComponent {
         next: (response) => {
           console.log('User created successfully:', response);
           // Auto Login
-          this.autoLogin().subscribe({
-            next: (response) => {
-              console.log('Auto login successful:', response);
-              this.registerForm.reset();
-              this.isLoading = false;
-              this.isSubmitted = false;
-              this.router.navigate([ROUTE_PATHS.home]);
-            },
-            error: (error) => {
-              console.error('Error during auto login:', error);
-              this.registerForm.reset();
-              this.isLoading = false;
-              this.isSubmitted = false;
-              this.router.navigate([ROUTE_PATHS.login]);
-            }
-          });
+          this.autoLogin();
+          this.registerForm.reset();
+          this.isLoading = false;
+          this.isSubmitted = false;
         },
         error: (error) => {
           console.log("USER: ", newUser);
@@ -87,9 +75,11 @@ export class RegisterFormComponent {
     }
   }
 
-  autoLogin(): Observable<AuthResponse>{
-      return this.authService.login({username: this.registerForm.value.username,
-                                      password: this.registerForm.value.password});
+  autoLogin(){
+      this.authService.login({
+        username: this.registerForm.value.username,
+        password: this.registerForm.value.password
+      });
   }
 
   private passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
