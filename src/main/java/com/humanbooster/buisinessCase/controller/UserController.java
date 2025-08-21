@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,13 +78,15 @@ public class UserController {
      * @return ResponseEntity with the user if found, or 404 Not Found if not found
      */
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getUserByToken(@RequestHeader("Authorization") String token){
-        String tokenValue = token.substring(7);
-        String username = refreshTokenService.extractUsername(tokenValue);
-        return userService.getUserByUsername(username)
-                .map(mapper::toDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<UserDTO> getUserByToken(@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    
+        return userService.getUserByUsername(userDetails.getUsername())
+            .map(mapper::toDTO)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     /**

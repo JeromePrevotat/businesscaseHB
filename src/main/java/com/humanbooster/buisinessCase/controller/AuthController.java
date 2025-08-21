@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.humanbooster.buisinessCase.dto.RefreshTokenDTO;
+import com.humanbooster.buisinessCase.exception.InvalidTokenException;
+import com.humanbooster.buisinessCase.exception.RefreshTokenExpiredException;
 import com.humanbooster.buisinessCase.model.RefreshToken;
 import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.AuthResponseDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
 import com.humanbooster.buisinessCase.service.RefreshTokenService;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 
 
@@ -72,16 +76,22 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<JwtDTO> refreshToken(@RequestBody RefreshTokenDTO refreshToken){
-        // GET THE TOKEN FROM DB NOT FROM BODY IDIOT
-        String username = refreshTokenService.extractUsername(refreshToken.getToken());
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        // GET USER INFO FROM EXPIRED
-        if (refreshTokenService.isTokenValid(refreshToken.getToken(), userDetails)) {
-            String newAccessToken = refreshTokenService.generateToken(username).getToken();
-            return ResponseEntity.status(HttpStatus.OK)
-            .header("Authorization", "Bearer " + newAccessToken)
-            .body(new JwtDTO(newAccessToken));
+        try{
+            // GET THE TOKEN FROM DB NOT FROM BODY IDIOT
+            String username = refreshTokenService.extractUsername(refreshToken.getToken());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            // GET USER INFO FROM EXPIRED
+            if (refreshTokenService.isTokenValid(refreshToken.getToken(), userDetails)) {
+                String newAccessToken = refreshTokenService.generateAccessToken(username);
+                return ResponseEntity.status(HttpStatus.OK)
+                .header("Authorization", "Bearer " + newAccessToken)
+                .body(new JwtDTO(newAccessToken));
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (ExpiredJwtException e) {
+            throw new RefreshTokenExpiredException("Refresh Token has expired", e);
+        } catch (JwtException e){
+            throw new InvalidTokenException("Token is invalid or malformed", e);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 }
