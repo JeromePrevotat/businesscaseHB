@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
+import { API_URL } from '../../utils/apiUrl';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ import { User } from '../../models/user';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   http = inject(HttpClient);
   userService = inject(UserService);
   public authService = inject(AuthService);
@@ -24,15 +25,12 @@ export class HomeComponent {
     });
   }
   onTestButtonClick() {
-    return this.http.get<User>(`http://localhost:8080/api/users/me`).subscribe({
+    return this.http.get<User>(`${API_URL.USERS}/me`).subscribe({
       next: (user) => {
         console.log(user);
       },
       error: (error) => {
-        if (error.status === 403){
-          this.authService.refresh();
-        }
-        console.error(error);
+        console.log(error)
       }
     });
   }

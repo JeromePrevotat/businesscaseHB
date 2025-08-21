@@ -37,6 +37,7 @@ export class LoginFormComponent {
       this.authService.login({ username, password }).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
+          this.authService.handleLoginSuccess(response);
           this.isLoading = false;
           this.isSubmitted = false;
           this.loginForm.reset();

@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SsrService } from './ssr.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user';
-import { UserService } from './user.service';
 import { AuthResponse } from '../models/auth-reponse';
 import { ROUTE_PATHS } from '../utils/routeMapping';
-import { Token } from '@angular/compiler';
+import { API_URL } from '../utils/apiUrl';
 
 export const accessTokenSubject = new BehaviorSubject<string | null>(null);
 
@@ -15,11 +14,10 @@ export const accessTokenSubject = new BehaviorSubject<string | null>(null);
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = "http://localhost:8080/api/auth";
-  private http = inject(HttpClient);
   private router = inject(Router);
   private ssrService = inject(SsrService);
-  private userService = inject(UserService);
+  private httpBackend = inject(HttpBackend);
+  private http = new HttpClient(this.httpBackend);
 
   // Subjects == emits its value when subscribed to
   private initializedSubject = new BehaviorSubject<boolean>(false);
@@ -43,7 +41,7 @@ export class AuthService {
     
     const token: string | null = localStorage.getItem('token');
     if(token){
-      this.userService.getUserByToken(token).subscribe({
+      this.getUserByToken(token).subscribe({
         next: (data: User) => {
           const user: User = data;
           this.setCurrentUser = user;
@@ -65,30 +63,25 @@ export class AuthService {
   }
 
   login({ username, password }: { username: string; password: string }): Observable<AuthResponse> {
-    const response = this.http.post<AuthResponse>(`${this.apiUrl}/login`, { username, password });
-    response.subscribe({
-      next: (authResponse) => {
-        console.log('Login successful, token received:', authResponse.accessToken);
-        this.currentRefreshToken = authResponse.refreshToken;
-        accessTokenSubject.next(authResponse.accessToken);
-        this.authenticated = true;
-        // Store the token in localStorage
-        if(this.ssrService.isClientSide) localStorage.setItem('token', this.currentRefreshToken);
-        this.userService.getUserByToken(this.currentRefreshToken).subscribe({
-          next: (user) => {
-            this.setCurrentUser = user;
-            this.router.navigate([ROUTE_PATHS.home]);
-          },
-          error: (error) => {
-            console.error('Error fetching user by token:', error);
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Login failed:', error);
-      }
-    });
-    return response;
+    return this.http.post<AuthResponse>(`${API_URL.AUTH}/login`, { username, password });
+  }
+
+  handleLoginSuccess(authResponse: AuthResponse): void {
+    console.log('Login successful, token received:', authResponse.accessToken);
+      this.currentRefreshToken = authResponse.refreshToken;
+      accessTokenSubject.next(authResponse.accessToken);
+      this.authenticated = true;
+      if(this.ssrService.isClientSide) localStorage.setItem('token', this.currentRefreshToken);
+      
+      this.getUserByToken(this.currentRefreshToken).subscribe({
+        next: (user) => {
+          this.setCurrentUser = user;
+          this.router.navigate([ROUTE_PATHS.home]);
+        },
+        error: (error) => {
+          console.error('Error fetching user by token:', error);
+        }
+      });
   }
 
   refresh(): void {
@@ -98,7 +91,7 @@ export class AuthService {
       this.router.navigate([ROUTE_PATHS.login]);
       return;
     }
-    const response = this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { token: refreshToken });
+    const response = this.http.post<AuthResponse>(`${API_URL.AUTH}/refresh`, { token: refreshToken });
     response.subscribe({
       next: (authResponse) => {
         console.log('Access Token refreshed successfully:', authResponse.accessToken);
@@ -126,6 +119,12 @@ export class AuthService {
 
       this.router.navigate([ROUTE_PATHS.home]);
     }
+  }
+
+  getUserByToken(token: string): Observable<User> {
+    return this.http.get<User>(`${API_URL.USERS}/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   }
 
   get getCurrentUser(): User | null {

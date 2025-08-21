@@ -3,19 +3,15 @@ import { inject } from '@angular/core';
 import { SsrService } from '../services/ssr.service';
 import { Router } from '@angular/router';
 import { accessTokenSubject } from '../services/auth.service';
+import { INTERCEPTOR_PROTECTED_URL, INTERCEPTOR_PUBLIC_URL } from '../utils/interceptorUtils';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const ssrService = inject(SsrService);
   const router = inject(Router);
   
-  const protectedUrls = [
-    'http://localhost:8080/api/users/me'
-  ];
+  const protectedUrls = INTERCEPTOR_PROTECTED_URL;
 
-  const publicUrls = [
-    'http://localhost:8080/api/auth/login',
-    'http://localhost:8080/api/auth/register',
-  ];
+  const publicUrls = INTERCEPTOR_PUBLIC_URL;
 
   const requiresAuthentication = protectedUrls.some(url => req.url.includes(url));
   const isPublicUrl = publicUrls.some(url => req.url.includes(url));
@@ -38,8 +34,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       });
       return next(authRequest);
     }
-    // Token absent or invalid
-    router.navigate(['/login']);
   }  
   return next(req);
 };
