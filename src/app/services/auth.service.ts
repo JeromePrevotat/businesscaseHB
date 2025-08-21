@@ -91,11 +91,12 @@ export class AuthService {
     return response;
   }
 
-  refresh(): Observable<AuthResponse> {
+  refresh(): void {
     const refreshToken = localStorage.getItem('token');
     if (!refreshToken){
       // No Refresh Token, redirect to login
       this.router.navigate([ROUTE_PATHS.login]);
+      return;
     }
     const response = this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { token: refreshToken });
     response.subscribe({
@@ -106,9 +107,9 @@ export class AuthService {
       },
       error: (error) => {
         console.error('Error refreshing access token:', error);
+        this.logout();
       }
     });
-    return response;
   }
 
   logout() {

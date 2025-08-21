@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideServerRendering } from '@angular/platform-server';
 import { jwtInterceptor } from './interceptors/jwt.interceptor';
+import { refreshInterceptor } from './interceptors/refresh.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +17,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withFetch(),
       withInterceptors([
-        jwtInterceptor
+        jwtInterceptor,
+        refreshInterceptor
       ])
     )
   ]

@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+import { accessTokenSubject, AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -19,10 +19,11 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
         // Error detected
         if (error.status === 403) {
           console.log('403 trying to refresh Access Token');
-          authService.refresh().subscribe({
-            next: (authResponse) => {
-              console.log('Refresh successful');
-              // Retry original request with new token
+          const currentAccessToken = authService.currentAccessToken;
+          authService.refresh();
+          accessTokenSubject.subscribe(newAccessToken => {
+            if (newAccessToken && newAccessToken !== currentAccessToken) {
+              console.log('Refresh successfull');
               next(req).subscribe({
                 next: (retryResponse) => {
                   observer.next(retryResponse);
@@ -32,11 +33,10 @@ export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
                   observer.error(retryError);
                 }
               });
-            },
-            error: (refreshError) => {
+            }
+            else if (newAccessToken === null && currentAccessToken !== null){
               console.log('Refresh failed');
-              authService.logout();
-              observer.error(refreshError);
+              observer.error(error);
             }
           });
         } else {
