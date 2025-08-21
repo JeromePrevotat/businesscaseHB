@@ -7,6 +7,7 @@ import { User } from '../models/user';
 import { UserService } from './user.service';
 import { AuthResponse } from '../models/auth-reponse';
 import { ROUTE_PATHS } from '../utils/routeMapping';
+import { Token } from '@angular/compiler';
 
 export const accessTokenSubject = new BehaviorSubject<string | null>(null);
 
@@ -85,6 +86,26 @@ export class AuthService {
       },
       error: (error) => {
         console.error('Login failed:', error);
+      }
+    });
+    return response;
+  }
+
+  refresh(): Observable<AuthResponse> {
+    const refreshToken = localStorage.getItem('token');
+    if (!refreshToken){
+      // No Refresh Token, redirect to login
+      this.router.navigate([ROUTE_PATHS.login]);
+    }
+    const response = this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, { token: refreshToken });
+    response.subscribe({
+      next: (authResponse) => {
+        console.log('Access Token refreshed successfully:', authResponse.accessToken);
+        this.currentAccessToken = authResponse.accessToken;
+        accessTokenSubject.next(authResponse.accessToken);
+      },
+      error: (error) => {
+        console.error('Error refreshing access token:', error);
       }
     });
     return response;
