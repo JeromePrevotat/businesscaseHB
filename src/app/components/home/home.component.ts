@@ -3,7 +3,6 @@ import { Component, inject } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
-import { error } from 'console';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +29,9 @@ export class HomeComponent {
         console.log(user);
       },
       error: (error) => {
+        if (error.status === 403){
+          this.authService.refresh();
+        }
         console.error(error);
       }
     });
