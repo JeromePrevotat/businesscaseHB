@@ -19,7 +19,7 @@ export class UserService {
   }
 
   createUser(user:Partial<User>): Observable<User> {
-    return this.http.post<User>(API_URL.USERS, user);
+    return this.http.post<User>(`${API_URL.AUTH}/register`, user);
   }
 
   editUser(id: number, user: Partial<User>): Observable<User> {

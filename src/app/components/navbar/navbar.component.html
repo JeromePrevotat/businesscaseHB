@@ -15,6 +15,7 @@
         @if(currentUser){
             <p>Welcome, {{ currentUser.username }}</p>
             <button (click)="authService.logout()">Logout</button>
+            <a routerLink="/profile">Profil</a>
         } @else {
             <a routerLink="auth/login">Login</a>
             <a routerLink="auth/register">Register</a>

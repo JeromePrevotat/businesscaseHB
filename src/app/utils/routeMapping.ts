@@ -7,6 +7,9 @@ export const ROUTE_PATHS = {
     register: 'auth/register',
     refresh: 'auth/refresh',
 
+    // Users routes
+    profile: 'profile',
+
     // Stations routes
     stations: 'stations',
     editStation: 'stations/:stationId/edit',

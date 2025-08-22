@@ -76,10 +76,19 @@ export class RegisterFormComponent {
   }
 
   autoLogin(){
-      this.authService.login({
-        username: this.registerForm.value.username,
-        password: this.registerForm.value.password
-      });
+    this.authService.login({
+      username: this.registerForm.value.username,
+      password: this.registerForm.value.password
+    }).subscribe({
+      next: (authResponse: AuthResponse) => {
+        console.log('Auto-login successful:', authResponse);
+        this.authService.handleLoginSuccess(authResponse);
+      },
+      error: (error) => {
+        console.error('Auto-login failed:', error);
+        this.router.navigate([ROUTE_PATHS.login]);
+      }
+    });
   }
 
   private passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
