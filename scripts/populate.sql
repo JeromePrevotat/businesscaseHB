@@ -89,13 +89,13 @@ INSERT INTO spots (
     (3, 'Place réservée, demander le code à l''accueil.', 5);
 
 INSERT INTO stations (
-    id, station_name, latitude, longitude, price_rate, power_output, manual, state, grounded, busy, wired, spot
+    id, station_name, latitude, longitude, price_rate, power_output, manual, state, grounded, busy, wired, spot, owner
 ) VALUES
-    (1, 'Station République', 48.867, 2.363, 0.25, 22.0, 'Voir le manuel à l''accueil.', 'ACTIVE', true, false, true, 3),
-    (2, 'Station Gare', 48.844, 2.374, 0.30, 50.0, 'Instructions affichées sur place.', 'INACTIVE', true, true, false, 2),
-    (3, 'BatBorne', 48.857194, 2.347063, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1),
-    (4, 'SuperBorne', 48.857194, 2.347064, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1),
-    (5, 'SpeedBorne', 48.857194, 2.347065, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1);
+    (1, 'Station République', 48.867, 2.363, 0.25, 22.0, 'Voir le manuel à l''accueil.', 'ACTIVE', true, false, true, 3, 1),
+    (2, 'Station Gare', 48.844, 2.374, 0.30, 50.0, 'Instructions affichées sur place.', 'INACTIVE', true, true, false, 2, 2),
+    (3, 'BatBorne', 48.857194, 2.347063, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1, 4),
+    (4, 'SuperBorne', 48.857194, 2.347064, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1, 5),
+    (5, 'SpeedBorne', 48.857194, 2.347065, 0.20, 11.0, NULL, 'ACTIVE', false, false, false, 1, 6);
 
 INSERT INTO reservations (
     id, created_at, validated_at, start_date, end_date, hourly_rate_log, state, payed, date_payed, user, station

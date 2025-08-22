@@ -121,6 +121,10 @@ public class User implements UserDetails {
     @JsonManagedReference("reservations-users")
     private List<Reservation> reservationList;
     
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("stations-users")
+    private List<Station> stationList;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference("tokens-users")
     private RefreshToken token;

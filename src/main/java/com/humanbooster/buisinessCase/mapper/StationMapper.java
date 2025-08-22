@@ -10,9 +10,11 @@ import com.humanbooster.buisinessCase.model.PlugType;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.Spot;
 import com.humanbooster.buisinessCase.model.Station;
+import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.MediaRepository;
 import com.humanbooster.buisinessCase.repository.PlugTypeRepository;
 import com.humanbooster.buisinessCase.repository.SpotRepository;
+import com.humanbooster.buisinessCase.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -22,6 +24,7 @@ public class StationMapper {
     private final SpotRepository spotRepository;
     private final MediaRepository mediaRepository;
     private final PlugTypeRepository plugTypeRepository;
+    private final UserRepository userRepository;
 
     
     public StationDTO toDTO(Station station) {
@@ -39,6 +42,7 @@ public class StationMapper {
             station.isBusy(),
             station.isWired(),
             station.getSpot() != null ? station.getSpot().getId() : null,
+            station.getOwner() != null ? station.getOwner().getId() : null,
             station.getReservationList() != null ? station.getReservationList()
                                                     .stream()
                                                     .map(reservation -> reservation.getId())
@@ -76,6 +80,11 @@ public class StationMapper {
                                         .orElse(null);
             station.setSpot(spot);
         } else station.setSpot(null);
+        if (dto.getOwner_id() != null) {
+            User owner = userRepository.findById(dto.getOwner_id())
+                                        .orElse(null);
+            station.setOwner(owner);
+        } else station.setOwner(null);
         if (dto.getReservationList() != null && !dto.getReservationList().isEmpty()) {
             station.setReservationList(dto.getReservationList()
                                             .stream()

@@ -75,7 +75,7 @@ public class Adress {
     private int floor;
 
     @NotNull
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "adressList", fetch = FetchType.LAZY)
     @JsonBackReference("adresses-users")
     private List<User> userList;
 

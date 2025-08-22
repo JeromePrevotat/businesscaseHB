@@ -59,6 +59,7 @@ public class StationDTO {
     private boolean wired = false;
 
     private Long spot_id;
+    private Long owner_id;
     private List<Long> reservationList;
     private List<Long> mediaList;
     private List<Long> plugTypeList;

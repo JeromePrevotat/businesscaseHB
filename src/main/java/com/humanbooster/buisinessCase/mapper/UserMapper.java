@@ -14,6 +14,7 @@ import com.humanbooster.buisinessCase.model.Adress;
 import com.humanbooster.buisinessCase.model.Media;
 import com.humanbooster.buisinessCase.model.Reservation;
 import com.humanbooster.buisinessCase.model.Role;
+import com.humanbooster.buisinessCase.model.Station;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.model.UserRole;
 import com.humanbooster.buisinessCase.model.Vehicule;
@@ -63,6 +64,11 @@ public class UserMapper {
             user.getReservationList() != null ? user.getReservationList()
                                                 .stream()
                                                 .map(Reservation::getId)
+                                                .toList()
+                                        : null,
+            user.getStationList() != null ? user.getStationList()
+                                                .stream()
+                                                .map(Station::getId)
                                                 .toList()
                                         : null
         );
@@ -130,6 +136,17 @@ public class UserMapper {
                     })
                     .toList());
         } else user.setReservationList(new ArrayList<>());
+        if (dto.getStationList() != null && !dto.getStationList().isEmpty()) {
+            user.setStationList(
+                dto.getStationList()
+                    .stream()
+                    .map(id -> {
+                        Station station = new Station();
+                        station.setId(id);
+                        return station;
+                    })
+                    .toList());
+        } else user.setStationList(new ArrayList<>());
         return user;
     }
 

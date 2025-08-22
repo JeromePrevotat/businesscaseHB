@@ -18,16 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.humanbooster.buisinessCase.dto.RefreshTokenDTO;
+import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.exception.InvalidTokenException;
 import com.humanbooster.buisinessCase.exception.RefreshTokenExpiredException;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.RefreshToken;
+import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.AuthResponseDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
 import com.humanbooster.buisinessCase.service.RefreshTokenService;
+import com.humanbooster.buisinessCase.service.UserService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 
@@ -41,6 +47,8 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     
     @PostMapping("/login")
@@ -93,5 +101,22 @@ public class AuthController {
         } catch (JwtException e){
             throw new InvalidTokenException("Token is invalid or malformed", e);
         }
+    }
+
+    /**
+     * Save a new user.
+     * POST /api/users
+     * @param user The user entity to be saved
+     * @return ResponseEntity with the saved user and 201 Created status
+     */
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
+        User newUser = userMapper.toEntity(userRegisterDTO);
+        User savedUser = userService.saveUser(newUser);
+        UserDTO savedUserDTO = userMapper.toDTO(savedUser);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/users/" + savedUser.getId());
+        // return ResponseEntity.created(location).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
     }
 }

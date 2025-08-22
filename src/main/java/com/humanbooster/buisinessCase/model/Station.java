@@ -97,11 +97,17 @@ public class Station {
     @JoinColumn(name="spot", nullable = false)
     @JsonBackReference("stations-spots")
     private Spot spot;
+    
+    @NotNull(message = "User is required")
+    @ManyToOne
+    @JoinColumn(name="owner", nullable = false)
+    @JsonBackReference("stations-users")
+    private User owner;
 
     @OneToMany(targetEntity=Reservation.class, mappedBy="station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("stations-reservations")
     private List<Reservation> reservationList;
-    
+
     @NotNull
     @OneToMany(targetEntity=Media.class, mappedBy="station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("medias-stations")

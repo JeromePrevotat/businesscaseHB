@@ -50,4 +50,5 @@ public class UserDTO {
     private Long media_id;
     private List<Long> adressList;
     private List<Long> reservationList;
+    private List<Long> stationList;
 } 
