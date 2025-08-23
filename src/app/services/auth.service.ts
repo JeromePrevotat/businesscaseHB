@@ -76,7 +76,6 @@ export class AuthService {
       this.getUserByToken(this.currentRefreshToken).subscribe({
         next: (user) => {
           this.setCurrentUser = user;
-          this.router.navigate([ROUTE_PATHS.home]);
         },
         error: (error) => {
           console.error('Error fetching user by token:', error);
@@ -119,6 +118,10 @@ export class AuthService {
 
       this.router.navigate([ROUTE_PATHS.home]);
     }
+  }
+
+  confirmAccount(user_id: number, code: string): Observable<any> {
+    return this.http.post<any>(`${API_URL.AUTH}/confirm`, { user_id, code });
   }
 
   getUserByToken(token: string): Observable<User> {

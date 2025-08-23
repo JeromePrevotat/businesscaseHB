@@ -1,0 +1,16 @@
+<div class="form-container">
+    <form [formGroup]="confirmationForm" action="">
+        <h2>Account Confirmation</h2>
+        <div class="form-field">
+            <label for="code">Confirmation Code: </label>
+            <input id="code" type="text" formControlName="code" [class.border-red-500]="isFieldInvalid('code')"/>
+            @if (isFieldInvalid('code')) {
+                <div class="form-validation-message">
+                    {{ getFieldError('code') }}
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="submit-btn" (click)="submitCode()">Submit</button>
+    </form>
+</div>
