@@ -4,6 +4,7 @@ export const ROUTE_PATHS = {
     home: 'home',
     // Auth routes
     login: 'auth/login',
+    accountConfirmation: 'auth/account-confirmation',
     register: 'auth/register',
     refresh: 'auth/refresh',
 

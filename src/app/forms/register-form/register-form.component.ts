@@ -83,7 +83,7 @@ export class RegisterFormComponent {
       next: (authResponse: AuthResponse) => {
         console.log('Auto-login successful:', authResponse);
         this.authService.handleLoginSuccess(authResponse);
-        this.router.navigate([ROUTE_PATHS.home]);
+        this.router.navigate([ROUTE_PATHS.accountConfirmation]);
       },
       error: (error) => {
         console.error('Auto-login failed:', error);

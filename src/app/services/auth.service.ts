@@ -121,7 +121,7 @@ export class AuthService {
   }
 
   confirmAccount(user_id: number, code: string): Observable<any> {
-    return this.http.post<any>(`${API_URL.AUTH}/confirm`, { user_id, code });
+    return this.http.post<any>(`${API_URL.AUTH}/account-confirmation`, { user_id, code });
   }
 
   getUserByToken(token: string): Observable<User> {

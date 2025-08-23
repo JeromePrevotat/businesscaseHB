@@ -1,27 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { error } from 'console';
 import { FormService } from '../../services/form.service';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user';
+import { ROUTE_PATHS } from '../../utils/routeMapping';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-account-confirmation',
+  selector: 'app-account-confirmation-form',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './account-confirmation.component.html',
-  styleUrl: './account-confirmation.component.css'
+  templateUrl: './account-confirmation-form.component.html',
+  styleUrl: './account-confirmation-form.component.css'
 })
 
-export class AccountConfirmationComponent {
+export class AccountConfirmationFormComponent {
   confirmationForm: FormGroup;
+  router = inject(Router);
   authService = inject(AuthService);
   isSubmitted = false;
   isLoading = false;
 
   constructor(private fb: FormBuilder) {
     this.confirmationForm = this.fb.group({
-      confirmationCode: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+      code: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
     });
   }
 
@@ -32,7 +33,7 @@ export class AccountConfirmationComponent {
         console.log('Form submitted:', this.confirmationForm.value);
         if (this.authService.getCurrentUser) {
           const user_id = this.authService.getCurrentUser.id;
-        const code = this.confirmationForm.value;
+        const code = this.confirmationForm.value.code;
 
         this.authService.confirmAccount(user_id!, code).subscribe({
           next: (response) => {
@@ -40,6 +41,7 @@ export class AccountConfirmationComponent {
             this.isLoading = false;
             this.isSubmitted = false;
             this.confirmationForm.reset();
+            this.router.navigate([ROUTE_PATHS.home]);
           },
           error: (error) => {
             console.error('Confirmation failed:', error);
