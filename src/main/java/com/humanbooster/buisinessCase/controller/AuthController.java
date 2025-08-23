@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.humanbooster.buisinessCase.dto.AccountConfirmationDTO;
 import com.humanbooster.buisinessCase.dto.RefreshTokenDTO;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
+import com.humanbooster.buisinessCase.exception.InvalidConfirmationCodeException;
 import com.humanbooster.buisinessCase.exception.InvalidTokenException;
 import com.humanbooster.buisinessCase.exception.RefreshTokenExpiredException;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
@@ -117,9 +119,23 @@ public class AuthController {
         newUser.setValidationCode(registerService.generateConfirmationCode());
         User savedUser = userService.saveUser(newUser);
         UserDTO savedUserDTO = userMapper.toDTO(savedUser);
+        registerService.sendConfirmationCode(savedUser);
         // Conform RESTful practices, we should return a URI to the created resource.
         // URI location = URI.create("/api/users/" + savedUser.getId());
         // return ResponseEntity.created(location).body(savedUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
+    }
+    
+    @PostMapping("/account-confirmation")
+    public ResponseEntity<UserDTO> confirmAccount(@Valid @RequestBody AccountConfirmationDTO dto){
+        Optional<User> userOpt = userService.getUserById(dto.getUser_id());
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (registerService.validateCode(user, dto.getCode())) {
+                UserDTO userDTO = userMapper.toDTO(user);
+                return ResponseEntity.ok(userDTO);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 }
