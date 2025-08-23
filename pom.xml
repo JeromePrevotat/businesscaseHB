@@ -109,6 +109,13 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- Mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.2</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
