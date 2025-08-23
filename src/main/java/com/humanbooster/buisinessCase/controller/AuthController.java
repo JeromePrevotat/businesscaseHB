@@ -29,6 +29,7 @@ import com.humanbooster.buisinessCase.security.AuthRequestDTO;
 import com.humanbooster.buisinessCase.security.AuthResponseDTO;
 import com.humanbooster.buisinessCase.security.JwtDTO;
 import com.humanbooster.buisinessCase.service.RefreshTokenService;
+import com.humanbooster.buisinessCase.service.RegisterService;
 import com.humanbooster.buisinessCase.service.UserService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -48,6 +49,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
+    private final RegisterService registerService;
     private final UserMapper userMapper;
 
     
@@ -112,6 +114,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
         User newUser = userMapper.toEntity(userRegisterDTO);
+        newUser.setValidationCode(registerService.generateConfirmationCode());
         User savedUser = userService.saveUser(newUser);
         UserDTO savedUserDTO = userMapper.toDTO(savedUser);
         // Conform RESTful practices, we should return a URI to the created resource.

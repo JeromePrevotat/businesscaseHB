@@ -87,7 +87,7 @@ public class User implements UserDetails {
     @Column(name = "account_valid", nullable = false)
     private boolean accountValid = false;
 
-    @Column(name = "validation_code", length = 15)
+    @Column(name = "validation_code", length = 6)
     private String validationCode;
 
     @NotNull(message = "Role is required")

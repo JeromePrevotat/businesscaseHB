@@ -163,7 +163,7 @@ public class UserMapper {
         // Inscription date and account validity are not part of UserRegisterDTO
         // as they are typically set during registration and not provided by the user.
         user.setInscriptionDate(LocalDateTime.now());
-        user.setAccountValid(true);
+        user.setAccountValid(false);
         Role roleUser = roleRepository.findByName(UserRole.USER);
         if (roleUser != null) {
             user.setRoleList(List.of(roleUser));
