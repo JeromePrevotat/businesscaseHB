@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.humanbooster.buisinessCase.dto.UserChangePwdDTO;
 import com.humanbooster.buisinessCase.dto.UserDTO;
 import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
@@ -129,6 +129,21 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO newUserDTO){
         return userService.updateUser(id, mapper.toEntity(newUserDTO))
+                .map(mapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Update a user password by ID.
+     * PUT /api/users/{id}/change-password
+     * @param id The ID of the user to update
+     * @param newUser The updated user entity
+     * @return ResponseEntity with the updated user if found, or 404 Not Found if not found
+     */
+    @PutMapping("/{id}/change-password")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserChangePwdDTO newUserDTO){
+        return userService.changeUserPassword(id, newUserDTO)
                 .map(mapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

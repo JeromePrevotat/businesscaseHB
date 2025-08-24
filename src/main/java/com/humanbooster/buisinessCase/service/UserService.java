@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.humanbooster.buisinessCase.dto.UserChangePwdDTO;
 import com.humanbooster.buisinessCase.exception.UserValidationException;
 import com.humanbooster.buisinessCase.model.User;
 import com.humanbooster.buisinessCase.repository.UserRepository;
@@ -48,6 +49,23 @@ public class UserService{
         }
         throw new IllegalArgumentException("User must not be null");
     }
+
+    /**
+     * Change a User Password.
+     * @param id the User id to modify
+     * @param userDTO the User DTO containing the old and new password
+     * @return the updated User
+     */
+    @Transactional
+    public Optional<User> changeUserPassword(Long id, UserChangePwdDTO userDTO){
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (!passwordEncoder.matches(userDTO.getOldpwd(), user.getPassword())) {
+            throw new IllegalArgumentException("Old password is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(userDTO.getNewpwd()));
+        return Optional.ofNullable(userRepository.save(user));
+    }
+
 
     /**
      * Retrieves all Users.
