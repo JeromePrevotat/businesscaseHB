@@ -29,4 +29,13 @@ export class UserService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${API_URL.USERS}/${id}`);
   }
+
+  changeUserPwd(user: User | null, passwords: { oldpwd: string; newpwd: string; newpwdconfirm: string }): Observable<User> {
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+    const updated_user: User = user;
+    updated_user.password = passwords.newpwd;
+    return this.http.put<User>(`${API_URL.USERS}/${user.id}`, { id: user.id, newUser: updated_user });
+  }
 }

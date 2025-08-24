@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-security',
@@ -10,9 +13,12 @@ import { FormService } from '../../services/form.service';
   styleUrl: './security.component.css'
 })
 export class SecurityComponent {
+  authService = inject(AuthService);
+  userService = inject(UserService);
   changePwdForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
+  currentUser: User | null = null;
 
   constructor(private fb: FormBuilder) {
     this.changePwdForm = this.fb.group({
@@ -22,10 +28,44 @@ export class SecurityComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
+  ngOnInit(){
+    this.currentUser = this.authService.getCurrentUser;
+    this.authService.user$.subscribe(user => {
+      this.currentUser = user;
+    });
+  }
+
   submitPwdChange(): void {
     this.isSubmitted = true;
+    console.log('Form submitted:', this.changePwdForm.value);
     if (this.changePwdForm.valid) {
-      // Handle password change logic here
+      this.isLoading = true;
+      console.log('Form submitted successfully:', this.changePwdForm.value);
+      this.userService.changeUserPwd(this.currentUser, this.changePwdForm.value).subscribe({
+        next: (response) => {
+          console.log('Password changed successfully:', response);
+          this.changePwdForm.reset();
+          this.isLoading = false;
+          this.isSubmitted = false;
+        },
+        error: (error) => {
+          const oldpwd = this.changePwdForm.get("oldpwd");
+          const newpwd = this.changePwdForm.get("newpwd");
+          const newpwdconfirm = this.changePwdForm.get("newpwdconfirm");
+          if (oldpwd && error.error && error.error.errors && error.error.errors.oldpwd) {
+            oldpwd.setErrors({ server: error.error.errors.oldpwd });
+          }
+          if (newpwd && error.error && error.error.errors && error.error.errors.newpwd) {
+            newpwd.setErrors({ server: error.error.errors.newpwd });
+          }
+          if (newpwdconfirm && error.error && error.error.errors && error.error.errors.newpwdconfirm) {
+            newpwdconfirm.setErrors({ server: error.error.errors.newpwdconfirm });
+          }
+          this.isLoading = false;
+        }
+      });
+    } else {
+      console.error('Form is invalid:', this.changePwdForm.errors);
     }
   }
 
