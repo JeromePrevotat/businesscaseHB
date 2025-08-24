@@ -10,10 +10,6 @@ export const ROUTE_PATHS = {
 
     // Users routes
     profile: 'profile',
-        personalInformation: 'personal',
-        settings: 'settings',
-        billingInformation: 'billing',
-        security: 'security',
 
     // Stations routes
     stations: 'stations',
