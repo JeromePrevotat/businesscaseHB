@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecurityComponent } from './security.component';
+import { SecurityComponent } from '../security/security.component';
 
 describe('SecurityComponent', () => {
   let component: SecurityComponent;
