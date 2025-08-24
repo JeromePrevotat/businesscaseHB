@@ -6,5 +6,7 @@ export const INTERCEPTOR_PUBLIC_URL = [
     `${API_URL.AUTH}/refresh`,
 ];
 export const INTERCEPTOR_PROTECTED_URL = [
-    `${API_URL.USERS}/me`
+    `${API_URL.USERS}`
+    // /me
+    // /:id
 ];

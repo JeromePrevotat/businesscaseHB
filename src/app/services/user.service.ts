@@ -36,6 +36,6 @@ export class UserService {
     }
     const updated_user: User = user;
     updated_user.password = passwords.newpwd;
-    return this.http.put<User>(`${API_URL.USERS}/${user.id}`, { id: user.id, newUser: updated_user });
+    return this.http.put<User>(`${API_URL.USERS}/${user.id}/change-password`, { user_id: user.id, oldpwd: passwords.oldpwd, newpwd: passwords.newpwd });
   }
 }

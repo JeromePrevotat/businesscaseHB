@@ -33,6 +33,25 @@ export class FormService {
       return '';
   }
 
+  static clearServerErrors(form: FormGroup | null): void {
+    if (!form) return;
+    // Go through all Fields
+    Object.keys(form.controls).forEach(fieldName => {
+      const control = form.get(fieldName);
+
+      // Check if the Field has a server error
+      if (control && control.errors && control.errors['server']) {
+        // Deletes it
+        delete control.errors['server'];
+
+        // If Field only had this error, set it back to valid
+        const newErrors = Object.keys(control.errors).length > 0 ? control.errors : null;
+        control.setErrors(newErrors);
+      }
+    });
+    
+  }
+
   // Claude suggestions
   // // Méthode bonus pour valider tout le formulaire
   // static getFormErrors(form: FormGroup | null): string[] {

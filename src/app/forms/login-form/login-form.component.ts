@@ -29,6 +29,7 @@ export class LoginFormComponent {
   }
 
     submitLogin(){
+    FormService.clearServerErrors(this.loginForm);
     this.isSubmitted = true;
     if (this.loginForm.valid) {
       this.isLoading = true;

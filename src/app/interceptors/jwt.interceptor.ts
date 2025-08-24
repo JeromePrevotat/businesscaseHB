@@ -13,7 +13,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   const publicUrls = INTERCEPTOR_PUBLIC_URL;
 
-  const requiresAuthentication = protectedUrls.some(url => req.url.includes(url));
+  const requiresAuthentication = protectedUrls.some(url => req.url.startsWith(url));
   const isPublicUrl = publicUrls.some(url => req.url.includes(url));
 
   // SSR Check
@@ -21,19 +21,17 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   // Public URL pass
   if (isPublicUrl) return next(req);
   // Authentication check
-  if (requiresAuthentication) {
-    // Retrieves Token & check its validity
-    const accessToken = accessTokenSubject.value;
-    const isAuthenticated = accessToken && accessToken.length > 0;
-    // Token present & Valid
-    if (isAuthenticated) {
-      const authRequest = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      return next(authRequest);
-    }
-  }  
+  // Retrieves Token & check its validity
+  const accessToken = accessTokenSubject.value;
+  const isAuthenticated = accessToken && accessToken.length > 0;
+  // Token present & Valid
+  if (isAuthenticated) {
+    const authRequest = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+    return next(authRequest);
+  }
   return next(req);
 };
