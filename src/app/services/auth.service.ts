@@ -76,6 +76,7 @@ export class AuthService {
       this.getUserByToken(this.currentRefreshToken).subscribe({
         next: (user) => {
           this.setCurrentUser = user;
+          this.router.navigate([ROUTE_PATHS.home]);
         },
         error: (error) => {
           console.error('Error fetching user by token:', error);
