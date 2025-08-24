@@ -1,1 +1,49 @@
-<p>security works!</p>
+<div class="form-container">
+  <h2>Security</h2>
+  <form [formGroup]="changePwdForm" action="">
+    <div class="form-field">
+      <label for="oldpwd">Old Password: </label>
+      <input
+        id="oldpwd"
+        type="password"
+        formControlName="oldpwd"
+        [class.border-red-500]="isFieldInvalid('oldpwd')"
+      />
+      @if (isFieldInvalid('oldpwd')) {
+      <div class="form-validation-message">
+        {{ getFieldError("oldpwd") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="newpwd">New Password: </label>
+      <input
+        id="newpwd"
+        type="password"
+        formControlName="newpwd"
+        [class.border-red-500]="isFieldInvalid('newpwd')"
+      />
+      @if (isFieldInvalid('newpwd')) {
+      <div class="form-validation-message">
+        {{ getFieldError("newpwd") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="newpwdconfirm">New Password: </label>
+      <input
+        id="newpwdconfirm"
+        type="password"
+        formControlName="newpwdconfirm"
+        [class.border-red-500]="isFieldInvalid('newpwdconfirm')"
+      />
+      @if (isFieldInvalid('newpwdconfirm')) {
+      <div class="form-validation-message">
+        {{ getFieldError("newpwdconfirm") }}
+      </div>
+      }
+    </div>
+
+    <button type="submit" class="submit-btn" (click)="submitPwdChange()">Change Password</button>
+  </form>
+</div>
