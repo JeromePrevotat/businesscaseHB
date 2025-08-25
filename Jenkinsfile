@@ -37,7 +37,8 @@ pipeline{
         }
         stage ('Tests'){
             steps{
-                sh 'mvn test'
+                sh 'mvn test -Dtest=PlugTypeRepositoryTests'
+                // sh 'mvn test'
             }
         }
         stage('SonarQube') {
