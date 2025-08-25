@@ -51,4 +51,4 @@ public class UserDTO {
     private List<Long> adressList;
     private List<Long> reservationList;
     private List<Long> stationList;
-} 
+}

@@ -4,18 +4,20 @@
 #         file: api/docker-compose.yml
 # #         service: "mysql"
 services:
-    #     jenkins:
-    #         build:
-    #             context: ./jenkins
-    #             dockerfile: Dockerfile.jenkins
-    #         container_name: jenkins
-    #         user: root
-    #         ports:
-    #             - "8081:8080" #Interface
-    #         volumes:
-    #             - ./jenkins_data:/var/jenkins_home
-    #         environment:
-    #             - DOCKER_HOST=tcp://host.docker:2375
+    jenkins:
+        build:
+            context: ./jenkins
+            dockerfile: Dockerfile.jenkins
+        container_name: jenkins
+        user: root
+        ports:
+            - "8081:8080" #Interface
+        volumes:
+            - ./jenkins_data:/var/jenkins_home
+        environment:
+            - DOCKER_HOST=tcp://host.docker:2375
+        env_file:
+            - .env
 
     mysql:
         image: mysql:8.3
