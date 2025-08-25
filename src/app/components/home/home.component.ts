@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { API_URL } from '../../utils/apiUrl';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -12,18 +13,22 @@ import { API_URL } from '../../utils/apiUrl';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent{
   http = inject(HttpClient);
   userService = inject(UserService);
   public authService = inject(AuthService);
   currentUser: User | null = null;
   
-  ngOnInit(){
-    this.currentUser = this.authService.getCurrentUser;
-    this.authService.user$.subscribe(user => {
-      this.currentUser = user;
-    });
+  constructor() {
+    this.authService.user$
+      // Cancel Subscription after the component is destroyed
+      // Prevents Memory Leaks
+      .pipe(takeUntilDestroyed())
+      .subscribe(user =>{
+        this.currentUser = user;
+    })
   }
+
   onTestButtonClick() {
     return this.http.get<User>(`${API_URL.USERS}/me`).subscribe({
       next: (user) => {

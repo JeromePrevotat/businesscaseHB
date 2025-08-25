@@ -4,6 +4,7 @@ import { FormService } from '../../services/form.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-security',
@@ -21,18 +22,19 @@ export class SecurityComponent {
   currentUser: User | null = null;
 
   constructor(private fb: FormBuilder) {
+    this.authService.user$
+      // Cancel Subscription after the component is destroyed
+      // Prevents Memory Leaks
+      .pipe(takeUntilDestroyed())
+      .subscribe(user =>{
+        this.currentUser = user;
+    })
+
     this.changePwdForm = this.fb.group({
       oldpwd: ['', [Validators.required, Validators.minLength(6)]],
       newpwd: ['', [Validators.required, Validators.minLength(6)]],
       newpwdconfirm: ['', [Validators.required, Validators.minLength(6)]]
     }, { validators: this.passwordMatchValidator });
-  }
-
-  ngOnInit(){
-    this.currentUser = this.authService.getCurrentUser;
-    this.authService.user$.subscribe(user => {
-      this.currentUser = user;
-    });
   }
 
   submitPwdChange(): void {

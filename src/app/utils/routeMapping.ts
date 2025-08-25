@@ -10,7 +10,7 @@ export const ROUTE_PATHS = {
 
     // Users routes
     profile: 'profile',
-        personalInformation: 'personal',
+        userInfos: 'personal',
         settings: 'settings',
         billingInformation: 'billing',
         security: 'security',
