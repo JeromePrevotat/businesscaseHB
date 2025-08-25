@@ -21,14 +21,14 @@ pipeline{
                 sh 'mvn compile'
             }
         }
-        stage ('Tests'){
-            steps{
-                sh 'mvn test'
-            }
-        }
         stage('SonarQube') {
             steps {
                 sh 'mvn sonar:sonar -Dsonar.login=${env.SONAR_TOKEN}'
+            }
+        }
+        stage ('Tests'){
+            steps{
+                sh 'mvn test'
             }
         }
         stage ('Packaging'){
