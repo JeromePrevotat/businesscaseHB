@@ -1,7 +1,5 @@
 package com.humanbooster.buisinessCase.controller.security;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,19 +8,24 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.humanbooster.buisinessCase.controller.AdressController;
 import com.humanbooster.buisinessCase.mapper.AdressMapper;
+import com.humanbooster.buisinessCase.mapper.StationMapper;
+import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.repository.UserRepository;
 import com.humanbooster.buisinessCase.security.JpaUserDetailsService;
 import com.humanbooster.buisinessCase.security.JwtAuthFilter;
 import com.humanbooster.buisinessCase.security.SecurityConfig;
 import com.humanbooster.buisinessCase.service.AdressService;
 import com.humanbooster.buisinessCase.service.RefreshTokenService;
+import com.humanbooster.buisinessCase.service.StationService;
+import com.humanbooster.buisinessCase.service.UserService;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest
+@WebMvcTest(controllers=AdressController.class)
 @AutoConfigureMockMvc
 @Import(SecurityConfig.class)
 public class AdressControllerSecurityTests {
@@ -41,6 +44,14 @@ public class AdressControllerSecurityTests {
     private JpaUserDetailsService jwtUserDetailsService;
     @MockitoBean
     private UserRepository userRepository;
+    @MockitoBean
+    private UserService userService;
+    @MockitoBean
+    private StationService stationService;
+    @MockitoBean
+    private UserMapper userMapper;
+    @MockitoBean
+    private StationMapper stationMapper;
 
     @Autowired
     private ObjectMapper objectMapper;

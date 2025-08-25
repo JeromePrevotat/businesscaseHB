@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.humanbooster.buisinessCase.model.Role;
 import com.humanbooster.buisinessCase.model.User;
@@ -32,6 +33,8 @@ import com.humanbooster.buisinessCase.repository.UserRepository;
 public class UserServiceTests {
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private UserService userService;
 
@@ -46,7 +49,7 @@ public class UserServiceTests {
         this.mockTemplateUser.setUsername("testuser");
         this.mockTemplateUser.setFirstname("John");
         this.mockTemplateUser.setLastname("Doe");
-        this.mockTemplateUser.setPassword("password123");
+        this.mockTemplateUser.setPassword("verysecurepassword");
         this.mockTemplateUser.setEmail("john.doe@example.com");
         this.mockTemplateUser.setBirthDate(LocalDate.of(1990, 1, 1));
         this.mockTemplateUser.setInscriptionDate(now);
@@ -86,7 +89,7 @@ public class UserServiceTests {
 
         User mockUser = this.mockTemplateUser;
         when(userRepository.save(newUser)).thenReturn(mockUser);
-
+        when(passwordEncoder.encode(any(CharSequence.class))).thenReturn("verysecurepassword");
         // Act
         User savedUser = userService.saveUser(newUser);
 
@@ -97,7 +100,7 @@ public class UserServiceTests {
             () -> assertEquals(mockUser.getUsername(), savedUser.getUsername(), "Saved user username should match"),
             () -> assertEquals(mockUser.getFirstname(), savedUser.getFirstname(), "Saved user firstname should match"),
             () -> assertEquals(mockUser.getLastname(), savedUser.getLastname(), "Saved user lastname should match"),
-            () -> assertEquals(mockUser.getPassword(), savedUser.getPassword(), "Saved user password should match"),
+            () -> assertEquals("verysecurepassword", savedUser.getPassword(), "Saved user password should match and be hashed"),
             () -> assertEquals(mockUser.getEmail(), savedUser.getEmail(), "Saved user email should match"),
             () -> assertEquals(mockUser.getBirthDate(), savedUser.getBirthDate(), "Saved user birth date should match"),
             () -> assertEquals(mockUser.getInscriptionDate(), savedUser.getInscriptionDate(), "Saved user inscription date should match"),

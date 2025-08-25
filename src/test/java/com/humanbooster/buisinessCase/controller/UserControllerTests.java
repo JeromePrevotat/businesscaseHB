@@ -17,11 +17,9 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -37,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.buisinessCase.dto.UserDTO;
+import com.humanbooster.buisinessCase.dto.UserRegisterDTO;
 import com.humanbooster.buisinessCase.mapper.StationMapper;
 import com.humanbooster.buisinessCase.mapper.UserMapper;
 import com.humanbooster.buisinessCase.model.Media;
@@ -79,6 +78,7 @@ public class UserControllerTests {
 
     private User mockTemplateUser;
     private UserDTO mockTemplateUserDTO;
+    private UserRegisterDTO mockTemplateUserRegisterDTO;
 
     @BeforeEach
     public void setUp() {
@@ -124,6 +124,15 @@ public class UserControllerTests {
         this.mockTemplateUserDTO.setAdressList(new ArrayList<>());
         this.mockTemplateUserDTO.setReservationList(new ArrayList<>());
         this.mockTemplateUserDTO.setMedia_id(media.getId());
+
+        this.mockTemplateUserRegisterDTO = new UserRegisterDTO();
+        this.mockTemplateUserRegisterDTO.setId(1L);
+        this.mockTemplateUserRegisterDTO.setUsername("testuser");
+        this.mockTemplateUserRegisterDTO.setFirstname("John");
+        this.mockTemplateUserRegisterDTO.setLastname("Doe");
+        this.mockTemplateUserRegisterDTO.setEmail("john.doe@example.com");
+        this.mockTemplateUserRegisterDTO.setBirthdate(LocalDate.of(1990, 1, 1));
+        this.mockTemplateUserRegisterDTO.setPassword("password123");
     }
 
     @Test
@@ -197,18 +206,37 @@ public class UserControllerTests {
     @Test
     public void test_save_user_route() throws Exception   {
         // Arrange
-        UserDTO newUserDTO = this.mockTemplateUserDTO;
+        UserRegisterDTO newUserRegisterDTO = this.mockTemplateUserRegisterDTO;
+
+        // User saved in DB
+        User savedUser = new User();
+        savedUser.setId(1L);
+        savedUser.setUsername(newUserRegisterDTO.getUsername());
+        savedUser.setFirstname(newUserRegisterDTO.getFirstname());
+        savedUser.setLastname(newUserRegisterDTO.getLastname());
+        savedUser.setEmail(newUserRegisterDTO.getEmail());
+        savedUser.setBirthDate(newUserRegisterDTO.getBirthdate());
+
+        // DTO returned from saved User
+        UserDTO expectedResponseDTO = new UserDTO();
+        expectedResponseDTO.setId(1L);
+        expectedResponseDTO.setUsername(newUserRegisterDTO.getUsername());
+        expectedResponseDTO.setFirstname(newUserRegisterDTO.getFirstname());
+        expectedResponseDTO.setLastname(newUserRegisterDTO.getLastname());
+        expectedResponseDTO.setEmail(newUserRegisterDTO.getEmail());
+        expectedResponseDTO.setBirthDate(newUserRegisterDTO.getBirthdate());
+    
 
         User mockUserService = new User();
         mockUserService.setId(1L);
 
-        given(userService.saveUser(any(User.class))).willReturn(mockUserService);
-        given(mapper.toDTO(mockUserService)).willReturn(newUserDTO);
-        given(mapper.toEntity(newUserDTO)).willReturn(this.mockTemplateUser);
+        given(mapper.toEntity(newUserRegisterDTO)).willReturn(this.mockTemplateUser);
+        given(userService.saveUser(any(User.class))).willReturn(savedUser);
+        given(mapper.toDTO(savedUser)).willReturn(expectedResponseDTO);
 
         // ACT
         MvcResult mvcResult = mockMvc.perform(post("/api/users")
-                .content(objectMapper.writeValueAsString(newUserDTO))
+                .content(objectMapper.writeValueAsString(newUserRegisterDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         
@@ -217,7 +245,7 @@ public class UserControllerTests {
         assertNotNull(mvcResult.getResponse(), "Response should not be null");
         assertEquals(HttpStatus.CREATED.value(), mvcResult.getResponse().getStatus(), "Status should be 201 Created");
         assertNotNull(content, "Response body should not be null");
-        assertEquals(newUserDTO.getId(), responseUser.getId(), "ID should match the mock value");
+        assertEquals(newUserRegisterDTO.getId(), responseUser.getId(), "ID should match the mock value");
     }
 
     @Test
