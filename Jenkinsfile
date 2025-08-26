@@ -35,7 +35,7 @@ pipeline{
         }
         stage('SonarQube') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN'
+                sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
             }
         }
         stage ('Packaging'){
