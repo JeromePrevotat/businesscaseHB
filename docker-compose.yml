@@ -14,8 +14,9 @@ services:
             - "8081:8080" #Interface
         volumes:
             - ./jenkins_data:/var/jenkins_home
-        environment:
-            - DOCKER_HOST=tcp://host.docker:2375
+            - /var/run/docker.sock:/var/run/docker.sock
+        # environment:
+        #     - DOCKER_HOST=tcp://host.docker:2375
         env_file:
             - .env
 
