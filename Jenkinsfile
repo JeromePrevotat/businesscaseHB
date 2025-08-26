@@ -35,7 +35,7 @@ pipeline{
         }
         stage('SonarQube') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.login=${env.SONAR_TOKEN}'
+                sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN'
             }
         }
         stage ('Packaging'){
