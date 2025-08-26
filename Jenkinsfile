@@ -37,9 +37,9 @@ pipeline{
             steps {
                 sh """
                 mvn sonar:sonar
-                -Dsonar.token=${SONAR_TOKEN}
-                -Dsonar.projectKey=${PROJECT_KEY}
-                -Dsonar.organization=${SONAR_ORGANIZATION}
+                -Dsonar.token=${env.SONAR_TOKEN}
+                -Dsonar.projectKey=${env.PROJECT_KEY}
+                -Dsonar.organization=${env.SONAR_ORGANIZATION}
                 -Dsonar.host.url=https://sonarcloud.io
                 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                 """
