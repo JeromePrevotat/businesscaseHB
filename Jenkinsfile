@@ -10,6 +10,8 @@ pipeline{
         IMAGE_NAME = 'spring-jenkins'
         IMAGE_TAG = 'latest'
 
+        // DB_HOST = '172.17.0.1'
+        // DB_PORT = '3307'
         DB_HOST = 'mysql-test'
         DB_PORT = '3306'
         DB_USER = 'user'
@@ -18,7 +20,7 @@ pipeline{
     stages {
         stage ('Checkout Branch Main'){
             steps {
-                git branch: 'main', url: 'https://github.com/JeromePrevotat/BuisinessCase.git'
+                checkout scm
             }
         }
         stage ('Build'){
