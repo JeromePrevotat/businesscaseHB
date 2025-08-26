@@ -36,11 +36,11 @@ pipeline{
         stage('SonarQube') {
             steps {
                 sh """
-                mvn sonar:sonar
-                -Dsonar.token=${env.SONAR_TOKEN}
-                -Dsonar.projectKey=${env.PROJECT_KEY}
-                -Dsonar.organization=${env.SONAR_ORGANIZATION}
-                -Dsonar.host.url=https://sonarcloud.io
+                mvn sonar:sonar \
+                -Dsonar.token=${env.SONAR_TOKEN} \
+                -Dsonar.projectKey=${env.PROJECT_KEY} \
+                -Dsonar.organization=${env.SONAR_ORGANIZATION} \
+                -Dsonar.host.url=https://sonarcloud.io \
                 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                 """
             }
