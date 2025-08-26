@@ -53,7 +53,7 @@ pipeline{
                 sh """
                 docker stop ${IMAGE_NAME} || true
                 docker rm ${IMAGE_NAME} || true
-                docker run -d --name ${IMAGE_NAME} -p 8081:8080 ${IMAGE_NAME}:${IMAGE_TAG}
+                docker run -d --name ${IMAGE_NAME} -p 8082:8080 ${IMAGE_NAME}:${IMAGE_TAG}
                 """
             }
         }
