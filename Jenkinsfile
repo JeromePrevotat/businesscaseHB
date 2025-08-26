@@ -9,6 +9,11 @@ pipeline{
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
         IMAGE_NAME = 'spring-jenkins'
         IMAGE_TAG = 'latest'
+
+        DB_HOST = 'mysql-test'
+        DB_PORT = '3306'
+        DB_USER = 'user'
+        DB_PASSWORD = 'password'
     }
     stages {
         stage ('Checkout Branch Main'){
@@ -23,7 +28,6 @@ pipeline{
         }
         stage ('Tests'){
             steps{
-                sh 'docker compose up -d mysql mysql-test'
                 sh 'mvn test -Dtest=PlugTypeRepositoryTests'
                 // sh 'mvn test'
             }
