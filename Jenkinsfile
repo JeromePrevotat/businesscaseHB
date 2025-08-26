@@ -59,7 +59,7 @@ pipeline{
         }
         stage ('Archive Reports'){
             steps{
-                junit 'target/surefire/*.xml'
+                junit 'target/surefire-reports/*.xml'
             }
         }
         stage ('Archive Artifact'){
