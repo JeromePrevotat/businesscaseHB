@@ -1,3 +1,3 @@
 # BuisinessCase
 
-HB Buisiness Case
+HB Business Case
