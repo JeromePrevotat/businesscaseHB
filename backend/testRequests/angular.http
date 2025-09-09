@@ -1,0 +1,42 @@
+### Angular Test Request
+GET http://localhost:8080/actuator/health
+
+### Login JWT
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+###
+@accessToken = {{login.response.headers.Authorization}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+### Refresh JWT
+# @name refresh_response
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+@new_access_token = {{refresh_response.response.headers.Authorization}}
+
+###
+GET http://localhost:8080/api/stations
+Content-Type: application/json
+# Authorization: {{new_access_token}}
+# Authorization: {{accessToken}}
+
+###
+GET http://localhost:8080/api/stations/1
+Authorization: Bearer {{refreshToken}}
+
+###
+GET http://localhost:8080/api/users
+Content-Type: application/json

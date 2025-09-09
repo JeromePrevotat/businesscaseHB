@@ -1,0 +1,72 @@
+######################################################
+### Create Media
+### Expected : 201 + tâche créée
+POST http://localhost:8080/api/medias
+Content-Type: application/json
+
+{
+    "url": "#",
+    "type": "img",
+    "mediaName": "Image de test",
+    "description": "Ceci est une image de test",
+    "size": 1024,
+    "borne": {}
+}
+######################################################
+
+######################################################
+### List all Medias
+### Expected : 200 + liste JSON
+GET http://localhost:8080/api/medias
+######################################################
+
+######################################################
+### Get a Media By ID (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+GET http://localhost:8080/api/medias/1
+### Invalid Request
+GET http://localhost:8080/api/medias/1234567890987654
+######################################################
+
+######################################################
+### Modifier une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Invalid Request
+PUT http://localhost:8080/api/medias/1
+Content-Type: application/json
+
+{
+    "url": "#",
+    "type": "img",
+    "mediaName": "Team Rond Bleu",
+    "description": "Ceci est un Rond Bleu de test",
+    "size": 1024,
+    "borne": {}
+}
+
+### Invalid Request
+PUT http://localhost:8080/api/medias/1234567890987654
+Content-Type: application/json
+
+{
+    "url": "#",
+    "type": "img",
+    "mediaName": "Team Rond Bleu",
+    "description": "Ceci est un Rond Bleu de test",
+    "size": 1024,
+    "borne": {}
+}
+######################################################
+
+######################################################
+### Supprimer une article (exemple avec id=1)
+### Expected : 200 ou 404
+
+### Valid Request
+DELETE http://localhost:8080/api/medias/1
+### Invalid Request
+DELETE http://localhost:8080/api/medias/1234567890987654
+######################################################
