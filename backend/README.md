@@ -1,4 +1,11 @@
-# Business Case
+# Business Case Electricity Business
 
-dummy
-HB Business Case
+## How to run
+
+### Dev
+
+-   Go to the backend directory: cd ./backend
+-   Start the Containers: docker compose up
+-   Go to the frontend directory cd ../frontend
+-   Install dependencies: npm i
+-   Start the frontend server: npm start

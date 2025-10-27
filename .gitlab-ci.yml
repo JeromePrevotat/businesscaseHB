@@ -1,0 +1,110 @@
+---
+stages:
+    - build
+    - package
+    - deploy
+
+.build:
+    stage: build
+    retry: 1
+    interruptible: true
+
+.change-folder:
+    before_script:
+        - cd ${APP_DIR}
+
+.docker-build:
+    stage: package
+    image: docker:28
+    services:
+        - name: docker:dind
+    script:
+        - docker login --username="${CI_REGISTRY_USER}" --password="${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
+        - docker build -t ${CI_REGISTRY_IMAGE}/${APP_DIR}:${CI_COMMIT_SHORT_SHA} -f production.Dockerfile ./
+        - docker push ${CI_REGISTRY_IMAGE}/${APP_DIR}:${CI_COMMIT_SHORT_SHA}
+
+.rules-changes:
+    rules:
+        - changes:
+              paths:
+                  - ${APP_DIR}/**/*
+
+# API
+.api-build:
+    extends:
+        - .build
+        - .rules-changes
+    image: maven:3.9.11-eclipse-temurin-17-alpine
+    script:
+        - mvn -B -DskipTests clean package
+    artifacts:
+        paths:
+            - ${APP_DIR}/target/*.jar
+    cache:
+        key:
+            files:
+                - ${APP_DIR}/pom.xml
+        paths:
+            - ${APP_DIR}/.m2/repository
+
+.api-variables:
+    variables:
+        APP_DIR: backend
+
+# Client (Angular / Node)
+.frontend-build:
+    extends:
+        - .build
+        - .rules-changes
+    image: node:24.7.0-bullseye
+    before_script:
+        - cd ${APP_DIR}
+    script:
+        - npm ci --cache .npm --prefer-offline
+        - npm run build -- --configuration=production
+    artifacts:
+      paths:
+        - ${APP_DIR}/dist/business-case-front
+    cache:
+      key:
+        files:
+          - ${APP_DIR}/package-lock.json
+          - ${APP_DIR}/package.json
+        paths:
+          - ${APP_DIR}/.npm
+
+.client-variables:
+    variables:
+        APP_DIR: frontend
+
+build api:
+    extends:
+        - .api-variables
+        - .change-folder
+        - .api-build
+
+build client:
+    extends:
+        - .client-variables
+        - .change-folder
+        - .frontend-build
+
+package api image:
+    extends:
+        - .api-variables
+        - .change-folder
+        - .docker-build
+    needs:
+        - job: build api
+          artifacts: true
+
+package client image:
+    extends:
+        - .client-variables
+        - .change-folder
+        - .docker-build
+    needs:
+        - job: build client
+          artifacts: true
+# Deploy
+# Pull Docker Image from Gitlab Registry via SSH
