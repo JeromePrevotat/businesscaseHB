@@ -7,7 +7,6 @@ import { FormService } from '../../services/form.service';
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../utils/routeMapping';
 import { AuthResponse } from '../../models/auth-reponse';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register-form',
