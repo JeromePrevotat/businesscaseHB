@@ -10,6 +10,7 @@ import { BillingInformationComponent } from './forms/billing-information/billing
 import { SecurityComponent } from './forms/security/security.component';
 import { UserInfosComponent } from './forms/user-infos/user-infos.component';
 import { StationFormComponent } from './forms/station-form/station-form.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -26,7 +27,7 @@ export const routes: Routes = [
     ] },
     // Station Routes
     { path: ROUTE_PATHS.createStation, component: StationFormComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
      },
     { path: ROUTE_PATHS.wildcard, redirectTo: ROUTE_PATHS.home },
 
