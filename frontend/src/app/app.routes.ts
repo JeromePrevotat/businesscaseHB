@@ -9,6 +9,7 @@ import { SettingsComponent } from './forms/settings/settings.component';
 import { BillingInformationComponent } from './forms/billing-information/billing-information.component';
 import { SecurityComponent } from './forms/security/security.component';
 import { UserInfosComponent } from './forms/user-infos/user-infos.component';
+import { StationFormComponent } from './forms/station-form/station-form.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -23,7 +24,10 @@ export const routes: Routes = [
         { path: ROUTE_PATHS.billingInformation, component: BillingInformationComponent },
         { path: ROUTE_PATHS.security, component: SecurityComponent },
     ] },
-    // { path: ROUTE_PATHS.editStation, redirectTo: ROUTE_PATHS.home },
+    // Station Routes
+    { path: ROUTE_PATHS.createStation, component: StationFormComponent,
+        // canActivate: [AuthGuard]
+     },
     { path: ROUTE_PATHS.wildcard, redirectTo: ROUTE_PATHS.home },
 
 ];
