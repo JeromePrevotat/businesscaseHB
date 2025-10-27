@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.humanbooster.businesscase.dto.StationDTO;
 import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.model.Station;
+import com.humanbooster.businesscase.model.User;
 import com.humanbooster.businesscase.service.StationService;
 
 import jakarta.validation.Valid;
@@ -72,8 +76,12 @@ public class StationController {
      * @return ResponseEntity with the saved station and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<StationDTO> saveStation(@Valid @RequestBody StationDTO stationDTO){
+    public ResponseEntity<StationDTO> saveStation(
+        @Valid @RequestBody StationDTO stationDTO,
+        @AuthenticationPrincipal UserDetails userDetails){
+        User user = (User) userDetails;
         Station newStation = mapper.toEntity(stationDTO);
+        newStation.setOwner(user);
         Station savedStation = stationService.saveStation(newStation);
         StationDTO savedStationDTO = mapper.toDTO(savedStation);
         // Conform RESTful practices, we should return a URI to the created resource.

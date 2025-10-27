@@ -54,7 +54,13 @@ public class SecurityConfig {
                 // Monitoring via Spring Boot Actuator
                 .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
                 // All other API endpoints require authentication
-                // .requestMatchers("/api/**").hasAcnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                // .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
+                // Stations Endpoints
+                .requestMatchers(HttpMethod.POST, "/api/stations").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
+
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
