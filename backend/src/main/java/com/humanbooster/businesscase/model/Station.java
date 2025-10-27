@@ -92,9 +92,9 @@ public class Station {
     @Column(name="wired")
     private boolean wired = false;
 
-    @NotNull(message = "Spot is required")
+    // @NotNull(message = "Spot is required")
     @ManyToOne
-    @JoinColumn(name="spot", nullable = false)
+    @JoinColumn(name="spot", nullable = true)
     @JsonBackReference("stations-spots")
     private Spot spot;
     
