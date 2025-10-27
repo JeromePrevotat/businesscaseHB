@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
-import { stationState } from '../../models/StationState';
+import { stationState } from '../../models/stationState';
 import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
 
@@ -29,9 +29,8 @@ export class StationFormComponent {
       powerOutput: ['', [Validators.required, Validators.min(0.1)]],
       state: ['', [Validators.required]],
       spot_id: [''],
-      plugTypeList: [[]],
+      plugType: [[]],
       grounded: [false],
-      busy: [false],
       wired: [false],
       manual: ['']
     });

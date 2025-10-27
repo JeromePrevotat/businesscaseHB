@@ -24,11 +24,15 @@ export const routes: Routes = [
         { path: ROUTE_PATHS.settings, component: SettingsComponent },
         { path: ROUTE_PATHS.billingInformation, component: BillingInformationComponent },
         { path: ROUTE_PATHS.security, component: SecurityComponent },
-    ] },
+    ]},
+
     // Station Routes
-    { path: ROUTE_PATHS.createStation, component: StationFormComponent,
-        canActivate: [AuthGuard]
-     },
+    { path: ROUTE_PATHS.stations, component: StationFormComponent, children:
+    [
+        { path: ROUTE_PATHS.createStation, component: StationFormComponent,
+            canActivate: [AuthGuard]
+        },
+    ]},
     { path: ROUTE_PATHS.wildcard, redirectTo: ROUTE_PATHS.home },
 
 ];

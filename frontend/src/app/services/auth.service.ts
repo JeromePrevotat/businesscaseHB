@@ -39,26 +39,44 @@ export class AuthService {
     // Prevents running this logic Server Side (because of SSR active)
     if (this.ssrService.isServerSide) return;
     
-    const token: string | null = localStorage.getItem('token');
-    if(token){
-      this.getUserByToken(token).subscribe({
-        next: (data: User) => {
-          const user: User = data;
-          this.setCurrentUser = user;
-          this.isInitialized = true;
-          // Redirect to the specified route after successful authentication
-          if (redirectRoute) {
-            this.router.navigate([redirectRoute]);
-          }
+    const refreshToken: string | null = localStorage.getItem('token');
+    console.log('Token from localStorage:', refreshToken);
+    if(refreshToken){
+      // Get a fresh access token using the refresh token
+      this.http.post<AuthResponse>(`${API_URL.AUTH}/refresh`, { token: refreshToken }).subscribe({
+        next: (authResponse) => {
+          // Update access token in subject
+          accessTokenSubject.next(authResponse.accessToken);
+          this.currentRefreshToken = authResponse.refreshToken;
+          
+          // Fetch user info with the new access token
+          this.getUserByToken(authResponse.accessToken).subscribe({
+            next: (user: User) => {
+              this.setCurrentUser = user;
+              this.isInitialized = true;
+              this.isAuthenticated = true;
+              if (redirectRoute) {
+                this.router.navigate([redirectRoute]);
+              }
+            },
+            error: (error) => {
+              console.error('Error fetching user by token:', error);
+              this.isInitialized = false;
+              this.isAuthenticated = false;
+              this.logout();
+            }
+          });
         },
         error: (error) => {
-          console.error('Error fetching user by token:', error);
-          this.isInitialized = false;
+          console.error('Error refreshing access token:', error);
+          this.isInitialized = true;
+          this.isAuthenticated = false;
           this.logout();
         }
       });
     } else {
       this.isInitialized = true;
+      this.isAuthenticated = false;
     }
   }
 
@@ -67,7 +85,6 @@ export class AuthService {
   }
 
   handleLoginSuccess(authResponse: AuthResponse): void {
-    console.log('Login successful, token received:', authResponse.accessToken);
       this.currentRefreshToken = authResponse.refreshToken;
       accessTokenSubject.next(authResponse.accessToken);
       this.authenticated = true;

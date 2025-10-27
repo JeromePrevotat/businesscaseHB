@@ -1,4 +1,4 @@
-import { stationState } from './StationState';
+import { stationState } from './stationState';
 
 export interface Station {
   readonly id: number | null;
