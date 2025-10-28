@@ -11,6 +11,7 @@ import { SecurityComponent } from './forms/security/security.component';
 import { UserInfosComponent } from './forms/user-infos/user-infos.component';
 import { StationFormComponent } from './forms/create-station-form/create-station-form.component';
 import { AuthGuard } from './guards/auth.guard';
+import { StationsComponent } from './components/stations/stations.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -27,7 +28,7 @@ export const routes: Routes = [
     ]},
 
     // Station Routes
-    { path: ROUTE_PATHS.stations, component: StationFormComponent, children:
+    { path: ROUTE_PATHS.stations, component: StationsComponent, children:
     [
         { path: ROUTE_PATHS.createStation, component: StationFormComponent,
             canActivate: [AuthGuard]

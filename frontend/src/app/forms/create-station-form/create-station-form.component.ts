@@ -4,6 +4,8 @@ import { FormService } from '../../services/form.service';
 import { stationState } from '../../models/stationState';
 import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
+import { Router } from '@angular/router';
+import { ROUTE_PATHS } from '../../utils/routeMapping';
 
 @Component({
   selector: 'app-station-form',
@@ -20,7 +22,7 @@ export class StationFormComponent {
   stationStates = Object.values(stationState);
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.createStationForm = this.fb.group({
       stationName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       latitude: ['', [Validators.required, Validators.min(-90), Validators.max(90)]],
@@ -50,6 +52,7 @@ export class StationFormComponent {
           this.isLoading = false;
           this.isSubmitted = false;
           // Redirection to station list
+          this.router.navigate([ROUTE_PATHS.stations]);
         },
         error: (error) => {
           console.log("STATION: ", newStation);
