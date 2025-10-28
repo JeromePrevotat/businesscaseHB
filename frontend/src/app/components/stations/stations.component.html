@@ -3,5 +3,12 @@
     <button [routerLink]="ROUTE_PATHS.createStation" class="btn btn-primary mb-3">Add New Station</button>
     <div class="stations-content">
         <router-outlet></router-outlet>
+        @for (station of (stationsList | async); track station.id){
+          <div  class="station-card card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ station.stationName }}</h5>
+            </div>
+          </div>
+        }
     </div>
 </div>
