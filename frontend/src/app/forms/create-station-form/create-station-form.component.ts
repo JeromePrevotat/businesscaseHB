@@ -9,8 +9,8 @@ import { StationService } from '../../services/station.service';
   selector: 'app-station-form',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './station-form.component.html',
-  styleUrls: ['./station-form.component.css']
+  templateUrl: './create-station-form.component.html',
+  styleUrls: ['./create-station-form.component.css']
 })
 export class StationFormComponent {
   StationService = inject(StationService);

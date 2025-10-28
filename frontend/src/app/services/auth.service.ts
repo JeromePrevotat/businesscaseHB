@@ -7,6 +7,7 @@ import { User } from '../models/user';
 import { AuthResponse } from '../models/auth-reponse';
 import { ROUTE_PATHS } from '../utils/routeMapping';
 import { API_URL } from '../utils/apiUrl';
+import { RefreshResponse } from '../models/refresh-response';
 
 export const accessTokenSubject = new BehaviorSubject<string | null>(null);
 
@@ -40,17 +41,15 @@ export class AuthService {
     if (this.ssrService.isServerSide) return;
     
     const refreshToken: string | null = localStorage.getItem('token');
-    console.log('Token from localStorage:', refreshToken);
-    if(refreshToken){
+    if(refreshToken !== null) {
       // Get a fresh access token using the refresh token
-      this.http.post<AuthResponse>(`${API_URL.AUTH}/refresh`, { token: refreshToken }).subscribe({
+      this.http.post<RefreshResponse>(`${API_URL.AUTH}/refresh`, { token: refreshToken }).subscribe({
         next: (authResponse) => {
           // Update access token in subject
-          accessTokenSubject.next(authResponse.accessToken);
-          this.currentRefreshToken = authResponse.refreshToken;
+          accessTokenSubject.next(authResponse.token);
           
           // Fetch user info with the new access token
-          this.getUserByToken(authResponse.accessToken).subscribe({
+          this.getUserByToken(authResponse.token).subscribe({
             next: (user: User) => {
               this.setCurrentUser = user;
               this.isInitialized = true;
@@ -143,6 +142,7 @@ export class AuthService {
   }
 
   getUserByToken(token: string): Observable<User> {
+    console.log('Fetching user with token:', token);
     return this.http.get<User>(`${API_URL.USERS}/me`, {
       headers: { Authorization: `Bearer ${token}` }
     });

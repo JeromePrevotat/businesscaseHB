@@ -7,11 +7,7 @@ import { SsrService } from '../services/ssr.service';
 import { ROUTE_PATHS } from '../utils/routeMapping';
 import { API_URL } from '../utils/apiUrl';
 import { Router } from '@angular/router';
-
-// Simple Interface for /auth/refresh response
-interface RefreshResponse {
-  token: string;
-}
+import { RefreshResponse } from '../models/refresh-response';
 
 export const refreshInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

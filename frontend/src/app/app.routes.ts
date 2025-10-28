@@ -9,7 +9,7 @@ import { SettingsComponent } from './forms/settings/settings.component';
 import { BillingInformationComponent } from './forms/billing-information/billing-information.component';
 import { SecurityComponent } from './forms/security/security.component';
 import { UserInfosComponent } from './forms/user-infos/user-infos.component';
-import { StationFormComponent } from './forms/station-form/station-form.component';
+import { StationFormComponent } from './forms/create-station-form/create-station-form.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [

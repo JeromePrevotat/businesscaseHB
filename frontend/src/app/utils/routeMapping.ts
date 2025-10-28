@@ -14,6 +14,7 @@ export const ROUTE_PATHS = {
         settings: 'settings',
         billingInformation: 'billing',
         security: 'security',
+        // me: 'me',
 
     // Stations routes
     stations: 'stations',
