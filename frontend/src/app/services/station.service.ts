@@ -26,7 +26,6 @@ export class StationService {
       },
       error: (err) => console.error('Erreur refresh stations', err)
     });
-    console.log("REFRESHED STATION LIST", this.stationList.value);
   }
 
   getAllStations(): Observable<Station[]> {

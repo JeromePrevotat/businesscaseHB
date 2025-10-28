@@ -21,7 +21,6 @@ export class StationFormComponent {
   isLoading = false;
   stationStates = Object.values(stationState);
 
-
   constructor(private fb: FormBuilder, private router: Router) {
     this.createStationForm = this.fb.group({
       stationName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
@@ -40,14 +39,11 @@ export class StationFormComponent {
 
   submitCreateStation(){
     this.isSubmitted = true;
-    console.log('Form submitted:', this.createStationForm.value);
     if (this.createStationForm.valid) {
       this.isLoading = true;
-      console.log('Form submitted successfully:', this.createStationForm.value);
       const newStation: Partial<Station> = this.createStationForm.value;
       this.StationService.createStation(newStation).subscribe({
         next: (response) => {
-          console.log('Station created successfully:', response);
           this.createStationForm.reset();
           this.isLoading = false;
           this.isSubmitted = false;

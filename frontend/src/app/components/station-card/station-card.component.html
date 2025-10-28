@@ -1,0 +1,27 @@
+<div class="station-card">
+  @if (station) {
+      <h2>{{ station.stationName }}</h2>
+      <img src="images/station.jpeg"/>
+      <p>Location: {{ station.latitude }}, {{ station.longitude }}</p>
+      <p>Price Rate: {{ station.priceRate }}</p>
+      <p>Power Output: {{ station.powerOutput }}</p>
+
+      <p>State: {{ station.state }}</p>
+
+      <p>Grounded: {{ station.grounded }}</p>
+      <p>Busy: {{ station.busy }}</p>
+      <p>Wired: {{ station.wired }}</p>
+      @if (station.spot_id) {
+        <p>Spot ID: {{ station.spot_id }}</p>
+      }
+      <!-- <img [src]="station.mediaList" alt="Station Media" /> -->
+      @if (station.plugTypeList && station.plugTypeList.length > 0) {
+        <p>Plug Types: {{ station.plugTypeList.join(', ') }}</p>
+      }
+      <!-- <a [routerLink]="['/stations', station.id]">Details</a> -->
+      <a [routerLink]="['/stations', 'edit', station.id]">Edit</a>
+      <!-- @if(station && station.id){
+          <app-station-delete-btn [stationId]="station.id"></app-station-delete-btn>
+      } -->
+  }
+</div>
