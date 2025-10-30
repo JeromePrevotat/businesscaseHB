@@ -49,6 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // Remove Bearer prefix
             final String token = authHeader.substring(7);
             final String username = refreshTokenService.extractUsername(token);
+            System.out.println("Extracted username from token: " + username);
             
             // User not authenticated yet, loads it from DB
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -66,9 +67,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
+            System.out.println("Token expired: " + e.getMessage());
             handleTokenError(response, "TOKEN_EXPIRED", "Access Token has expired", "REFRESH_TOKEN");
             return;
         } catch (JwtException e) {
+            System.out.println("JWT Exception: " + e.getMessage());
             handleTokenError(response, "INVALID_TOKEN", "Token is invalid or malformed", "LOGIN_REQUIRED");
             return;
         }
