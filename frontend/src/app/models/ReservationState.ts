@@ -1,0 +1,9 @@
+export enum ReservationState {
+  REQUESTED = 'REQUESTED',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
+  PENDING = 'PENDING',
+  PAST = 'PAST',
+  CANCELLED = 'CANCELLED',
+  EXPIRED = 'EXPIRED'
+}
