@@ -5,14 +5,13 @@ import { StationService } from '../../services/station.service';
 import { StationState } from '../../models/stationState';
 import { Station } from '../../models/station';
 import { Observable } from 'rxjs/internal/Observable';
-import { AsyncPipe } from '@angular/common';
 import { ListDisplayComponent } from "../list-display/list-display.component";
 import { ListType } from '../../models/listType';
 
 @Component({
   selector: 'app-stations',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, AsyncPipe, ListDisplayComponent],
+  imports: [RouterLink, RouterOutlet, ListDisplayComponent],
   templateUrl: './stations.component.html',
   styleUrl: './stations.component.css'
 })

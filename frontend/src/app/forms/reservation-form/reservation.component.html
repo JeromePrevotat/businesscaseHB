@@ -2,7 +2,7 @@
   <form [formGroup]="reservationForm" action="">
     <div class="form-field">
       <label for="startDate">From: </label>
-      <input id="startDate" type="date" formControlName="startDate" [class.border-red-500]="isFieldInvalid('startDate')"/>
+      <input id="startDate" type="datetime-local" formControlName="startDate" [class.border-red-500]="isFieldInvalid('startDate')"/>
       @if (isFieldInvalid('startDate')) {
         <div class="form-validation-message">
             {{ getFieldError('startDate') }}
@@ -11,12 +11,13 @@
     </div>
     <div class="form-field">
       <label for="endDate">To: </label>
-      <input id="endDate" type="date" formControlName="endDate" [class.border-red-500]="isFieldInvalid('endDate')"/>
+      <input id="endDate" type="datetime-local" formControlName="endDate" [class.border-red-500]="isFieldInvalid('endDate')"/>
       @if (isFieldInvalid('endDate')) {
         <div class="form-validation-message">
             {{ getFieldError('endDate') }}
         </div>
       }
     </div>
+    <button type="submit" class="submit-btn" (click)="submitReservation()">Confirm</button>
   </form>
 </div>

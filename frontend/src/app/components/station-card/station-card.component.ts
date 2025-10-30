@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Station } from '../../models/station';
 import { SsrService } from '../../services/ssr.service';
 import { ReservationComponent } from "../../forms/reservation-form/reservation.component";
@@ -11,15 +11,9 @@ import { ReservationComponent } from "../../forms/reservation-form/reservation.c
   styleUrls: ['./station-card.component.css']
 })
 
-export class StationCardComponent implements OnInit{
+export class StationCardComponent {
   ssrService = inject(SsrService);
   @Input() station: Station | undefined;
-  
-  ngOnInit(): void {
-    console.log("Station: ", this.station);
-    if (this.station)
-      console.log("Station ID: ", this.station.id);
-  }
 
   test(){
     console.log("MODAL TEST: ", this.station);

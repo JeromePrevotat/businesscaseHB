@@ -22,9 +22,10 @@ export class ReservationComponent {
   constructor(private fb: FormBuilder) {
     this.reservationForm = this.fb.group({
       startDate: [''],
-      // startDate: ['', [Validators.required, ValidateTypeDate.validateDateMin()]],
       endDate: [''],
-      // endDate: ['', [Validators.required, ValidateTypeDate.validateDateMin()]],
+    },
+    { validators:
+      ValidateTypeDate.validateDateIsFutureFrom()
     });
   }
 
@@ -33,6 +34,7 @@ export class ReservationComponent {
     if (this.reservationForm.valid) {
       this.isLoading = true;
       const newReservation: Partial<Reservation> = this.reservationForm.value;
+      console.log('Form Submitted', newReservation);
       // API Call
     } else {
       console.log('Form is invalid', this.reservationForm.errors);
