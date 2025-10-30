@@ -1,12 +1,12 @@
 import { Component, inject, Input } from '@angular/core';
 import { Station } from '../../models/station';
 import { SsrService } from '../../services/ssr.service';
-import { ReservationComponent } from "../../forms/reservation-form/reservation.component";
+import { ReservationFormComponent } from "../../forms/reservation-form/reservation-form.component";
 
 @Component({
   selector: 'app-station-card',
   standalone: true,
-  imports: [ReservationComponent],
+  imports: [ ReservationFormComponent],
   templateUrl: './station-card.component.html',
   styleUrls: ['./station-card.component.css']
 })

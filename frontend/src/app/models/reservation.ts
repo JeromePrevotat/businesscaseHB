@@ -2,7 +2,7 @@ import { ReservationState } from './reservationState';
 
 export interface Reservation {
   readonly id: number | null;
-  user_id: number;
+  user_id: number | null;
   station_id: number;
   createdAt: Date;
   validatedAt?: Date;

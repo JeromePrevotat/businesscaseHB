@@ -20,6 +20,11 @@ export const ROUTE_PATHS = {
     stations: 'stations',
         createStation: 'create',
         editStation: 'stations/:stationId/edit',
+        
+    // Reservations routes
+    reservations: 'reservations',
+        createReservation: 'create',
+        editReservation: 'reservations/:reservationId/edit',
 
     // Wildcard redirect to home
     wildcard: '**',
