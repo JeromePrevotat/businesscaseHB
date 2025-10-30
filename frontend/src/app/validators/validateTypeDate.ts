@@ -12,13 +12,6 @@ export class ValidateTypeDate {
       let endDateFuturError: ValidationErrors | null = null;
       let endDateBeforeStartDateError: ValidationErrors | null = null;
       let unknownDateError: ValidationErrors | null = null;
-      let errors = {
-        missingDate: missingDateError ? missingDateError : null,
-        startDateFutur: startDateFuturError ? startDateFuturError : null,
-        endDateFutur: endDateFuturError ? endDateFuturError : null,
-        endDateBeforeStartDate: endDateBeforeStartDateError ? endDateBeforeStartDateError : null,
-        unknownDateError: unknownDateError ? unknownDateError : null
-      };
       const formGroup = control as FormGroup;
       const currentDate = Date.now();
       const startDate = toEpochLocal(formGroup.get('startDate')?.value);
@@ -26,29 +19,40 @@ export class ValidateTypeDate {
 
       if (!startDate) {
         formGroup.get('startDate')?.setErrors({ missingDate: true });
-        formGroup.get('endDate')?.setErrors({ missingDate: true });
-        missingDateError = { missingDate: true };
+        missingDateError = { missingDate: "Missing Start Date" };
       }
       if (!endDate) {
         formGroup.get('endDate')?.setErrors({ missingDate: true });
-        missingDateError = { missingDate: true };
+        missingDateError = { missingDate: "Missing End Date" };
+      }
+      if (!startDate && !endDate) {
+        formGroup.get('startDate')?.setErrors({ missingDate: true });
+        formGroup.get('endDate')?.setErrors({ missingDate: true });
+        missingDateError = { missingDate: "Missing Dates" };
       }
       if (startDate) {
-        const startDateError = startDate >= currentDate ? null : { startDateNotInFutur: true };
+        const startDateError = startDate >= currentDate ? null : { startDateNotInFutur: "Start Date must be in the future" };
         formGroup.get('startDate')?.setErrors(startDateError);
         startDateFuturError = startDateError;
       }
       if (endDate && !startDate) {
-        const endDateError = endDate >= currentDate ? null : { endDateNotInFuture: true };
+        const endDateError = endDate >= currentDate ? null : { endDateNotInFuture: "End Date must be in the future" };
         formGroup.get('endDate')?.setErrors(endDateError);
         endDateFuturError = endDateError;
       }
       if (endDate && startDate) {
-        const endBeforeStartError = endDate >= startDate ? null : { endDateBeforeStartDate: true };
+        const endBeforeStartError = endDate >= startDate ? null : { endDateBeforeStartDate: "End Date must be after Start Date" };
         formGroup.get('endDate')?.setErrors(endBeforeStartError);
         endDateBeforeStartDateError = endBeforeStartError;
       }
 
+      let errors = {
+        missingDate: missingDateError ? missingDateError : null,
+        startDateFutur: startDateFuturError ? startDateFuturError : null,
+        endDateFutur: endDateFuturError ? endDateFuturError : null,
+        endDateBeforeStartDate: endDateBeforeStartDateError ? endDateBeforeStartDateError : null,
+        unknownDateError: unknownDateError ? unknownDateError : null
+      };
       const hasAnyError = Object.values(errors).some(v => v !== null);
       return hasAnyError ? (errors as ValidationErrors) : null;
     };
