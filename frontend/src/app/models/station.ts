@@ -1,4 +1,4 @@
-import { stationState } from './stationState';
+import { StationState } from './stationState';
 
 export interface Station {
   readonly id: number | null;
@@ -8,7 +8,7 @@ export interface Station {
 	priceRate: number; // > 0.1
 	powerOutput: number; // > 0.1
 	manual?: string;
-	state: stationState;
+	state: StationState;
 	grounded: boolean;
 	busy: boolean;
 	wired: boolean;

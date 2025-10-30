@@ -1,4 +1,4 @@
-export enum stationState {
+export enum StationState {
 	ACTIVE = "ACTIVE",
 	INACTIVE = "INACTIVE",
 	MAINTENANCE = "MAINTENANCE",

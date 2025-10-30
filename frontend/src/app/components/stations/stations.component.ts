@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ROUTE_PATHS } from '../../utils/routeMapping';
 import { StationService } from '../../services/station.service';
-import { stationState } from '../../models/stationState';
+import { StationState } from '../../models/stationState';
 import { Station } from '../../models/station';
 import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe } from '@angular/common';
@@ -19,7 +19,7 @@ import { ListType } from '../../models/listType';
 export class StationsComponent {
   readonly ROUTE_PATHS = ROUTE_PATHS;
   stationsService: StationService = inject(StationService);
-  stationStates = Object.values(stationState);
+  stationStates = Object.values(StationState);
   stationsList: Observable<Station[]> = this.stationsService.getStationList();
   listType = ListType.STATION;
 }

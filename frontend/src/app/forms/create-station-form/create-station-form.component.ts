@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
-import { stationState } from '../../models/stationState';
+import { StationState } from '../../models/stationState';
 import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ export class StationFormComponent {
   createStationForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
-  stationStates = Object.values(stationState);
+  stationStates = Object.values(StationState);
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.createStationForm = this.fb.group({

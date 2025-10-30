@@ -1,0 +1,22 @@
+<div class="form-container">
+  <form [formGroup]="reservationForm" action="">
+    <div class="form-field">
+      <label for="startDate">From: </label>
+      <input id="startDate" type="date" formControlName="startDate" [class.border-red-500]="isFieldInvalid('startDate')"/>
+      @if (isFieldInvalid('startDate')) {
+        <div class="form-validation-message">
+            {{ getFieldError('startDate') }}
+        </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="endDate">To: </label>
+      <input id="endDate" type="date" formControlName="endDate" [class.border-red-500]="isFieldInvalid('endDate')"/>
+      @if (isFieldInvalid('endDate')) {
+        <div class="form-validation-message">
+            {{ getFieldError('endDate') }}
+        </div>
+      }
+    </div>
+  </form>
+</div>
