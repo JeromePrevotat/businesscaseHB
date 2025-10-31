@@ -40,7 +40,6 @@ public class ReservationDTO {
     private boolean payed;
     private LocalDateTime datePayed;
     
-    @NotNull(message="User ID is required")
     private Long user_id;
 
     @NotNull(message="Station ID is required")

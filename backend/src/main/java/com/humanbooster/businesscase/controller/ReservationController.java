@@ -1,10 +1,13 @@
 package com.humanbooster.businesscase.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.humanbooster.businesscase.dto.ReservationDTO;
 import com.humanbooster.businesscase.mapper.ReservationMapper;
 import com.humanbooster.businesscase.model.Reservation;
+import com.humanbooster.businesscase.model.User;
 import com.humanbooster.businesscase.service.ReservationService;
 
 import jakarta.validation.Valid;
@@ -68,14 +72,19 @@ public class ReservationController {
      * @return ResponseEntity with the saved reservation and 201 Created status
      */
     @PostMapping
-    public ResponseEntity<ReservationDTO> saveReservation(@Valid @RequestBody ReservationDTO reservationDTO){
-        Reservation newReservation = mapper.toEntity(reservationDTO);
-        Reservation savedReservation = reservationService.saveReservation(newReservation);
-        ReservationDTO savedReservationDTO = mapper.toDTO(savedReservation);
-        // Conform RESTful practices, we should return a URI to the created resource.
-        // URI location = URI.create("/api/reservations/" + savedReservation.getId());
-        // return ResponseEntity.created(location).body(savedReservation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReservationDTO);
+    public ResponseEntity<ReservationDTO> saveReservation(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @Valid @RequestBody ReservationDTO reservationDTO){
+            User user = (User) userDetails;
+            reservationDTO.setUser_id(user.getId());
+            reservationDTO.setCreatedAt(LocalDateTime.now());
+            Reservation newReservation = mapper.toEntity(reservationDTO);
+            Reservation savedReservation = reservationService.saveReservation(newReservation);
+            ReservationDTO savedReservationDTO = mapper.toDTO(savedReservation);
+            // Conform RESTful practices, we should return a URI to the created resource.
+            // URI location = URI.create("/api/reservations/" + savedReservation.getId());
+            // return ResponseEntity.created(location).body(savedReservation);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedReservationDTO);
     }
 
     /**
