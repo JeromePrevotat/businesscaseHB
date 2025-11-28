@@ -1,8 +1,17 @@
 services:
   angular:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: angular-front
     container_name: angular-front
     environment:
       - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
+    networks:
+      - backend_default
     expose:
       - "80"
+
+networks:
+  backend_default:
+    external: true
