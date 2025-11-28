@@ -38,7 +38,6 @@ export class ReservationFormComponent {
 
   submitReservation(){
     this.isSubmitted = true;
-    console.log("STATION ID: ", this.station);
     if (this.reservationForm.valid) {
       this.isLoading = true;
       let newReservation: Partial<Reservation>;
