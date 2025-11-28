@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ROUTE_PATHS } from '../../utils/routeMapping';
 import { StationService } from '../../services/station.service';
-import { StationState } from '../../models/stationState';
+import { StationState } from '../../models/StationState';
 import { Station } from '../../models/station';
 import { Observable } from 'rxjs/internal/Observable';
 import { ListDisplayComponent } from "../list-display/list-display.component";

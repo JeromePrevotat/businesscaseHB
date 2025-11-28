@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { FormService } from '../../services/form.service';
-import { StationState } from '../../models/stationState';
+import { StationState } from '../../models/StationState';
 import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
 import { Router } from '@angular/router';

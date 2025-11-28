@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ReservationState } from '../../models/reservationState';
+import { ReservationState } from '../../models/ReservationState';
 import { Reservation } from '../../models/reservation';
 import { FormService } from '../../services/form.service';
 import { ValidateTypeDate } from '../../validators/validateTypeDate';

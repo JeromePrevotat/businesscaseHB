@@ -1,4 +1,4 @@
-import { ReservationState } from './reservationState';
+import { ReservationState } from './ReservationState';
 
 export interface Reservation {
   readonly id: number | null;
