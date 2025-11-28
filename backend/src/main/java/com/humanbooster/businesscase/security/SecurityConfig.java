@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
-
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
