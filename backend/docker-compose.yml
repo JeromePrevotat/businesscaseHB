@@ -98,19 +98,12 @@ services:
             DB_NAME: db
             DB_USER: user
             DB_PASSWORD: password
-            VIRTUAL_HOST: ""
+            VIRTUAL_HOST: "" # Nginx ignores this container and prevents load balancing
         env_file:
             - .env
-        networks:
-            - backend_default
-        expose:
-            - "8080"
+        ports:
+            - "8080:8080"
         command: ["tail", "-f", "/dev/null"] # == While True to keep the process alive with minimal resources consumption
-
-networks:
-    backend_default:
-        external: true
-
 volumes:
     mysql_data:
     mysql-test_data:

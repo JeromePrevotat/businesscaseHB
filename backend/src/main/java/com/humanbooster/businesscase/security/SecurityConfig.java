@@ -75,7 +75,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:4200",
             "http://electricity-business.91.166.39.12.nip.io",
-            "http://api.electricity-business.91.166.39.12.nip.io"));
+            "http://91.166.39.12:8080"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
