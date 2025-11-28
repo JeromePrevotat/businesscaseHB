@@ -98,6 +98,7 @@ services:
             DB_NAME: db
             DB_USER: user
             DB_PASSWORD: password
+            VIRTUAL_HOST: ""
         env_file:
             - .env
         ports:
