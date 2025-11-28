@@ -1,14 +1,16 @@
 # Business Case Electricity Business
 
+URL: http://electricity-business.91.166.39.12.nip.io/
+
 ## How to run
 
 ### Dev
 
--   Go to the backend directory: cd ./backend
--   Start the Containers: docker compose up
--   Go to the frontend directory cd ../frontend
--   Install dependencies: npm i
--   Start the frontend server: npm start
+- Go to the backend directory: cd ./backend
+- Start the Containers: docker compose up
+- Go to the frontend directory cd ../frontend
+- Install dependencies: npm i
+- Start the frontend server: npm start
 
 # Subtree
 
