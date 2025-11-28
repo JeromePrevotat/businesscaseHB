@@ -98,8 +98,6 @@ services:
             DB_NAME: db
             DB_USER: user
             DB_PASSWORD: password
-            VIRTUAL_HOST: api.electricity-business.91.166.39.12.nip.io
-            VIRTUAL_PORT: 8080
         env_file:
             - .env
         networks:
