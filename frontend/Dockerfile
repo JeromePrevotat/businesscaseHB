@@ -11,8 +11,8 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/* && \
   rm /etc/nginx/conf.d/default.conf
 
-# Copier les fichiers Angular buildés
-COPY --from=build /app/dist/business-case-front/ /usr/share/nginx/html
+# Copier les fichiers Angular buildés depuis le dossier browser
+COPY --from=build /app/dist/business-case-front/browser/ /usr/share/nginx/html
 
 # Copier la configuration nginx custom
 COPY nginx.conf /etc/nginx/conf.d/default.conf
