@@ -98,12 +98,20 @@ services:
             DB_NAME: db
             DB_USER: user
             DB_PASSWORD: password
-            VIRTUAL_HOST: "" # Nginx ignores this container and prevents load balancing
+            VIRTUAL_HOST: api.electricity-business.91.166.39.12.nip.io
+            VIRTUAL_PORT: 8080
         env_file:
             - .env
-        ports:
-            - "8080:8080"
+        networks:
+            - backend_default
+        expose:
+            - "8080"
         command: ["tail", "-f", "/dev/null"] # == While True to keep the process alive with minimal resources consumption
+
+networks:
+    backend_default:
+        external: true
+
 volumes:
     mysql_data:
     mysql-test_data:
