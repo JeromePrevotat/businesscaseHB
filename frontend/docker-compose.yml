@@ -1,0 +1,6 @@
+services:
+  angular:
+    image: angular-front
+    container_name: angular-front
+    environment:
+      - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
