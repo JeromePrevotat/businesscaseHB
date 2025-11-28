@@ -101,9 +101,16 @@ services:
             VIRTUAL_HOST: ""
         env_file:
             - .env
-        ports:
-            - "8080:8080"
+        networks:
+            - backend_default
+        expose:
+            - "8080"
         command: ["tail", "-f", "/dev/null"] # == While True to keep the process alive with minimal resources consumption
+
+networks:
+    backend_default:
+        external: true
+
 volumes:
     mysql_data:
     mysql-test_data:
