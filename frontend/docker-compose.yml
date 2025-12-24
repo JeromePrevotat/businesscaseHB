@@ -4,14 +4,15 @@ services:
       context: .
       dockerfile: Dockerfile
     image: angular-front
-    container_name: angular-front
+    container_name: business-case-front
     environment:
       - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
     networks:
-      - backend_default
+      - business-case-network
     expose:
       - "80"
 
 networks:
-  backend_default:
+  business-case-network:
+  nginx-proxy:
     external: true

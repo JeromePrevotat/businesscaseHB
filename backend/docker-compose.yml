@@ -4,26 +4,9 @@
 #         file: api/docker-compose.yml
 # #         service: "mysql"
 services:
-    # jenkins:
-    #     build:
-    #         context: ./jenkins
-    #         dockerfile: Dockerfile.jenkins
-    #     container_name: jenkins
-    #     user: root
-    #     ports:
-    #         - "8081:8080" #Interface
-    #     volumes:
-    #         - ./jenkins_data:/var/jenkins_home
-    #         - /var/run/docker.sock:/var/run/docker.sock
-    #     environment:
-    #         #     - DOCKER_HOST=tcp://host.docker:2375
-    #         - DOCKER_HOST=unix:///var/run/docker.sock
-    #     env_file:
-    #         - .env
-
     mysql:
         image: mysql:8.3
-        container_name: mysql
+        container_name: business-case-db
         healthcheck:
             test:
                 [
@@ -40,10 +23,10 @@ services:
             timeout: 5s
             retries: 10
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         ports:
             - "3306:3306"
         volumes:
@@ -51,7 +34,7 @@ services:
 
     mysql-test:
         image: mysql:8.3
-        container_name: mysql-test
+        container_name: business-case-test-db
         healthcheck:
             test:
                 [
@@ -67,12 +50,11 @@ services:
             interval: 10s
             timeout: 5s
             retries: 10
-
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: db-test
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_TEST_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         ports:
             - "3307:3306"
         volumes:
@@ -80,7 +62,7 @@ services:
 
     app:
         build: ./
-        container_name: app
+        container_name: business-case-back
         depends_on:
             mysql:
                 condition: service_healthy # Wait for db to be healthy
@@ -95,15 +77,21 @@ services:
         environment:
             DB_HOST: mysql
             DB_PORT: 3306
-            DB_NAME: db
-            DB_USER: user
-            DB_PASSWORD: password
+            DB_NAME: ${MYSQL_DATABASE}
+            DB_USER: ${MYSQL_USER}
+            DB_PASSWORD: ${MYSQL_PASSWORD}
             VIRTUAL_HOST: "" # Nginx ignores this container and prevents load balancing
         env_file:
             - .env
         ports:
             - "8080:8080"
         command: ["tail", "-f", "/dev/null"] # == While True to keep the process alive with minimal resources consumption
+        networks:
+            - business-case-network
+
+networks:
+    business-case-network:
+
 volumes:
     mysql_data:
     mysql-test_data:
