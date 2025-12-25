@@ -2,6 +2,7 @@
 // Dans app.routes
 export const ROUTE_PATHS = {
     home: 'home',
+    cgu: 'cgu',
     // Auth routes
     login: 'auth/login',
     accountConfirmation: 'auth/account-confirmation',

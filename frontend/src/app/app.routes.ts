@@ -13,10 +13,12 @@ import { StationFormComponent } from './forms/create-station-form/create-station
 import { AuthGuard } from './guards/auth.guard';
 import { StationsComponent } from './components/stations/stations.component';
 import { ReservationFormComponent } from './forms/reservation-form/reservation-form.component';
+import { CguComponent } from './components/cgu/cgu.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: ROUTE_PATHS.home, component: HomeComponent },
+    { path: ROUTE_PATHS.cgu, component: CguComponent },
     { path: ROUTE_PATHS.register, component: RegisterFormComponent },
     { path: ROUTE_PATHS.login, component: LoginFormComponent },
     { path: ROUTE_PATHS.accountConfirmation, component: AccountConfirmationFormComponent },
