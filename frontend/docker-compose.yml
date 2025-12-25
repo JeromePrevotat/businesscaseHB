@@ -5,14 +5,3 @@ services:
       dockerfile: Dockerfile
     image: angular-front
     container_name: business-case-front
-    environment:
-      - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
-    networks:
-      - business-case-network
-    expose:
-      - "80"
-
-networks:
-  business-case-network:
-  nginx-proxy:
-    external: true

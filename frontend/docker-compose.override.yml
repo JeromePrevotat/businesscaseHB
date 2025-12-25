@@ -1,0 +1,9 @@
+services:
+  angular:
+    ports:
+      - "80:80"
+    networks:
+      - business-case-network
+
+networks:
+  business-case-network:

@@ -1,0 +1,21 @@
+services:
+    mysql:
+        ports:
+            - "3306:3306"
+        networks:
+            - business-case-network
+
+    mysql-test:
+        ports:
+            - "3307:3306"
+        networks:
+            - business-case-network
+
+    app:
+        ports:
+            - "8080:8080"
+        networks:
+            - business-case-network
+
+networks:
+    business-case-network:

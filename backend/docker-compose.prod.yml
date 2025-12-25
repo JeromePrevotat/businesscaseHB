@@ -1,0 +1,22 @@
+services:
+    mysql:
+        networks:
+            - business-case-network
+
+    mysql-test:
+        networks:
+            - business-case-network
+
+    app:
+        environment:
+            VIRTUAL_HOST: "" # Nginx ignore ce container
+        networks:
+            - business-case-network
+            - nginx-proxy
+        expose:
+            - "8080"
+
+networks:
+    business-case-network:
+    nginx-proxy:
+        external: true
