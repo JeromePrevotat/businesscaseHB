@@ -5,11 +5,12 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { API_URL } from '../../utils/apiUrl';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MapComponent } from "../map/map.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [MapComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
