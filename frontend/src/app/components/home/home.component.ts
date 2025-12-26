@@ -8,11 +8,12 @@ import { MapComponent } from "../map/map.component";
 import { addMarkersToMap } from '../../utils/mapUtils';
 import { StationService } from '../../services/station.service';
 import { map } from 'leaflet';
+import { SearchBarComponent } from "../search-bar/search-bar.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MapComponent],
+  imports: [MapComponent, SearchBarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

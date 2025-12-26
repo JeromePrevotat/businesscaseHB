@@ -1,1 +1,32 @@
-<p>search-bar works!</p>
+<div class="search-bar">
+  <div class="input-container mb-3">
+    <input type="text" placeholder="Adresse..." name="adress-input" class="form-control"/>
+  </div>
+
+  <div class="input-container mb-3">
+    <input type="number" placeholder="Rayon (km)..." name="radius-input" class="form-control"/>
+  </div>
+
+  <div class="input-container mb-3">
+    <input type="date" placeholder="Date..." name="date-input" class="form-control"/>
+  </div>
+    
+  <div class="input-container mb-3">
+    <input type="time" placeholder="Heure..." name="time-input" class="form-control"/>
+  </div>
+    
+  <div class="input-container mb-3" id="price-input-container">
+    <label for="price-input">Prix Maximum</label>
+    <input type="range" placeholder="Prix..." name="price-input" id="price-input" class="form-control"
+      oninput="num.value = this.value"
+      min="0"
+      max="20"
+      step="0.1"
+      />
+    <output id="num">-</output>
+  </div>
+
+  <div class="input-container mb-3">
+    <button class="btn btn-primary">Chercher</button>
+  </div>
+</div>
