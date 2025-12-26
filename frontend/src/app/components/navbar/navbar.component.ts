@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ROUTE_PATHS } from '../../utils/routeMapping';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  readonly ROUTE_PATHS = ROUTE_PATHS;
   public authService = inject(AuthService);
   currentUser: User | null = null;
 

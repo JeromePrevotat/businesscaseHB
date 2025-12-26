@@ -3,8 +3,9 @@
         <nav class="navbar-nav">
             <ul>
                 <li><a routerLink="/">Home</a></li>
-                <li><a routerLink="/stations">Stations</a></li>
-                <li><a routerLink="/stations/add">Add Station</a></li>
+                @if(currentUser){
+                    <li><a routerLink="/stations">Stations</a></li>
+                }
             </ul>
         </nav>
     </div>
