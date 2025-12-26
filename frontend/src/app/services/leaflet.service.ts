@@ -18,6 +18,7 @@ export class LeafletService {
     // Client side: dynamically import Leaflet
     if (!this.leaflet) {
       this.leaflet = await import('leaflet');
+      this.leaflet.Icon.Default.imagePath = 'leaflet/images/';
     }
 
     return this.leaflet;

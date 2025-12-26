@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
-import { API_URL } from '../../utils/apiUrl';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapComponent } from "../map/map.component";
+import { addMarkersToMap } from '../../utils/mapUtils';
+import { StationService } from '../../services/station.service';
+import { map } from 'leaflet';
 
 @Component({
   selector: 'app-home',
@@ -17,9 +19,11 @@ import { MapComponent } from "../map/map.component";
 export class HomeComponent{
   http = inject(HttpClient);
   userService = inject(UserService);
+  stationService = inject(StationService);
   public authService = inject(AuthService);
   currentUser: User | null = null;
-  
+  @ViewChild(MapComponent) mapComp!: MapComponent;
+
   constructor() {
     this.authService.user$
       // Cancel Subscription after the component is destroyed
@@ -31,13 +35,13 @@ export class HomeComponent{
   }
 
   onTestButtonClick() {
-    return this.http.get<User>(`${API_URL.USERS}/me`).subscribe({
-      next: (user) => {
-        console.log(user);
-      },
-      error: (error) => {
-        console.log(error)
-      }
-    });
+    const {L,map} = this.mapComp.getMapInstance();
+    this.stationService.getStationList()
+      .subscribe(stations => {
+        for (const station of stations) {
+          console.log('Station:', station);
+          addMarkersToMap(L, map, station.latitude, station.longitude);
+        }
+      });
   }
 }

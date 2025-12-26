@@ -1,5 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { LeafletService } from '../../services/leaflet.service';
+import { getLocation } from '../../utils/mapUtils';
+import { SsrService } from '../../services/ssr.service';
+import { addCircleToMap } from '../../utils/mapUtils';
 
 @Component({
   selector: 'app-map',
@@ -10,22 +13,36 @@ import { LeafletService } from '../../services/leaflet.service';
 })
 export class MapComponent implements AfterViewInit{
   private map: any;
+  private L: any;
 
-  constructor(private leafletService: LeafletService) { 
+  constructor(
+    private leafletService: LeafletService,
+    private ssrService: SsrService) { 
     this.map = null;
+    this.L = null;
   }
 
   async ngAfterViewInit() {
     try {
-      const L = await this.leafletService.load();
+      let coords;
+      if (this.ssrService.isClientSide) {
+        coords = await getLocation();
+      }
+      this.L = await this.leafletService.load();
 
-      if (!L) {
+      if (!this.L) {
+        console.error("Leaflet library could not be loaded.");
+        return;
+      }
+      if (!coords) {
+        console.error("Could not get user location.");
         return;
       }
 
-      this.map = L.map('map').setView([48.8566, 2.3522], 13);
+      this.map = this.L.map('map').setView([coords.latitude, coords.longitude], 13);
+      await addCircleToMap(this.L, this.map, coords.latitude, coords.longitude);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; OpenStreetMap'
       }).addTo(this.map);
@@ -40,4 +57,6 @@ export class MapComponent implements AfterViewInit{
       this.map = null;
     }
   }
+
+  getMapInstance() { return { L: this.L, map: this.map }; }
 }
