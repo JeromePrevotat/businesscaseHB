@@ -57,7 +57,7 @@ public class UserServiceTests {
         this.mockTemplateUser.setValidationCode("ABC123");
         Role role = new Role();
         role.setId(1L);
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
         this.mockTemplateUser.setRoleList(List.of(role));
         this.mockTemplateUser.setIban("FR1420041010050500013M02606");
         this.mockTemplateUser.setBanned(false);
@@ -121,7 +121,7 @@ public class UserServiceTests {
         LocalDateTime now = LocalDateTime.now();
         Role role = new Role();
         role.setId(1L);
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
         User user1 = new User();
         user1.setUsername("Test User 1");
         user1.setFirstname("Test");
@@ -234,7 +234,7 @@ public class UserServiceTests {
         // Arrange
         Role role = new Role();
         role.setId(1L);
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
         Long userId = 1L;
         User existingUser = new User();
         existingUser.setId(userId);

@@ -1,30 +1,11 @@
 CREATE DATABASE IF NOT EXISTS business_case_db;
 USE business_case_db;
 
--- Disable FK checks
-SET FOREIGN_KEY_CHECKS=0;
-
-TRUNCATE TABLE reservations;
-TRUNCATE TABLE stations;
-TRUNCATE TABLE spots;
-TRUNCATE TABLE plug_types;
-TRUNCATE TABLE medias;
-TRUNCATE TABLE vehicules;
-TRUNCATE TABLE adresses;
-TRUNCATE TABLE users;
-TRUNCATE TABLE roles_users;
-TRUNCATE TABLE roles;
-TRUNCATE TABLE jwt_refresh;
-
-SET FOREIGN_KEY_CHECKS=1;
-
-
 -- Insert roles
 INSERT INTO roles (id, role_name) VALUES
-    (1, 'ADMIN'),
-    (2, 'USER'),
-    (3, 'GUEST');
-
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_USER'),
+    (3, 'ROLE_GUEST');
 
 -- Insert admin user
 INSERT INTO users (

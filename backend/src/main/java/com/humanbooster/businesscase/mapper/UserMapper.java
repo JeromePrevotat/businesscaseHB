@@ -97,7 +97,14 @@ public class UserMapper {
                     .collect(Collectors.toList())
             );
         }
-        else user.setRoleList(new ArrayList<>());
+        else {
+            Role roleUser = roleRepository.findByName(UserRole.ROLE_USER);
+            if (roleUser != null) {
+                user.setRoleList(List.of(roleUser));
+            } else {
+                user.setRoleList(new ArrayList<>());
+            }
+        }
         user.setBanned(dto.getBanned());
         if (dto.getVehiculeList() != null && !dto.getVehiculeList().isEmpty()) {
             user.setVehiculeList(new HashSet<>(
@@ -164,7 +171,7 @@ public class UserMapper {
         // as they are typically set during registration and not provided by the user.
         user.setInscriptionDate(LocalDateTime.now());
         user.setAccountValid(false);
-        Role roleUser = roleRepository.findByName(UserRole.USER);
+        Role roleUser = roleRepository.findByName(UserRole.ROLE_USER);
         if (roleUser != null) {
             user.setRoleList(List.of(roleUser));
         } else {

@@ -43,7 +43,7 @@ public class MediaRepositoryTests {
     public void setUp() {
         LocalDateTime now = LocalDateTime.now();
         Role role = new Role();
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
         role = roleRepository.saveAndFlush(role);
 
         User user1 = new User();

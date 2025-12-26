@@ -96,7 +96,7 @@ public class VehiculeControllerTests {
         this.mockTemplateVehicule.setBatteryCapacity(75);
         Role role = new Role();
         role.setId(1L);
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
         role.setUserList(new ArrayList<>());
         User user1 = new User();
         user1.setId(1L);

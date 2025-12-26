@@ -52,13 +52,13 @@ public class SecurityConfig {
                                 "/actuator/health/**").permitAll()
                 .requestMatchers("/actuator/info").permitAll()
                 // Monitoring via Spring Boot Actuator
-                .requestMatchers("/actuator/**").hasAuthority(UserRole.ADMIN.name())
+                .requestMatchers("/actuator/**").hasAuthority(UserRole.ROLE_ADMIN.name())
                 // All other API endpoints require authentication
                 // .requestMatchers("/api/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.USER.name())
                 // Stations Endpoints
-                .requestMatchers(HttpMethod.POST, "/api/stations").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.PUT, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.DELETE, "/api/stations/**").hasAnyAuthority(UserRole.USER.name(), UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.POST, "/api/stations").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, "/api/stations/**").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, "/api/stations/**").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()

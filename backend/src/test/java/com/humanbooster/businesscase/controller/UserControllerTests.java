@@ -80,7 +80,7 @@ public class UserControllerTests {
         LocalDateTime now = LocalDateTime.now();
         Role role = new Role();
         role.setId(1L);
-        role.setName(UserRole.ADMIN);
+        role.setName(UserRole.ROLE_ADMIN);
 
         Media media = new Media();
         media.setId(1L);
