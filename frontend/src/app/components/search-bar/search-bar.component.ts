@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { adressLookUp } from '../../utils/mapUtils';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { FormService } from '../../services/form.service';
 import { HttpClient } from '@angular/common/http';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -18,7 +18,7 @@ export class SearchBarComponent {
   isSubmitted = false;
   isLoading = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private mapService: MapService) {
       this.searchForm = this.fb.group({
         adress: ['', ],
         radius: ['', [Validators.min(1), Validators.max(50)]],
@@ -28,7 +28,7 @@ export class SearchBarComponent {
       });
     }
 
-  submitSearch(){
+  async submitSearch(){
     this.isSubmitted = true;
     if (this.searchForm.valid) {
       this.isLoading = true;
@@ -36,8 +36,11 @@ export class SearchBarComponent {
       const formData = this.searchForm.value;
       console.log('Form Data:', formData);
       try {
-        const coords = adressLookUp(formData.adress, this.http);
+        const coords = await adressLookUp(formData.adress, this.http);
         console.log('Coordinates:', coords);
+        if (coords) {
+          this.mapService.updateCoords(coords);
+        }
       } catch (error) {
         console.error('Error during address lookup:', error);
       }

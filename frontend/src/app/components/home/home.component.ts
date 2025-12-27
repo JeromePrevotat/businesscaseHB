@@ -5,10 +5,9 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MapComponent } from "../map/map.component";
-import { addMarkersToMap } from '../../utils/mapUtils';
 import { StationService } from '../../services/station.service';
-import { map } from 'leaflet';
 import { SearchBarComponent } from "../search-bar/search-bar.component";
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +18,7 @@ import { SearchBarComponent } from "../search-bar/search-bar.component";
 })
 export class HomeComponent{
   http = inject(HttpClient);
+  mapService = inject(MapService);
   userService = inject(UserService);
   stationService = inject(StationService);
   public authService = inject(AuthService);
@@ -41,7 +41,7 @@ export class HomeComponent{
       .subscribe(stations => {
         for (const station of stations) {
           console.log('Station:', station);
-          addMarkersToMap(L, map, station.latitude, station.longitude);
+          this.mapService.addMarkersToMap(L, map, station.latitude, station.longitude);
         }
       });
   }

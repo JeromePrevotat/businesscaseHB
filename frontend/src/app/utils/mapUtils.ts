@@ -15,14 +15,13 @@ export async function getLocation(): Promise<{ latitude: number; longitude: numb
                     console.error("Error getting location:", error);
                     reject(error);
                 },
-                { timeout: 5000, enableHighAccuracy: true, maximumAge: 2000 }
+                { timeout: 20000, enableHighAccuracy: true, maximumAge: 2000 }
             );
         });
 }
 
 export async function adressLookUp(adresseInput:string, http: HttpClient): Promise<{ latitude: number; longitude: number; } | undefined> {
     const endpoint = API_URL.NOMINATIM;
-    const queryParam = sanitizeInput(adresseInput) + '&format=json';
     try {
         const data: any = await firstValueFrom(
             http.get(endpoint, {
@@ -56,24 +55,3 @@ function sanitizeInput(input: string): string {
     return input.replace(/<[^>]*>/g, '').trim();
 }
 
-export function setMapLocation(map: any, latitude: number, longitude: number) {
-    if (latitude && longitude) {
-        map.setView([latitude, longitude], 14);
-    } else {
-        console.error("Invalid latitude or longitude provided.");
-    }
-}
-
-export async function addCircleToMap(L: any, map: any, latitude: number, longitude: number, radius = 5000) {
-    const c = L.circle([latitude, longitude], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.1,
-        radius: radius
-    }).addTo(map);
-}
-
-export async function addMarkersToMap(L: any, map: any, latitude: number, longitude: number) {
-    L.marker([latitude, longitude]).addTo(map);
-    console.log(`Marker added at Latitude: ${latitude}, Longitude: ${longitude}`);
-}

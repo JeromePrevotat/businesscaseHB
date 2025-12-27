@@ -2,7 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { LeafletService } from '../../services/leaflet.service';
 import { getLocation } from '../../utils/mapUtils';
 import { SsrService } from '../../services/ssr.service';
-import { addCircleToMap } from '../../utils/mapUtils';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-map',
@@ -17,9 +17,19 @@ export class MapComponent implements AfterViewInit{
 
   constructor(
     private leafletService: LeafletService,
-    private ssrService: SsrService) { 
+    private ssrService: SsrService,
+    private mapService: MapService
+  ) { 
     this.map = null;
     this.L = null;
+    this.mapService.coords$.subscribe(coords => {
+    if (coords) {
+      if (this.map && this.L) {
+        this.mapService.setMapLocation(this.map, coords.latitude, coords.longitude);
+        this.mapService.addCircleToMap(this.L, this.map, coords.latitude, coords.longitude);
+      }
+    }
+  });
   }
 
   async ngAfterViewInit() {
@@ -39,8 +49,9 @@ export class MapComponent implements AfterViewInit{
         return;
       }
 
-      this.map = this.L.map('map').setView([coords.latitude, coords.longitude], 13);
-      await addCircleToMap(this.L, this.map, coords.latitude, coords.longitude);
+      this.map = this.L.map('map');
+      this.mapService.setMapLocation(this.map, coords.latitude, coords.longitude);
+      await this.mapService.addCircleToMap(this.L, this.map, coords.latitude, coords.longitude);
 
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
