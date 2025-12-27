@@ -85,10 +85,49 @@ export class MapComponent implements AfterViewInit{
         console.error("Could not get user location.");
         return;
       }
-      this.currentCoords = coords;
+      // this.currentCoords = coords;
+      this.currentCoords = {latitude: 45.7774551, longitude: 3.0819427};
       this.mapService.updateCoords(coords);
       this.map = this.L.map('map');
       this.mapService.setMapLocation(this.map, this.currentCoords.latitude, this.currentCoords.longitude);
+      if (this.currentCircle) {
+        this.map.removeLayer(this.currentCircle);
+        this.currentCircle = null;
+      }
+      this.currentCircle = await this.mapService.addCircleToMap(this.L, this.map, this.currentCoords.latitude, this.currentCoords.longitude, 5000);
+
+      if (this.map && this.L) {
+        if (this.currentMarkers) {
+          // Remove existing markers
+          for (const marker of this.currentMarkers) {
+            this.map.removeLayer(marker);
+          }
+          this.currentMarkers = [];
+        }
+        if (this.currentCoords) {
+          // Call station service to search stations
+          this.stationService.searchStation(
+            5000,
+            this.currentCoords ? this.currentCoords.latitude : 0,
+            this.currentCoords ? this.currentCoords.longitude : 0,
+            20
+          ).subscribe({
+            next: (stations) => {
+              this.stationService.updateFilteredStations(stations);
+              this.currentStations = stations;
+            },
+            error: (err) => {
+              console.error('Error during station search:', err);
+            }
+          });
+          for (const station of this.currentStations || []) {
+            if (station.latitude && station.longitude) {            
+              const marker = this.mapService.addMarkersToMap(this.L, this.map, station.latitude, station.longitude);
+              this.currentMarkers.push(marker);
+            }
+          }
+        }
+      }
 
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

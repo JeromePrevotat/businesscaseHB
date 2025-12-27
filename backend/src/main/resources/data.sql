@@ -122,5 +122,18 @@ INSERT INTO stations (
     1.10,
     NULL,
     'Plug & Charge'
-)
-;
+);
+
+INSERT INTO reservations (
+    id, station, user,
+    created_at, validated_at, state,
+    start_date, end_date,
+    payed, date_payed,
+    hourly_rate_log
+) VALUES (
+    1, 1, 2,
+    2025-12-27 18:45:57.577844, NULL, 'PENDING',
+    2025-12-27 20:00:00.000000, 2025-12-27 23:00:00.000000,
+    0, NULL,
+    0.3000
+);
