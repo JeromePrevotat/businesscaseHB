@@ -7,7 +7,9 @@ export const INTERCEPTOR_PUBLIC_URL = [
 ];
 export const INTERCEPTOR_PROTECTED_URL = [
     `${API_URL.USERS}`,
-    `${API_URL.STATIONS}`
+    `${API_URL.STATIONS}`,
+    `${API_URL.RESERVATIONS}`,
+    `${API_URL.NOMINATIM}`,
     // /me
     // /:id
 ];

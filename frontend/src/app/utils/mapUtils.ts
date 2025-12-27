@@ -1,3 +1,7 @@
+import { HttpClient } from '@angular/common/http';
+import { API_URL } from './apiUrl';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+
 export async function getLocation(): Promise<{ latitude: number; longitude: number; } | undefined> {
     return new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
@@ -16,32 +20,30 @@ export async function getLocation(): Promise<{ latitude: number; longitude: numb
         });
 }
 
-export async function adressLookUp(adresseInput:string): Promise<{ latitude: number; longitude: number; } | undefined> {
-    const endpoint = 'https://nominatim.openstreetmap.org/search?q=';
+export async function adressLookUp(adresseInput:string, http: HttpClient): Promise<{ latitude: number; longitude: number; } | undefined> {
+    const endpoint = API_URL.NOMINATIM;
     const queryParam = sanitizeInput(adresseInput) + '&format=json';
-
     try {
-        // Send the GET request to Nominatim API
-        let response = await fetch(endpoint + queryParam, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'School Project Human Booster'
-            }
-        });
-        // Error handling
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        // Parse the JSON response
-        const data = await response.json();
-        console.log("Response from Nominatim:", data);
-        // Check if data is not empty and set the map location
-        if (data.length == 0) {
-            console.warn("No results found for the provided address.");
-            return ;
+        const data: any = await firstValueFrom(
+            http.get(endpoint, {
+                params: {
+                    q: sanitizeInput(adresseInput),
+                    format: 'json'
+                }
+            })
+        );
+
+        console.log('Response from Nominatim:', data);
+
+        if (!data || data.length === 0) {
+            console.warn('No results found for the provided address.');
+            return;
         }
-        // Center the map on the first result
-        const latitude = data[0].lat;
-        const longitude = data[0].lon;
-        return {latitude, longitude};
+
+        const latitude = Number(data[0].lat);
+        const longitude = Number(data[0].lon);
+
+        return { latitude, longitude };
     }
     catch (error) {
         console.error("Error fetching data from Nominatim:", error);

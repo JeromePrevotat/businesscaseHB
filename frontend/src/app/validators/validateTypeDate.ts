@@ -2,7 +2,6 @@ import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angu
 
 export class ValidateTypeDate {
   static validateDateIsFutureFrom(): ValidatorFn {
-    console.log("VALIDATOR INIT");
     return (control: AbstractControl): ValidationErrors | null => {
       if (!(control instanceof FormGroup)) {
         return null;
