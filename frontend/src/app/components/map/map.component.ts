@@ -4,6 +4,9 @@ import { getLocation } from '../../utils/mapUtils';
 import { SsrService } from '../../services/ssr.service';
 import { MapService } from '../../services/map.service';
 import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
+import { Station } from '../../models/station';
+import { inject } from '@angular/core';
+import { StationService } from '../../services/station.service';
 
 @Component({
   selector: 'app-map',
@@ -17,16 +20,20 @@ export class MapComponent implements AfterViewInit{
   private L: any;
   private currentCoords: any;
   private currentCircle: any;
+  private currentMarkers: any[];
+  private currentStations: Station[];
+  private mapService = inject(MapService);
+  private leafletService = inject(LeafletService);
+  private ssrService = inject(SsrService);
+  private stationService = inject(StationService);
 
-  constructor(
-    private leafletService: LeafletService,
-    private ssrService: SsrService,
-    private mapService: MapService
-  ) { 
+  constructor() { 
     this.map = null;
     this.L = null;
     this.currentCoords = null;
     this.currentCircle = null;
+    this.currentMarkers = [];
+    this.currentStations = [];
     // Subscribe to coordinates to recenter on change
     this.mapService.coords$.pipe(
       distinctUntilChanged((prev, curr) => prev?.latitude === curr?.latitude && prev?.longitude === curr?.longitude))
@@ -36,11 +43,28 @@ export class MapComponent implements AfterViewInit{
             this.mapService.setMapLocation(this.map, coords.latitude, coords.longitude);
         }
       });
-      // Subscribe to radius changes to update circle
+    // Subscribe to radius changes to update circle
     this.mapService.radius$.subscribe(async radius => {
       if (this.map && this.L && this.currentCoords) {
         if (this.currentCircle) this.map.removeLayer(this.currentCircle);
         this.currentCircle = await this.mapService.addCircleToMap(this.L, this.map, this.currentCoords.latitude, this.currentCoords.longitude, radius ?? 5000);
+      }
+    });
+    // Subscribe to stations changes to update markers
+    this.stationService.filteredStations$.subscribe(async stations => {
+      this.currentStations = stations || [];
+      if (this.map && this.L && this.currentMarkers) {
+        // Remove existing markers
+        for (const marker of this.currentMarkers) {
+          this.map.removeLayer(marker);
+        }
+        this.currentMarkers = [];
+        for (const station of stations || []) {
+          if (station.latitude && station.longitude) {            
+            const marker = this.mapService.addMarkersToMap(this.L, this.map, station.latitude, station.longitude);
+            this.currentMarkers.push(marker);
+          }
+        }
       }
     });
   }

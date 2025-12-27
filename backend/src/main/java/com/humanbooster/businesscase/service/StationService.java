@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.humanbooster.businesscase.model.Station;
 import com.humanbooster.businesscase.repository.StationRepository;
 import com.humanbooster.businesscase.utils.ModelUtil;
+import com.humanbooster.businesscase.utils.StationsUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +41,43 @@ public class StationService{
     @Transactional(readOnly = true)
     public List<Station> getAllStations(){
         return stationRepository.findAll();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Station> searchStations(
+            Double radius,
+            Double centerLat,
+            Double centerLon,
+            Double maxPrice
+    ) {
+        List<Station> stations = stationRepository.findAll();
+
+        stations.removeIf(station -> {
+            // Price Filter
+            if (maxPrice != null) {
+                if (station.getPriceRate().doubleValue() > maxPrice) {
+                    return true;
+                }
+            }
+
+            // Distance Filter
+            if (radius != null && centerLat != null && centerLon != null) {
+                double distance = StationsUtils.distanceMeters(
+                        centerLat,
+                        centerLon,
+                        station.getLatitude().doubleValue(),
+                        station.getLongitude().doubleValue()
+                );
+                if (distance > radius) {
+                    return true;
+                }
+            }
+            
+            // Keep the station
+            return false;
+        });
+
+        return stations;
     }
 
     /**

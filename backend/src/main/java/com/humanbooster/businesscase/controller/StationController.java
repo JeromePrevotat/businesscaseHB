@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -55,13 +55,23 @@ public class StationController {
         return ResponseEntity.ok(stationDTOs);
     }
 
+    @GetMapping("/search")
+    public List<Station> searchStations(
+            @RequestParam(required = false) Double radius,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lon,
+            @RequestParam(required = false) Double maxPrice
+    ) {
+        return stationService.searchStations(radius, lat, lon, maxPrice);
+    }
+
     /**
      * Get a station by ID.
      * GET /api/stations/{id}
      * @param id The ID of the station to retrieve
      * @return ResponseEntity with the station if found, or 404 Not Found if not found
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<StationDTO> getStationById(@PathVariable Long id){
         return stationService.getStationById(id)
                 .map(mapper::toDTO)

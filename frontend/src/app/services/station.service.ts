@@ -10,7 +10,14 @@ import { API_URL } from '../utils/apiUrl';
 export class StationService {
   private http = inject(HttpClient);
   public stationList: BehaviorSubject<Station[]> = new BehaviorSubject<Station[]>([]);
+  
+  private filteredStations = new BehaviorSubject<Station[] | null>(null);
+  filteredStations$ = this.filteredStations.asObservable();
 
+  updateFilteredStations(filteredStations: Station[] | null): void {
+    this.filteredStations.next(filteredStations);
+  }
+  
   constructor() {
     this.refreshStationList();
   }
@@ -34,6 +41,21 @@ export class StationService {
 
   getStation(id: number): Observable<Station> {
     return this.http.get<Station>(`${API_URL.STATIONS}/${id}`);
+  }
+  
+  searchStation(
+    radius: number,
+    centerLat: number,
+    centerLon: number,
+    maxPrice: number
+  ): Observable<Station[]> {
+    const params = {
+      radius,
+      lat: centerLat,
+      lon: centerLon,
+      maxPrice
+    }
+    return this.http.get<Station[]>(`${API_URL.STATIONS}/search`, { params });
   }
 
   createStation(station: Partial<Station>): Observable<Station> {

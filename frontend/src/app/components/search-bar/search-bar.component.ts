@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormService } from '../../services/form.service';
 import { HttpClient } from '@angular/common/http';
 import { MapService } from '../../services/map.service';
+import { StationService } from '../../services/station.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
@@ -17,6 +19,7 @@ export class SearchBarComponent {
   searchForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
+  private stationService = inject(StationService);
 
   constructor(private fb: FormBuilder, private http: HttpClient, private mapService: MapService) {
       this.searchForm = this.fb.group({
@@ -44,6 +47,22 @@ export class SearchBarComponent {
         if (formData.radius) {
           this.mapService.updateRadius(formData.radius * 1000);
         }
+        // Call station service to search stations
+        this.stationService.searchStation(
+          formData.radius ? formData.radius * 1000 : 5000,
+          coords ? coords.latitude : 0,
+          coords ? coords.longitude : 0,
+          formData.maxPrice ? formData.maxPrice : 20
+        ).subscribe({
+          next: (stations) => {
+            this.stationService.updateFilteredStations(stations);
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('Error during station search:', err);
+            this.isLoading = false;
+          }
+        });
       } catch (error) {
         console.error('Error during address lookup:', error);
       }

@@ -35,8 +35,9 @@ export class MapService {
     return c;
   }
 
-  async addMarkersToMap(L: any, map: any, latitude: number, longitude: number) {
-    L.marker([latitude, longitude]).addTo(map);
+  addMarkersToMap(L: any, map: any, latitude: number, longitude: number) {
+    const marker = L.marker([latitude, longitude]).addTo(map);
     console.log(`Marker added at Latitude: ${latitude}, Longitude: ${longitude}`);
+    return marker;
   }
 }
