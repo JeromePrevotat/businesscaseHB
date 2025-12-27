@@ -7,11 +7,12 @@ import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChang
 import { Station } from '../../models/station';
 import { inject } from '@angular/core';
 import { StationService } from '../../services/station.service';
+import { ReservationFormComponent } from "../../forms/reservation-form/reservation-form.component";
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [ReservationFormComponent],
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
@@ -22,6 +23,7 @@ export class MapComponent implements AfterViewInit{
   private currentCircle: any;
   private currentMarkers: any[];
   private currentStations: Station[];
+  public selectedStation: Station | null;
   private mapService = inject(MapService);
   private leafletService = inject(LeafletService);
   private ssrService = inject(SsrService);
@@ -34,6 +36,7 @@ export class MapComponent implements AfterViewInit{
     this.currentCircle = null;
     this.currentMarkers = [];
     this.currentStations = [];
+    this.selectedStation = null;
     // Subscribe to coordinates to recenter on change
     this.mapService.coords$.pipe(
       distinctUntilChanged((prev, curr) => prev?.latitude === curr?.latitude && prev?.longitude === curr?.longitude))
@@ -62,6 +65,9 @@ export class MapComponent implements AfterViewInit{
         for (const station of stations || []) {
           if (station.latitude && station.longitude) {            
             const marker = this.mapService.addMarkersToMap(this.L, this.map, station.latitude, station.longitude);
+            marker.on('click', () => {
+              this.openModal(station);
+            });
             this.currentMarkers.push(marker);
           }
         }
@@ -123,6 +129,9 @@ export class MapComponent implements AfterViewInit{
           for (const station of this.currentStations || []) {
             if (station.latitude && station.longitude) {            
               const marker = this.mapService.addMarkersToMap(this.L, this.map, station.latitude, station.longitude);
+              marker.on('click', () => {
+                this.openModal(station);
+              });
               this.currentMarkers.push(marker);
             }
           }
@@ -136,6 +145,17 @@ export class MapComponent implements AfterViewInit{
     } catch (error) {
       console.error('Error loading Leaflet or initializing the map:', error);
     }
+  }
+
+  openModal(station: Station) {
+    if (this.ssrService.isServerSide) return;
+    this.selectedStation = station;
+    const m = document.getElementById('reservationModal');
+    if (!m) return;
+    import('bootstrap').then(({ Modal }) => {
+      const modal = new Modal(m);
+      modal.show();
+    });
   }
 
   ngOnDestroy() {

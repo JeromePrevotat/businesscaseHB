@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Station } from '../models/station';
+import Modal from 'bootstrap/js/dist/modal';
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
