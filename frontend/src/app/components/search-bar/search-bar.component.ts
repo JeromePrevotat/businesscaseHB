@@ -41,6 +41,9 @@ export class SearchBarComponent {
         if (coords) {
           this.mapService.updateCoords(coords);
         }
+        if (formData.radius) {
+          this.mapService.updateRadius(formData.radius * 1000);
+        }
       } catch (error) {
         console.error('Error during address lookup:', error);
       }

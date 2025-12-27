@@ -6,13 +6,20 @@ export class MapService {
   private coords = new BehaviorSubject<{ latitude: number; longitude: number } | null>(null);
   coords$ = this.coords.asObservable();
 
+  private radius = new BehaviorSubject<number | null>(null);
+  radius$ = this.radius.asObservable();
+
   updateCoords(coords: { latitude: number; longitude: number }) {
     this.coords.next(coords);
   }
 
-  setMapLocation(map: any, latitude: number, longitude: number) {
+  updateRadius(radius: number) {
+    this.radius.next(radius);
+  }
+
+  setMapLocation(map: any, latitude: number, longitude: number, zoom: number = 13) {
     if (latitude && longitude) {
-        map.setView([latitude, longitude], 14);
+        map.setView([latitude, longitude], zoom);
     } else {
         console.error("Invalid latitude or longitude provided.");
     }
@@ -25,6 +32,7 @@ export class MapService {
         fillOpacity: 0.1,
         radius: radius
     }).addTo(map);
+    return c;
   }
 
   async addMarkersToMap(L: any, map: any, latitude: number, longitude: number) {
