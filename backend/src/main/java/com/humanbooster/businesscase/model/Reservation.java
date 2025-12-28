@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -34,7 +35,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @ToString(exclude = {"user", "station"})
-@Table(name="reservations")
+@Table(
+    name="reservations",
+    indexes = {
+        @Index(name = "idx_reservation_station_dates", columnList = "station,start_date,end_date")
+    }
+)
 public class Reservation {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -122,6 +122,20 @@ INSERT INTO stations (
     1.10,
     NULL,
     'Plug & Charge'
+),
+(
+    5,
+    'Station Test 5',
+    45.7754, 3.0849,
+    2, -- Owner (user)
+    'ACTIVE',
+    0, -- busy
+    1, -- grounded
+    1, -- wired
+    22.0,
+    5.00,
+    NULL,
+    'Plug & Charge'
 );
 
 INSERT INTO reservations (
@@ -132,8 +146,15 @@ INSERT INTO reservations (
     hourly_rate_log
 ) VALUES (
     1, 1, 2,
-    2025-12-27 18:45:57.577844, NULL, 'PENDING',
-    2025-12-27 20:00:00.000000, 2025-12-27 23:00:00.000000,
+    '2025-12-27 18:45:57.577844', NULL, 'PENDING',
+    '2025-12-31 20:00:00.000000', '2025-12-31 23:00:00.000000',
     0, NULL,
     0.3000
+),
+(
+    2, 5, 2,
+    '2025-12-27 20:00:00.000000', NULL, 'PENDING',
+    '2025-01-01 12:00:00.000000', '2025-12-31 23:00:00.000000',
+    0, NULL,
+    5.0000
 );

@@ -116,7 +116,7 @@ export class MapComponent implements AfterViewInit{
             5000,
             this.currentCoords ? this.currentCoords.latitude : 0,
             this.currentCoords ? this.currentCoords.longitude : 0,
-            20
+            20, null, null, null
           ).subscribe({
             next: (stations) => {
               this.stationService.updateFilteredStations(stations);

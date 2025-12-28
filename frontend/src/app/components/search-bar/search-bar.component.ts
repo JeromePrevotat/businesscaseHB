@@ -26,7 +26,8 @@ export class SearchBarComponent {
         adress: ['', ],
         radius: ['', [Validators.min(1), Validators.max(50)]],
         date: ['', ],
-        time: ['', ],
+        startTime: ['', ],
+        endTime: ['', ],
         maxPrice: ['', [Validators.min(0), Validators.max(20)]],
       });
     }
@@ -52,7 +53,10 @@ export class SearchBarComponent {
           formData.radius ? formData.radius * 1000 : 5000,
           coords ? coords.latitude : 0,
           coords ? coords.longitude : 0,
-          formData.maxPrice ? formData.maxPrice : 20
+          formData.maxPrice ? formData.maxPrice : 20,
+          formData.date ? formData.date : null,
+          formData.startTime ? formData.startTime : null,
+          formData.endTime ? formData.endTime : null
         ).subscribe({
           next: (stations) => {
             this.stationService.updateFilteredStations(stations);

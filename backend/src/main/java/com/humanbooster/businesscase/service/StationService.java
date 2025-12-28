@@ -1,5 +1,12 @@
 package com.humanbooster.businesscase.service;
 
+import java.math.BigDecimal;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,37 +55,52 @@ public class StationService{
             Double radius,
             Double centerLat,
             Double centerLon,
-            Double maxPrice
+            Double maxPrice,
+            LocalDate startDate,
+            LocalTime startTime,
+            LocalTime endTime
     ) {
-        List<Station> stations = stationRepository.findAll();
+        LocalDateTime searchStart = null;
+        LocalDateTime searchEnd = null;
+        
+        // Filter by Date only
+        if (startDate != null && startTime == null && endTime == null) {
+            searchStart = startDate.atStartOfDay();
+            searchEnd = startDate.atTime(23, 59, 59);
+        }
 
-        stations.removeIf(station -> {
-            // Price Filter
-            if (maxPrice != null) {
-                if (station.getPriceRate().doubleValue() > maxPrice) {
-                    return true;
-                }
-            }
+        // Filter by Date and Time
+        else if (startDate != null && startTime != null && endTime != null) {
+            searchStart = LocalDateTime.of(startDate, startTime);
+            searchEnd = LocalDateTime.of(startDate, endTime);
+        }
 
-            // Distance Filter
-            if (radius != null && centerLat != null && centerLon != null) {
-                double distance = StationsUtils.distanceMeters(
-                        centerLat,
-                        centerLon,
-                        station.getLatitude().doubleValue(),
-                        station.getLongitude().doubleValue()
-                );
-                if (distance > radius) {
-                    return true;
-                }
-            }
-            
-            // Keep the station
-            return false;
-        });
+        // HQL query to search stations
+        List<Station> stations = stationRepository.searchStations(
+                maxPrice != null ? BigDecimal.valueOf(maxPrice) : null,
+                searchStart,
+                searchEnd,
+                startTime != null ? startTime.toString() : null,
+                endTime != null ? endTime.toString() : null
+        );
+
+        if (radius != null && centerLat != null && centerLon != null) {
+            stations = stations.stream()
+                    .filter(station -> {
+                        double distance = StationsUtils.distanceMeters(
+                                centerLat,
+                                centerLon,
+                                station.getLatitude().doubleValue(),
+                                station.getLongitude().doubleValue()
+                        );
+                        return distance <= radius;
+                    })
+                    .toList();
+        }
 
         return stations;
     }
+
 
     /**
      * Retrieves a Station by its ID.

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Station } from '../models/station';
@@ -47,13 +47,26 @@ export class StationService {
     radius: number,
     centerLat: number,
     centerLon: number,
-    maxPrice: number
+    maxPrice: number,
+    startDate: string | null,
+    startTime: string | null,
+    endTime: string | null
   ): Observable<Station[]> {
-    const params = {
-      radius,
-      lat: centerLat,
-      lon: centerLon,
-      maxPrice
+    let params = new HttpParams()
+      .set('radius', radius.toString())
+      .set('lat', centerLat.toString())
+      .set('lon', centerLon.toString());
+    if (maxPrice != null) {
+      params = params.set('maxPrice', maxPrice.toString());
+    }
+    if (startDate) {
+      params = params.set('startDate', startDate);
+    }
+    if (startTime) {
+      params = params.set('startTime', startTime);
+    }
+    if (endTime) {
+      params = params.set('endTime', endTime);
     }
     return this.http.get<Station[]>(`${API_URL.STATIONS}/search`, { params });
   }
