@@ -1,9 +1,7 @@
 package com.humanbooster.businesscase.repository;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,27 +28,6 @@ public interface StationRepository extends JpaRepository<Station, Long>{
     List<Station> findByState(StationState state);
     
     List<Station> findByBusy(Boolean busy);
-
-    // @Query("""
-    //     SELECT s
-    //     FROM Station s
-    //     WHERE
-    //         (:priceRate IS NULL OR s.priceRate <= :priceRate)
-    //     AND (
-    //         :startDate IS NULL OR NOT EXISTS (
-    //             SELECT r
-    //             FROM Reservation r
-    //             WHERE r.station = s
-    //             AND r.startDate < :endDate
-    //             AND r.endDate > :startDate
-    //         )
-    //     )
-    // """)
-    // List<Station> searchStations(
-    //     @Param("priceRate") BigDecimal priceRate,
-    //     @Param("startDate") LocalDateTime startDate,
-    //     @Param("endDate") LocalDateTime endDate
-    // );
 
     @Query(value = """
     SELECT *
@@ -81,7 +58,5 @@ public interface StationRepository extends JpaRepository<Station, Long>{
         @Param("startTime") String startTime,
         @Param("endTime") String endTime
     );
-
-
    
 }
