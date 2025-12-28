@@ -9,10 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.humanbooster.businesscase.model.PlugType;
-import com.humanbooster.businesscase.model.Spot;
 import com.humanbooster.businesscase.model.Station;
-import com.humanbooster.businesscase.model.StationState;
+import com.humanbooster.businesscase.model.User;
 
 /**
  * Station's Repository. Provides basic CRUD operations for Station entities.
@@ -20,14 +18,8 @@ import com.humanbooster.businesscase.model.StationState;
 @Repository
 public interface StationRepository extends JpaRepository<Station, Long>{
     List<Station> findByPriceRate(BigDecimal priceRate);
-
-    List<Station> findByPlugType(PlugType plugType);
-
-    List<Station> findBySpot(Spot spot);
     
-    List<Station> findByState(StationState state);
-    
-    List<Station> findByBusy(Boolean busy);
+    List<Station> findByOwner(User owner);
 
     @Query(value = """
     SELECT *

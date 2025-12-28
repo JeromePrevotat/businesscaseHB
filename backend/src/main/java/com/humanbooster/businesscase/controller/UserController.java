@@ -1,6 +1,7 @@
 package com.humanbooster.businesscase.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
+import com.humanbooster.businesscase.dto.StationDTO;
 import com.humanbooster.businesscase.dto.UserChangePwdDTO;
 import com.humanbooster.businesscase.dto.UserDTO;
 import com.humanbooster.businesscase.dto.UserRegisterDTO;
+import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.mapper.UserMapper;
+import com.humanbooster.businesscase.model.Station;
 import com.humanbooster.businesscase.model.User;
+import com.humanbooster.businesscase.repository.StationRepository;
 import com.humanbooster.businesscase.service.RefreshTokenService;
 import com.humanbooster.businesscase.service.UserService;
 
@@ -43,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
+    private final StationRepository stationRepository;
+    private final StationMapper stationMapper;
     private final UserMapper mapper;
 
 
@@ -90,6 +95,35 @@ public class UserController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
+    
+    /**
+     * Get all stations belonging to the user.
+     * GET /api/users/my-stations
+     * @return ResponseEntity with the user's stations if found
+     */
+    @GetMapping("/my-stations")
+    public ResponseEntity<List<StationDTO>> getUserStations(@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    
+        Optional<User> userOpt = userService.getUserByUsername(userDetails.getUsername());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userOpt.get();
+
+        List<Station> stations = stationRepository.findByOwner(user);
+
+        List<StationDTO> stationDTOs = stations.stream()
+                                            .map(stationMapper::toDTO)
+                                            .toList();
+
+        return ResponseEntity.ok(stationDTOs);
+    }
+
+
 
     /**
      * Save a new user.

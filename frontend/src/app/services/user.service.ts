@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { API_URL } from '../utils/apiUrl';
+import { Station } from '../models/station';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class UserService {
 
   getUser(id:number): Observable<User> {
     return this.http.get<User>(`${API_URL.USERS}/${id}`);
+  }
+  
+  getUserStations(): Observable<Station[]> {
+    return this.http.get<Station[]>(`${API_URL.USERS}/my-stations`);
   }
 
   createUser(user:Partial<User>): Observable<User> {

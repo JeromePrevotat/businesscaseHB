@@ -7,6 +7,7 @@ import { Station } from '../../models/station';
 import { Observable } from 'rxjs/internal/Observable';
 import { ListDisplayComponent } from "../list-display/list-display.component";
 import { ListType } from '../../models/listType';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-stations',
@@ -18,7 +19,8 @@ import { ListType } from '../../models/listType';
 export class StationsComponent {
   readonly ROUTE_PATHS = ROUTE_PATHS;
   stationsService: StationService = inject(StationService);
+  userService: UserService = inject(UserService);
   stationStates = Object.values(StationState);
-  stationsList: Observable<Station[]> = this.stationsService.getStationList();
+  stationsList: Observable<Station[]> = this.userService.getUserStations();
   listType = ListType.STATION;
 }
