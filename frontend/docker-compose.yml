@@ -16,6 +16,7 @@ services:
       - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
     networks:
       - business-case-network
+      - nginx-proxy
     expose:
       - "80"
 
