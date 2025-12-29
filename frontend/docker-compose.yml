@@ -12,6 +12,8 @@ services:
         interval: 10s
         retries: 5
         timeout: 5s
+    environment:
+      - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
     networks:
       - business-case-network
     expose:
