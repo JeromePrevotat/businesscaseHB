@@ -5,7 +5,7 @@ services:
 
 networks:
   businesscasehb:
-    name: businesscasehb
+    name: business-case-network
     driver: bridge
 
 include:

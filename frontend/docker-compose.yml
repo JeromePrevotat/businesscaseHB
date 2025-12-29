@@ -7,5 +7,10 @@ services:
     container_name: business-case-front
     depends_on:
       - app
+    healthcheck:
+        test: ["CMD-SHELL", "curl -f http://app:8080/actuator/health || exit 1"]
+        interval: 10s
+        retries: 5
+        timeout: 5s
     networks:
-      - businesscasehb
+      - business-case-network
