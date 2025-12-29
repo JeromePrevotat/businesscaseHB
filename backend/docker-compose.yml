@@ -22,6 +22,8 @@ services:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        networks:
+            - businesscasehb
         volumes:
             - mysql_data:/var/lib/mysql
 
@@ -48,6 +50,8 @@ services:
             MYSQL_DATABASE: ${MYSQL_TEST_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        networks:
+            - businesscasehb
         volumes:
             - mysql-test_data:/var/lib/mysql
 
@@ -74,6 +78,8 @@ services:
         env_file:
             - .env
         command: ["tail", "-f", "/dev/null"]
+        networks:
+            - businesscasehb
 
 volumes:
     mysql_data:

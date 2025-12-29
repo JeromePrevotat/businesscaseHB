@@ -5,3 +5,5 @@ services:
       dockerfile: Dockerfile
     image: angular-front
     container_name: business-case-front
+    networks:
+      - businesscasehb

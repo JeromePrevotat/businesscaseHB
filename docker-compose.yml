@@ -1,3 +1,13 @@
+services:
+  _dummy:
+    image: alpine
+    command: ["true"]
+
+networks:
+  businesscasehb:
+    name: businesscasehb
+    driver: bridge
+
 include:
   - backend/docker-compose.yml
   - frontend/docker-compose.yml
