@@ -79,7 +79,10 @@ services:
             - .env
         command: ["tail", "-f", "/dev/null"]
         networks:
-                - business-case-network
+            - business-case-network
+            - nginx-proxy
+        expose:
+            - "8080"
 
 volumes:
     mysql_data:
@@ -87,3 +90,5 @@ volumes:
 
 networks:
     business-case-network:
+    nginx-proxy:
+        external: true
