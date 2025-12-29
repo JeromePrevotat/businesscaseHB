@@ -47,7 +47,7 @@ export class EditStationFormComponent {
     if (this.editStationForm.valid) {
       this.isLoading = true;
       const editedStation: Partial<Station> = this.editStationForm.value;
-      this.StationService.editStation(editedStation.id!, editedStation).subscribe({
+      this.StationService.editStation(this.station!.id!, editedStation).subscribe({
         next: (response) => {
           this.editStationForm.reset();
           this.isLoading = false;
