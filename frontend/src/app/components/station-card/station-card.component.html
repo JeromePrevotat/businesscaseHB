@@ -17,37 +17,6 @@
       @if (station.plugTypeList && station.plugTypeList.length > 0) {
         <p>Plug Types: {{ station.plugTypeList.join(', ') }}</p>
       }
-      <!-- <a [routerLink]="['/stations', station.id]">Details</a> -->
-      <!-- <a [routerLink]="['/stations', 'edit', station.id]">Edit</a> -->
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" attr.data-bs-target="#reservationModal-{{ station.id }}" (click)="test()">
-        Réserver
-      </button>
-
-      <!-- Modal -->
-      @if (station) {
-        <div class="modal fade reservationModal" id="reservationModal-{{ station.id }}" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <div>
-                  <h1 class="modal-title" id="reservationModalLabel">Réserver {{ station.stationName }}</h1>
-                </div>
-                  <div>
-                    <h2>Located at:</h2>
-                    <p>{{ station.latitude }}, {{ station.longitude }}</p>
-                  </div>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <p>Price: {{ station.priceRate }}</p>
-                  <p>Total: {{ station.priceRate }}</p>
-                </div>
-                <div class="modal-footer">
-                  <app-reservation-form [station]="station"></app-reservation-form>
-              </div>
-            </div>
-          </div>
-        </div>
-        }
+      <button type="button" class="btn btn-primary" (click)="navigateToEdit(station!)">Edit</button>
   }
 </div>

@@ -1,6 +1,8 @@
 <div class="container">
-    <h2>Stations</h2>
-    <button [routerLink]="ROUTE_PATHS.createStation" class="btn btn-primary mb-3">Add New Station</button>
+    <div>
+        <h2>My Stations</h2>
+        <button [routerLink]="ROUTE_PATHS.createStation" class="btn btn-primary mb-3">Add New Station</button>
+    </div>
     <div class="stations-content">
         <router-outlet></router-outlet>
         <app-list-display [items$]="stationsList" [type]="listType"></app-list-display>

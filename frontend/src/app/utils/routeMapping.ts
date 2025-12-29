@@ -20,7 +20,7 @@ export const ROUTE_PATHS = {
     // Stations routes
     stations: 'stations',
         createStation: 'create',
-        editStation: 'stations/:stationId/edit',
+        editStation: ':stationId/edit',
         
     // Reservations routes
     reservations: 'reservations',
