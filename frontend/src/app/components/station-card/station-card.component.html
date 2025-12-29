@@ -18,5 +18,6 @@
         <p>Plug Types: {{ station.plugTypeList.join(', ') }}</p>
       }
       <button type="button" class="btn btn-primary" (click)="navigateToEdit(station!)">Edit</button>
+      <button type="button" class="btn btn-danger" (click)="deleteStation(station!)">Delete</button>
   }
 </div>
