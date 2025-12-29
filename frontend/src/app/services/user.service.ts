@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user';
 import { API_URL } from '../utils/apiUrl';
 import { Station } from '../models/station';
@@ -10,6 +10,8 @@ import { Station } from '../models/station';
 })
 export class UserService {
   private http = inject(HttpClient);
+  private userStations = new BehaviorSubject<Station[]>([]);
+  userStations$ = this.userStations.asObservable();
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(API_URL.USERS);
@@ -20,7 +22,16 @@ export class UserService {
   }
   
   getUserStations(): Observable<Station[]> {
-    return this.http.get<Station[]>(`${API_URL.USERS}/my-stations`);
+    return this.userStations$;
+  }
+
+  refreshUserStations(): void {
+    this.http.get<Station[]>(`${API_URL.USERS}/my-stations`).subscribe({
+    next: (stations) => {
+      this.userStations.next(stations);
+    },
+    error: (error) => console.error('Erreur refresh user stations', error)
+  });
   }
 
   createUser(user:Partial<User>): Observable<User> {

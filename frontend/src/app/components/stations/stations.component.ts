@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { ROUTE_PATHS } from '../../utils/routeMapping';
 import { StationService } from '../../services/station.service';
@@ -16,11 +16,15 @@ import { UserService } from '../../services/user.service';
   templateUrl: './stations.component.html',
   styleUrl: './stations.component.css'
 })
-export class StationsComponent {
+export class StationsComponent implements OnInit {
   readonly ROUTE_PATHS = ROUTE_PATHS;
   stationsService: StationService = inject(StationService);
   userService: UserService = inject(UserService);
   stationStates = Object.values(StationState);
   stationsList: Observable<Station[]> = this.userService.getUserStations();
   listType = ListType.STATION;
+
+  ngOnInit(): void {
+    this.userService.refreshUserStations();
+  }
 }

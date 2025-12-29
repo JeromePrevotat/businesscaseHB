@@ -6,6 +6,7 @@ import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../utils/routeMapping';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-station-form',
@@ -16,6 +17,7 @@ import { ROUTE_PATHS } from '../../utils/routeMapping';
 })
 export class EditStationFormComponent {
   StationService = inject(StationService);
+  userService = inject(UserService);
   editStationForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
@@ -49,6 +51,7 @@ export class EditStationFormComponent {
       const editedStation: Partial<Station> = this.editStationForm.value;
       this.StationService.editStation(this.station!.id!, editedStation).subscribe({
         next: (response) => {
+          this.userService.refreshUserStations();
           this.editStationForm.reset();
           this.isLoading = false;
           this.isSubmitted = false;
