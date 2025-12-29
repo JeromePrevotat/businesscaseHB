@@ -75,13 +75,13 @@ services:
             DB_NAME: ${MYSQL_DATABASE}
             DB_USER: ${MYSQL_USER}
             DB_PASSWORD: ${MYSQL_PASSWORD}
-            VIRTUAL_HOST: "" # Nginx ignore ce container
+            # VIRTUAL_HOST: "" # Nginx ignore ce container
         env_file:
             - .env
         command: ["tail", "-f", "/dev/null"]
         networks:
             - business-case-network
-            - nginx-proxy
+            # - nginx-proxy
         expose:
             - "8080"
 
@@ -91,5 +91,5 @@ volumes:
 
 networks:
     business-case-network:
-    nginx-proxy:
-        external: true
+    # nginx-proxy:
+        # external: true
