@@ -14,6 +14,9 @@ services:
         timeout: 5s
     environment:
       - VIRTUAL_HOST=electricity-business.91.166.39.12.nip.io
+      - LETSENCRYPT_HOST=electricity-business.91.166.39.12.nip.io
+    volumes:
+      - ../../nginx-proxy/certs:/etc/nginx/certs:ro
     networks:
       - business-case-network
       - nginx-proxy
