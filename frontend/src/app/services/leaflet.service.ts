@@ -17,9 +17,11 @@ export class LeafletService {
 
     // Client side: dynamically import Leaflet
     if (!this.leaflet) {
-      this.leaflet = await import('leaflet');
-      // this.leaflet.Icon.Default.imagePath = 'leaflet/images/';
-      this.leaflet.Icon.Default.imagePath = '/assets/leaflet/images/';
+      const leafletModule = await import('leaflet');
+      console.log('LEAFLETMODULE:', leafletModule);
+      this.leaflet = leafletModule?.default || leafletModule;
+      console.log('LEAFLET:', this.leaflet);
+      this.leaflet.Icon.Default.imagePath = 'leaflet/images/';
     }
 
     return this.leaflet;
