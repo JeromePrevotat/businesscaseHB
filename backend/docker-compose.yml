@@ -22,10 +22,10 @@ services:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        networks:
-            - business-case-network
         volumes:
             - mysql_data:/var/lib/mysql
+        networks:
+            - business-case-network
 
     mysql-test:
         image: mysql:8.3
@@ -50,10 +50,10 @@ services:
             MYSQL_DATABASE: ${MYSQL_TEST_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        networks:
-            - business-case-network
         volumes:
             - mysql-test_data:/var/lib/mysql
+        networks:
+            - business-case-network
 
     app:
         build: ./
@@ -79,8 +79,11 @@ services:
             - .env
         command: ["tail", "-f", "/dev/null"]
         networks:
-            - business-case-network
+                - business-case-network
 
 volumes:
     mysql_data:
     mysql-test_data:
+
+networks:
+    business-case-network:
