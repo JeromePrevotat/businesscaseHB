@@ -2,8 +2,9 @@
     display: grid;
     align-items: center;
     padding: 10px;
-    background-color: #61dafb;
-    color: #282c34;
+    background-color: var(--color-secondary);
+    color: var(--color-text-inverse);
+    font-family: "Inter", sans-serif;
 }
 
 .navbar-left{
@@ -20,8 +21,13 @@
 
 .navbar-nav a {
     text-decoration: none;
-    color: #282c34;
-    font-weight: bold;
+    color: var(--color-text-inverse);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.navbar-nav a:hover {
+    color: var(--color-primary);
 }
 
 .navbar-center {
@@ -43,7 +49,8 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
-    font-size: medium;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
 }
 
 .navbar-right button,
@@ -54,8 +61,13 @@
     justify-content: flex-end;
     padding-right: 24px;
     text-decoration: none;
-    color: #282c34;
-    font-weight: bold;
+    color: var(--color-text-inverse);
+    font-weight: 600;
+}
+
+.navbar-right a:hover,
+.navbar-right button:hover {
+    color: var(--color-primary);
 }
 
 .navbar-bottom {
@@ -64,17 +76,23 @@
     align-items: center;
     justify-content: space-evenly;
     padding-top: 8px;
-    border-top: 1px solid #282c34;
+    border-top: 1px solid var(--color-border-light);
 }
 
 .navbar-bottom a{
     text-decoration: none;
-    color: #282c34;
-    font-weight: bold;
+    color: var(--color-text-main);
+    font-weight: 600;
+    font-size: 16px;
     text-align: center;
     width: 150px;
+    background-color: var(--color-primary);
+    
     border: 1px solid black;
-    background-color: yellowgreen;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 8px;
+}
+
+.navbar-bottom a:hover {
+    background-color: var(--color-primary-hover);
 }

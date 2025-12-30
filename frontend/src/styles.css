@@ -1,14 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
-*{
+:root {
+    --color-primary: #2ECC71;
+    --color-primary-hover: #27AE60;
+
+    --color-secondary: #1F3C88;
+    --color-secondary-hover: #40599A;
+
+    --color-tertiary:  #c0d1e0;
+
+    --color-error: #E74C3C;
+
+    --color-text-inverse: #FFFFFF;
+    --color-text-main: #1C1C1C;
+
+    --color-border-light: rgba(255, 255, 255, 0.2);
+}
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Times New Roman', Times, serif;
+
+    font-family: "Inter", system-ui, sans-serif;
 }
 
-body{
-    background-color: #282c34;
-    color: white;
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-main);
 }
 
 app-root {
@@ -20,3 +38,4 @@ app-root {
 .main-content {
     flex: 1;
 }
+
