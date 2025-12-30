@@ -49,7 +49,7 @@
 }
 
 .modal-header h1 {
-    color: white;
+    color: var(--color-text-main);
     text-align: center;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -57,7 +57,7 @@
 }
 
 .modal-header h2 {
-    color: white;
+    color: var(--color-text-main);
     text-align: left;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -65,7 +65,7 @@
 }
 
 .modal-header p {
-    color: white;
+    color: var(--color-text-main);
     text-align: left;
     margin-top: 8px;
     margin-bottom: 8px;
@@ -73,9 +73,16 @@
     font-style: italic;
 }
 
-.modal-content {
+/* .modal-content {
     background-color: #2727279d;
     color: white;
+} */
+
+.modal-content {
+    background-color: rgba(192, 209, 224, 0.6); /* semi-transparent sur fond blanc */
+    color: var(--color-text-main);
+    border-radius: 6px;
+    padding: 16px;
 }
 
 .modal-body {

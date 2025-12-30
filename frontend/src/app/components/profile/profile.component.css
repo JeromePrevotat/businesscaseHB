@@ -1,6 +1,7 @@
 .profile-container {
   display: flex;
   flex-direction: row;
+  font-family: "Inter", sans-serif;
 }
 
 .profile-left {
@@ -8,17 +9,26 @@
   flex-direction: column;
   width: 200px;
   padding: 8px;
-  border-right: solid white 1px;
-  border-bottom: solid white 1px;
+  border-right: solid var(--color-border-light) 1px;
+  border-bottom: solid var(--color-border-light) 1px;
   border-bottom-right-radius: 5px;
+  background-color: var(--color-tertiary);
+  color: var(--color-text-main);
 }
 
 .profile-left a {
   text-decoration: none;
-  color: white;
+  color: var(--color-text-main);
   margin-top: 8px;
+}
+
+.profile-left a:hover {
+    color: var(--color-secondary-hover);
 }
 
 .profile-content {
   flex: 1;
+  color: var(--color-text-main);
+  padding: 8px;
+  background-color: #ffffff;
 }

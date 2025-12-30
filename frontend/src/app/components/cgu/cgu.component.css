@@ -1,22 +1,23 @@
 .cgu-container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  line-height: 1.6;
-  color: #e7e7e7;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    line-height: 1.6;
+    color: var(--color-text-main);
+    font-family: "Inter", sans-serif;
 }
 
 /* Headings */
 .cgu-container h1,
 .cgu-container h2,
 .cgu-container h3 {
-  color: #fff;
+  color: var(--color-text-main);
   margin: 1rem 0;
 }
 
 .cgu-container h1 {
   font-size: 2rem;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid var(--color-border-light);
   padding-bottom: 8px;
 }
 
@@ -24,6 +25,7 @@
 .cgu-container p,
 .cgu-container li {
   margin-bottom: 0.75rem;
+  color: var(--color-text-main);
 }
 
 .cgu-container ul,
@@ -33,10 +35,11 @@
 
 /* Links */
 .cgu-container a {
-  color: #4dabf7;
+  color: var(--color-primary);
   text-decoration: none;
 }
 .cgu-container a:hover {
+  color: var(--color-primary-hover);
   text-decoration: underline;
 }
 
@@ -51,6 +54,6 @@
 /* Horizontal rule */
 .cgu-container hr {
   border: none;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid var(--color-border-light);
   margin: 1.25rem 0;
 }
