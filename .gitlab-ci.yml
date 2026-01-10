@@ -107,7 +107,8 @@ sonar-backend:
     - mvn -B -DskipTests clean verify sonar:sonar \
         -Dsonar.projectKey=jeromeprevotat_businesscasehb \
         -Dsonar.host.url=${SONAR_HOST_URL} \
-        -Dsonar.login=${SONAR_TOKEN}
+        -Dsonar.login=${SONAR_TOKEN} \
+        -U
   cache:
     key:
       files:

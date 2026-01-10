@@ -129,7 +129,14 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>4.1.3.3549</version>
+                <version>5.5.0.6356</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
