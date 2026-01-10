@@ -93,7 +93,7 @@ sonar-backend:
     image: maven:3.9.11-eclipse-temurin-21
     script:
         - cd backend
-        - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../ -U
+        - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../ -Dsonar.modules=backend-U
     cache:
         key:
             files:
@@ -109,7 +109,7 @@ sonar-frontend:
     image: sonarsource/sonar-scanner-cli:latest
     script:
         - cd frontend
-        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../ -Dsonar.inclusions="**/*.ts,**/*.html,**/*.css, **/*.js"
+        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../ -Dsonar.modules=frontend -Dsonar.inclusions="**/*.ts,**/*.html,**/*.css, **/*.js"
     rules:
     - changes:
         - frontend/**/*
