@@ -1,10 +1,4 @@
 ---
-debug changes:
-  stage: build
-  script:
-    - echo "Changed files:"
-    - git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA
-    
 stages:
     - build
     - sonarqube
