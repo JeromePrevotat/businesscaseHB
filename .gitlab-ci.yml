@@ -1,6 +1,7 @@
 ---
 stages:
     - build
+    - sonarqube
     - package
     - deploy
 
@@ -94,6 +95,39 @@ build client:
     rules:
         - changes:
             - frontend/**/*
+
+sonar-backend:
+  stage: sonarqube
+  image: maven:3.9.11-eclipse-temurin-21-alpine
+  rules:
+    - changes:
+        - backend/**/*
+  script:
+    - mvn -B -DskipTests clean verify sonar:sonar \
+        -Dsonar.projectKey=businesscase-backend \
+        -Dsonar.host.url=${SONAR_HOST_URL} \
+        -Dsonar.login=${SONAR_TOKEN}
+  cache:
+    key:
+      files:
+        - backend/pom.xml
+    paths:
+      - backend/.m2/repository
+
+sonar-frontend:
+  stage: sonarqube
+  image: node:24.7.0-bullseye
+  rules:
+    - changes:
+        - frontend/**/*
+  script:
+    - cd frontend
+    - npm ci --prefer-offline
+    - npx sonar-scanner \
+        -Dsonar.projectKey=businesscase-frontend \
+        -Dsonar.sources=. \
+        -Dsonar.host.url=${SONAR_HOST_URL} \
+        -Dsonar.login=${SONAR_TOKEN}
 
 package api image:
     extends:
