@@ -9,4 +9,4 @@
 - Go to the frontend directory cd ../frontend
 - Install dependencies: npm i
 - Start the frontend server: npm start
-  dum
+  du
