@@ -1,4 +1,11 @@
 ---
+workflow:
+  rules:
+    - changes:
+        - frontend/**/*
+        - backend/**/*
+    - when: never
+
 stages:
     - build
     - sonarqube
@@ -75,25 +82,16 @@ build api:
         - .api-variables
         - .change-folder
         - .api-build
-    rules:
-        - changes:
-            - backend/**/*
 
 build client:
     extends:
         - .client-variables
         - .change-folder
         - .frontend-build
-    rules:
-        - changes:
-            - frontend/**/*
 
 sonar-backend:
   stage: sonarqube
   image: maven:3.9.11-eclipse-temurin-21
-  rules:
-    - changes:
-        - backend/**/*
   script:
     - cd backend
     - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -U
@@ -107,9 +105,6 @@ sonar-backend:
 sonar-frontend:
   stage: sonarqube
   image: node:24.7.0-bullseye
-  rules:
-    - changes:
-        - frontend/**/*
   script:
     - cd frontend
     - npm ci --prefer-offline
@@ -123,9 +118,6 @@ package api image:
     needs:
         - job: build api
           artifacts: true
-    rules:
-        - changes:
-            - backend/**/*
 
 package client image:
     extends:
@@ -135,8 +127,5 @@ package client image:
     needs:
         - job: build client
           artifacts: true
-    rules:
-        - changes:
-            - frontend/**/*
 # Deploy
 # Pull Docker Image from Gitlab Registry via SSH
