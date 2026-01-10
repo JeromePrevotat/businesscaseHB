@@ -104,7 +104,7 @@ sonar-backend:
 
 sonar-frontend:
   stage: sonarqube
-  image: sonarsource/sonar-scanner-cli:5-bullseye
+  image: sonarsource/sonar-scanner-cli:latest
   script:
     - cd frontend
     - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
