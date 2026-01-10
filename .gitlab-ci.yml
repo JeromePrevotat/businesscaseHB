@@ -1,11 +1,4 @@
 ---
-workflow:
-  rules:
-    - changes:
-        - frontend/**/*
-        - backend/**/*
-    - when: never
-
 stages:
     - build
     - sonarqube
@@ -82,12 +75,18 @@ build api:
         - .api-variables
         - .change-folder
         - .api-build
+    rules:
+    - changes:
+        - backend/**/*
 
 build client:
     extends:
         - .client-variables
         - .change-folder
         - .frontend-build
+    rules:
+    - changes:
+        - frontend/**/*
 
 sonar-backend:
   stage: sonarqube
@@ -101,13 +100,19 @@ sonar-backend:
         - backend/pom.xml
     paths:
       - backend/.m2/repository
+    rules:
+    - changes:
+        - backend/**/*
 
 sonar-frontend:
-  stage: sonarqube
-  image: sonarsource/sonar-scanner-cli:latest
-  script:
+    stage: sonarqube
+    image: sonarsource/sonar-scanner-cli:latest
+    script:
     - cd frontend
     - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
+    rules:
+    - changes:
+        - frontend/**/*
 
 package api image:
     extends:
@@ -117,6 +122,9 @@ package api image:
     needs:
         - job: build api
           artifacts: true
+    rules:
+    - changes:
+        - backend/**/*
 
 package client image:
     extends:
@@ -126,5 +134,8 @@ package client image:
     needs:
         - job: build client
           artifacts: true
+    rules:
+    - changes:
+        - frontend/**/*
 # Deploy
 # Pull Docker Image from Gitlab Registry via SSH
