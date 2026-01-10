@@ -1,5 +1,3 @@
-dummy
-
 # Business Case Electricity Business
 
 ## How to run
