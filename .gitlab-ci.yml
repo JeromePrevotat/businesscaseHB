@@ -109,7 +109,7 @@ sonar-frontend:
     image: sonarsource/sonar-scanner-cli:latest
     script:
         - cd frontend
-        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../
+        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectBaseDir=../ -Dsonar.inclusions="**/*.ts,**/*.html,**/*.css, **/*.js"
     rules:
     - changes:
         - frontend/**/*
