@@ -103,6 +103,7 @@ sonar-backend:
     - changes:
         - backend/**/*
   script:
+    - cd backend
     - mvn -B -DskipTests clean verify sonar:sonar \
         -Dsonar.projectKey=businesscase-backend \
         -Dsonar.host.url=${SONAR_HOST_URL} \
