@@ -82,12 +82,18 @@ build api:
         - .api-variables
         - .change-folder
         - .api-build
+    rules:
+        - changes:
+            - backend/**/*
 
 build client:
     extends:
         - .client-variables
         - .change-folder
         - .frontend-build
+    rules:
+        - changes:
+            - frontend/**/*
 
 package api image:
     extends:
