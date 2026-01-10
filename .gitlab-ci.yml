@@ -104,10 +104,11 @@ sonar-backend:
 
 sonar-frontend:
   stage: sonarqube
-  image: sonarsource/sonar-scanner-cli:5
+  image: node:20-bookworm
   script:
     - cd frontend
-    - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
+    - npm ci --prefer-offline
+    - npx sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
 
 package api image:
     extends:
