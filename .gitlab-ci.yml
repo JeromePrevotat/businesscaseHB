@@ -24,17 +24,10 @@ stages:
         - docker build -t ${CI_REGISTRY_IMAGE}/${APP_DIR}:${CI_COMMIT_SHORT_SHA} -f production.Dockerfile ./
         - docker push ${CI_REGISTRY_IMAGE}/${APP_DIR}:${CI_COMMIT_SHORT_SHA}
 
-.rules-changes:
-    rules:
-        - changes:
-              paths:
-                  - ${APP_DIR}/**/*
-
 # API
 .api-build:
     extends:
         - .build
-        - .rules-changes
     image: maven:3.9.11-eclipse-temurin-21-alpine
     script:
         - mvn -B -DskipTests clean package
@@ -56,7 +49,6 @@ stages:
 .frontend-build:
     extends:
         - .build
-        - .rules-changes
     image: node:24.7.0-bullseye
     before_script:
         - cd ${APP_DIR}
@@ -121,11 +113,7 @@ sonar-frontend:
   script:
     - cd frontend
     - npm ci --prefer-offline
-    - npx sonar-scanner \
-        -Dsonar.projectKey=jeromeprevotat_businesscasehb \
-        -Dsonar.sources=. \
-        -Dsonar.host.url=${SONAR_HOST_URL} \
-        -Dsonar.login=${SONAR_TOKEN}
+    - npx sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
 
 package api image:
     extends:
