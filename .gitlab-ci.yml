@@ -103,6 +103,9 @@ package api image:
     needs:
         - job: build api
           artifacts: true
+    rules:
+        - changes:
+            - backend/**/*
 
 package client image:
     extends:
@@ -112,5 +115,8 @@ package client image:
     needs:
         - job: build client
           artifacts: true
+    rules:
+        - changes:
+            - frontend/**/*
 # Deploy
 # Pull Docker Image from Gitlab Registry via SSH

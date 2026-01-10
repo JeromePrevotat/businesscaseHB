@@ -1,4 +1,3 @@
-dummy
 # Business Case Electricity Business
 
 URL: http://electricity-business.91.166.39.12.nip.io/
