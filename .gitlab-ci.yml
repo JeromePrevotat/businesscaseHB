@@ -108,7 +108,8 @@ sonar-frontend:
   script:
     - cd frontend
     - npm ci --prefer-offline
-    - npx sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
+    - npm install --global sonar-scanner
+    - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.sources=. -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_TOKEN}
 
 package api image:
     extends:
