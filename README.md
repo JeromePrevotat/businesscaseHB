@@ -25,5 +25,3 @@ git subtree pull --prefix=backend backend-repo main
 
 git subtree push --prefix=frontend frontend-repo main
 git subtree push --prefix=backend backend-repo main
-
-dummy
