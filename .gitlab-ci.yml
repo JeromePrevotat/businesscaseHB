@@ -105,9 +105,6 @@ sonar-backend:
 sonar-frontend:
   stage: sonarqube
   image: sonarsource/sonar-scanner-cli:5
-  rules:
-    - changes:
-        - frontend/**/*
   script:
     - cd frontend
     - sonar-scanner \
@@ -115,7 +112,7 @@ sonar-frontend:
         -Dsonar.sources=. \
         -Dsonar.host.url=${SONAR_HOST_URL} \
         -Dsonar.login=${SONAR_TOKEN}
-        
+
 package api image:
     extends:
         - .api-variables
