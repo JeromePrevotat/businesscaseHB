@@ -19,14 +19,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.humanbooster.businesscase.dto.ReservationDTO;
 import com.humanbooster.businesscase.dto.StationDTO;
 import com.humanbooster.businesscase.dto.UserChangePwdDTO;
 import com.humanbooster.businesscase.dto.UserDTO;
 import com.humanbooster.businesscase.dto.UserRegisterDTO;
+import com.humanbooster.businesscase.mapper.ReservationMapper;
 import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.mapper.UserMapper;
+import com.humanbooster.businesscase.model.Reservation;
 import com.humanbooster.businesscase.model.Station;
 import com.humanbooster.businesscase.model.User;
+import com.humanbooster.businesscase.repository.ReservationRepository;
 import com.humanbooster.businesscase.repository.StationRepository;
 import com.humanbooster.businesscase.service.RefreshTokenService;
 import com.humanbooster.businesscase.service.UserService;
@@ -47,7 +51,9 @@ public class UserController {
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
     private final StationRepository stationRepository;
+    private final ReservationRepository reservationRepository;
     private final StationMapper stationMapper;
+    private final ReservationMapper reservationMapper;
     private final UserMapper mapper;
 
 
@@ -121,6 +127,33 @@ public class UserController {
                                             .toList();
 
         return ResponseEntity.ok(stationDTOs);
+    }
+    
+    /**
+     * Get all reservations belonging to the user.
+     * GET /api/users/my-reservations
+     * @return ResponseEntity with the user's reservations if found
+     */
+    @GetMapping("/my-reservations")
+    public ResponseEntity<List<ReservationDTO>> getUserReservations(@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    
+        Optional<User> userOpt = userService.getUserByUsername(userDetails.getUsername());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userOpt.get();
+
+        List<Reservation> reservations = reservationRepository.findByUser(user);
+
+        List<ReservationDTO> reservationDTOs = reservations.stream()
+                                            .map(reservationMapper::toDTO)
+                                            .toList();
+
+        return ResponseEntity.ok(reservationDTOs);
     }
 
 
