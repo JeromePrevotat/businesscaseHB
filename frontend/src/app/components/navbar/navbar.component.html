@@ -1,33 +1,33 @@
 <div class="navbar">
-    <div class="navbar-left">
-        <nav class="navbar-nav">
-            <ul>
-                <li><a routerLink="/">Home</a></li>
-                @if(currentUser){
-                    <li><a routerLink="/stations">Stations</a></li>
-                }
-            </ul>
-        </nav>
-    </div>
-    <div class="navbar-center">
-        <h1>Electricity Business</h1>
-    </div>
-    <div class="navbar-right">
+  <div class="navbar-left">
+    <nav class="navbar-nav">
+      <ul>
+        <li><a routerLink="/">Home</a></li>
         @if(currentUser){
-            <p>Welcome, {{ currentUser.username }}</p>
-            <button (click)="authService.logout()">Logout</button>
-        } @else {
-            <a routerLink="auth/login">Login</a>
-            <a routerLink="auth/register">Register</a>
+        <li><a routerLink="/stations">Stations</a></li>
         }
-    </div>
-    <div class="navbar-bottom">
-        @if(currentUser){
-            <a routerLink="/home">Search</a>
-            <a routerLink="/profile">My Reservations</a>
-            <a routerLink="stations">My Stations</a>
-            <a routerLink="/profile">My Vehicles</a>
-            <a routerLink="/profile">Profile</a>
-        }
-    </div>
+      </ul>
+    </nav>
+  </div>
+  <div class="navbar-center">
+    <h1>Electricity Business</h1>
+  </div>
+  <div class="navbar-right">
+    @if(currentUser){
+    <p>Welcome, {{ currentUser.username }}</p>
+    <button (click)="authService.logout()">Logout</button>
+    } @else {
+    <a routerLink="auth/login">Login</a>
+    <a routerLink="auth/register">Register</a>
+    }
+  </div>
+  <div class="navbar-bottom">
+    @if(currentUser){
+    <a routerLink="/home">Search</a>
+    <a routerLink="/reservations">My Reservations</a>
+    <a routerLink="stations">My Stations</a>
+    <a routerLink="/profile">My Vehicles</a>
+    <a routerLink="/profile">Profile</a>
+    }
+  </div>
 </div>

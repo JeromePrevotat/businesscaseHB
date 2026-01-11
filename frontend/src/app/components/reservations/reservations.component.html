@@ -1,0 +1,9 @@
+<div class="container">
+    <div>
+        <h2>My Reservations</h2>
+    </div>
+    <div class="reservations-content">
+        <router-outlet></router-outlet>
+        <app-list-display [items$]="reservationsList" [type]="listType"></app-list-display>
+    </div>
+</div>

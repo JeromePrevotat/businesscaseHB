@@ -3,11 +3,12 @@ import { StationCardComponent } from "../station-card/station-card.component";
 import { Observable } from 'rxjs';
 import { ListType } from '../../models/listType';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { ReservationCardComponent } from '../reservation-card/reservation-card.component';
 
 @Component({
   selector: 'app-list-display',
   standalone: true,
-  imports: [StationCardComponent, AsyncPipe, CommonModule],
+  imports: [StationCardComponent, ReservationCardComponent, AsyncPipe, CommonModule],
   templateUrl: './list-display.component.html',
   styleUrls: ['./list-display.component.css']
 })
@@ -27,6 +28,9 @@ export class ListDisplayComponent<T> implements OnInit {
     switch (this.type) {
       case ListType.STATION:
         this.cardComponent = StationCardComponent;
+        break;
+      case ListType.RESERVATION:
+        this.cardComponent = ReservationCardComponent;
         break;
       default:
         throw new Error('Unsupported list type');

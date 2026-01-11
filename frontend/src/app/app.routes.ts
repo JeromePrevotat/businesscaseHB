@@ -15,6 +15,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { StationsComponent } from './components/stations/stations.component';
 import { ReservationFormComponent } from './forms/reservation-form/reservation-form.component';
 import { CguComponent } from './components/cgu/cgu.component';
+import { ReservationsComponent } from './components/reservations/reservations.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -43,13 +44,18 @@ export const routes: Routes = [
             canActivate: [AuthGuard]
         },
     ]},
-    { path: ROUTE_PATHS.wildcard, redirectTo: ROUTE_PATHS.home },
 
     // Reservation Routes
     { 
         path: ROUTE_PATHS.createReservation, component: ReservationFormComponent,
         canActivate: [AuthGuard]
     },
+    { 
+        path: ROUTE_PATHS.reservations, component: ReservationsComponent,
+        canActivate: [AuthGuard]
+    },
+
+    
     { path: ROUTE_PATHS.wildcard, redirectTo: ROUTE_PATHS.home },
     
 ];

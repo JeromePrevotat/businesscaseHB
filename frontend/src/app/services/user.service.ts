@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user';
 import { API_URL } from '../utils/apiUrl';
 import { Station } from '../models/station';
+import { Reservation } from '../models/reservation';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class UserService {
   private http = inject(HttpClient);
   private userStations = new BehaviorSubject<Station[]>([]);
   userStations$ = this.userStations.asObservable();
+  private userReservations = new BehaviorSubject<Reservation[]>([]);
+  userReservations$ = this.userReservations.asObservable();
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(API_URL.USERS);
@@ -25,13 +28,26 @@ export class UserService {
     return this.userStations$;
   }
 
+  getUserReservations(): Observable<Reservation[]> {
+    return this.userReservations$;
+  }
+
   refreshUserStations(): void {
     this.http.get<Station[]>(`${API_URL.USERS}/my-stations`).subscribe({
-    next: (stations) => {
-      this.userStations.next(stations);
-    },
-    error: (error) => console.error('Erreur refresh user stations', error)
-  });
+      next: (stations) => {
+        this.userStations.next(stations);
+      },
+      error: (error) => console.error('Erreur refresh user stations', error)
+    });
+  }
+
+  refreshUserReservations(): void {
+    this.http.get<Reservation[]>(`${API_URL.USERS}/my-reservations`).subscribe({
+      next: (reservations) => {
+        this.userReservations.next(reservations);
+      },
+      error: (error) => console.error('Erreur refresh user reservations', error)
+    });
   }
 
   createUser(user:Partial<User>): Observable<User> {
