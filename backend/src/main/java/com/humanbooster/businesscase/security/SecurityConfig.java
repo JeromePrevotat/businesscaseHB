@@ -60,6 +60,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/stations/**").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/stations/**").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
                 .requestMatchers(HttpMethod.DELETE, "/api/users/my-stations").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/api/users/my-reservations").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/api/geocode").hasAnyAuthority(UserRole.ROLE_USER.name(), UserRole.ROLE_ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/api/stations/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
