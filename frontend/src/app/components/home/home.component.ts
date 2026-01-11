@@ -34,15 +34,4 @@ export class HomeComponent{
         this.currentUser = user;
     })
   }
-
-  onTestButtonClick() {
-    const {L,map} = this.mapComp.getMapInstance();
-    this.stationService.getStationList()
-      .subscribe(stations => {
-        for (const station of stations) {
-          console.log('Station:', station);
-          this.mapService.addMarkersToMap(L, map, station.latitude, station.longitude);
-        }
-      });
-  }
 }

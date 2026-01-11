@@ -1,23 +1,23 @@
 <div class="station-card">
-  @if (station) {
-      <h2>{{ station.stationName }}</h2>
+  @if (item) {
+      <h2>{{ item.stationName }}</h2>
       <img src="images/station.jpeg"/>
-      <p>Location: {{ station.latitude }}, {{ station.longitude }}</p>
-      <p>Price Rate: {{ station.priceRate }}</p>
-      <p>Power Output: {{ station.powerOutput }}</p>
+      <p>Location: {{ item.latitude }}, {{ item.longitude }}</p>
+      <p>Price Rate: {{ item.priceRate }}</p>
+      <p>Power Output: {{ item.powerOutput }}</p>
 
-      <p>State: {{ station.state }}</p>
+      <p>State: {{ item.state }}</p>
 
-      <p>Grounded: {{ station.grounded }}</p>
-      <p>Busy: {{ station.busy }}</p>
-      <p>Wired: {{ station.wired }}</p>
-      @if (station.spot_id) {
-        <p>Spot ID: {{ station.spot_id }}</p>
+      <p>Grounded: {{ item.grounded }}</p>
+      <p>Busy: {{ item.busy }}</p>
+      <p>Wired: {{ item.wired }}</p>
+      @if (item.spot_id) {
+        <p>Spot ID: {{ item.spot_id }}</p>
       }
-      @if (station.plugTypeList && station.plugTypeList.length > 0) {
-        <p>Plug Types: {{ station.plugTypeList.join(', ') }}</p>
+      @if (item.plugTypeList && item.plugTypeList.length > 0) {
+        <p>Plug Types: {{ item.plugTypeList.join(', ') }}</p>
       }
-      <button type="button" class="btn btn-primary" (click)="navigateToEdit(station!)">Edit</button>
-      <button type="button" class="btn btn-danger" (click)="deleteStation(station!)">Delete</button>
+      <button type="button" class="btn btn-primary" (click)="navigateToEdit(item!)">Edit</button>
+      <button type="button" class="btn btn-danger" (click)="deleteStation(item!)">Delete</button>
   }
 </div>

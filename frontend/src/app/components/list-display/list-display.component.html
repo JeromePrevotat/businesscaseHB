@@ -1,5 +1,5 @@
 <div class="list-display">
     @for(item of (items$ | async); track item){
-      <ng-container *ngComponentOutlet="cardComponent; inputs: {station: item}"></ng-container>
+      <ng-container *ngComponentOutlet="cardComponent; inputs: {item: item}"></ng-container>
     }
 </div>

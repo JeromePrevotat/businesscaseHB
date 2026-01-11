@@ -20,7 +20,7 @@ export class StationCardComponent {
   ssrService = inject(SsrService);
   userService = inject(UserService);
   stationService = inject(StationService);
-  @Input() station: Station | undefined;
+  @Input() item: Station | undefined;
   readonly ROUTE_PATHS = ROUTE_PATHS;
 
   navigateToEdit(station: Station): void {

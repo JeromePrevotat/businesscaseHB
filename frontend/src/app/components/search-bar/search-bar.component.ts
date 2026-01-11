@@ -20,6 +20,7 @@ export class SearchBarComponent {
   isSubmitted = false;
   isLoading = false;
   private stationService = inject(StationService);
+  displayPrice: string = '-';
 
   constructor(private fb: FormBuilder, private http: HttpClient, private mapService: MapService) {
       this.searchForm = this.fb.group({
@@ -73,6 +74,11 @@ export class SearchBarComponent {
     } else {
       console.log('Form is invalid', this.searchForm.errors);
     }
+  }
+
+  updatePriceDisplay(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.displayPrice = value ? `${value}` : '-';
   }
     
   get getIsSubmitted(): boolean{
