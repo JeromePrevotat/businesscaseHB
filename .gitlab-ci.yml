@@ -87,12 +87,16 @@ build client:
     - changes:
         - frontend/**/*
 
-sonar-backend:
+sonarqube-analysis:
     stage: sonarqube
     image: maven:3.9.11-eclipse-temurin-21
     script:
-        - cd backend
-        - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.login=${SONAR_TOKEN} -Dsonar.moduleKey=backend
+        # Installation de sonar-scanner
+        - apt-get update && apt-get install -y wget unzip
+        - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+        - unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+        - export PATH=$PATH:$(pwd)/sonar-scanner-5.0.1.3006-linux/bin
+        - sonar-scanner -Dsonar.login=${SONAR_TOKEN}
     cache:
         key:
             files:
@@ -100,18 +104,9 @@ sonar-backend:
         paths:
             - backend/.m2/repository
     rules:
-    - changes:
-        - backend/**/*
-
-sonar-frontend:
-    stage: sonarqube
-    image: sonarsource/sonar-scanner-cli:latest
-    script:
-        - cd frontend
-        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.login=${SONAR_TOKEN} -Dsonar.moduleKey=frontend -Dsonar.sources=src -Dsonar.language=ts -Dsonar.inclusions=**/*.ts,**/*.html,**/*.css,**/*.js
-    rules:
-    - changes:
-        - frontend/**/*
+        - changes:
+            - backend/**/*
+            - frontend/**/*
 
 package api image:
     extends:
