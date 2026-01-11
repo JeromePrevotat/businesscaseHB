@@ -108,7 +108,6 @@ sonar-frontend:
     stage: sonarqube
     image: sonarsource/sonar-scanner-cli:latest
     script:
-        - cd frontend
         - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.login=${SONAR_TOKEN} -Dsonar.modules=frontend -Dsonar.projectBaseDir=.
     rules:
     - changes:
