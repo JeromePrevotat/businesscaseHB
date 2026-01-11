@@ -1,33 +1,83 @@
-<div class="navbar">
-  <div class="navbar-left">
-    <nav class="navbar-nav">
-      <ul>
-        <li><a routerLink="/">Home</a></li>
-        @if(currentUser){
-        <li><a routerLink="/stations">Stations</a></li>
-        }
-      </ul>
-    </nav>
+<div class="navbar-wrapper bg-secondary">
+  <!-- Top bar: Logo, Titre, Auth -->
+  <div
+    class="container-fluid d-flex align-items-center justify-content-between px-4 py-2"
+  >
+    <!-- Logo -->
+    <a routerLink="/">
+      <img src="images/logo.svg" alt="Logo" height="72" />
+    </a>
+
+    <!-- Titre -->
+    <h1 class="text-white fw-bold fs-2 m-0 d-none d-md-block">
+      Electricity Business
+    </h1>
+
+    <!-- Auth section -->
+    <div class="d-flex flex-column align-items-end text-white">
+      @if(currentUser){
+      <span class="fw-semibold">Welcome, {{ currentUser.username }}</span>
+      <button
+        class="btn btn-link text-white text-decoration-none p-0 fw-semibold"
+        (click)="authService.logout()"
+      >
+        Logout
+      </button>
+      } @else {
+      <a
+        class="text-white text-decoration-none fw-semibold"
+        routerLink="auth/login"
+        >Login</a
+      >
+      <a
+        class="text-white text-decoration-none fw-semibold"
+        routerLink="auth/register"
+        >Register</a
+      >
+      }
+    </div>
   </div>
-  <div class="navbar-center">
-    <h1>Electricity Business</h1>
+
+  <!-- Navigation buttons -->
+  @if(currentUser){
+  <div class="container-fluid border-top border-secondary-subtle">
+    <!-- Desktop: boutons en ligne -->
+    <div class="d-none d-md-flex justify-content-evenly py-2 gap-2">
+      <a class="btn btn-primary-custom" routerLink="/home">Search</a>
+      <a class="btn btn-primary-custom" routerLink="/reservations"
+        >My Reservations</a
+      >
+      <a class="btn btn-primary-custom" routerLink="stations">My Stations</a>
+      <a class="btn btn-primary-custom" routerLink="/profile">My Vehicles</a>
+      <a class="btn btn-primary-custom" routerLink="/profile">Profile</a>
+    </div>
+
+    <!-- Mobile: bouton hamburger + collapse -->
+    <div class="d-md-none py-2">
+      <button
+        class="btn btn-outline-light w-100"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mobileNav"
+      >
+        Menu ☰
+      </button>
+      <div class="collapse mt-2" id="mobileNav">
+        <div class="d-flex flex-column gap-2">
+          <a class="btn btn-primary-custom" routerLink="/home">Search</a>
+          <a class="btn btn-primary-custom" routerLink="/reservations"
+            >My Reservations</a
+          >
+          <a class="btn btn-primary-custom" routerLink="stations"
+            >My Stations</a
+          >
+          <a class="btn btn-primary-custom" routerLink="/profile"
+            >My Vehicles</a
+          >
+          <a class="btn btn-primary-custom" routerLink="/profile">Profile</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="navbar-right">
-    @if(currentUser){
-    <p>Welcome, {{ currentUser.username }}</p>
-    <button (click)="authService.logout()">Logout</button>
-    } @else {
-    <a routerLink="auth/login">Login</a>
-    <a routerLink="auth/register">Register</a>
-    }
-  </div>
-  <div class="navbar-bottom">
-    @if(currentUser){
-    <a routerLink="/home">Search</a>
-    <a routerLink="/reservations">My Reservations</a>
-    <a routerLink="stations">My Stations</a>
-    <a routerLink="/profile">My Vehicles</a>
-    <a routerLink="/profile">Profile</a>
-    }
-  </div>
+  }
 </div>

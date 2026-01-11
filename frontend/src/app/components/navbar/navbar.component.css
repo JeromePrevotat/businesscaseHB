@@ -1,98 +1,25 @@
-.navbar {
-    display: grid;
-    align-items: center;
-    padding: 10px;
-    background-color: var(--color-secondary);
-    color: var(--color-text-inverse);
-    font-family: "Inter", sans-serif;
+/* Styles personnalisés pour la navbar - Bootstrap gère le responsive */
+.navbar-wrapper {
+  font-family: "Inter", sans-serif;
 }
 
-.navbar-left{
-    grid-column: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 24px;
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
 }
 
-.navbar-nav li{
-    list-style: none;
+.btn-primary-custom {
+  background-color: var(--color-primary);
+  border: 1px solid #000;
+  border-radius: 8px;
+  color: var(--color-text-main);
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 16px;
+  text-decoration: none;
+  text-align: center;
 }
 
-.navbar-nav a {
-    text-decoration: none;
-    color: var(--color-text-inverse);
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.navbar-nav a:hover {
-    color: var(--color-primary);
-}
-
-.navbar-center {
-    grid-column: 2;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.navbar-right {
-    grid-column: 3;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.navbar-right button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-family: "Inter", sans-serif;
-}
-
-.navbar-right button,
-.navbar-right a,
-.navbar-right p {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 24px;
-    text-decoration: none;
-    color: var(--color-text-inverse);
-    font-weight: 600;
-}
-
-.navbar-right a:hover,
-.navbar-right button:hover {
-    color: var(--color-primary);
-}
-
-.navbar-bottom {
-    grid-column: 1 / span 3;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-top: 8px;
-    border-top: 1px solid var(--color-border-light);
-}
-
-.navbar-bottom a{
-    text-decoration: none;
-    color: var(--color-text-main);
-    font-weight: 600;
-    font-size: 16px;
-    text-align: center;
-    width: 150px;
-    background-color: var(--color-primary);
-    
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 8px;
-}
-
-.navbar-bottom a:hover {
-    background-color: var(--color-primary-hover);
+.btn-primary-custom:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-text-main);
 }

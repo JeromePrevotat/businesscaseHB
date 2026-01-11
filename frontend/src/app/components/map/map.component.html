@@ -1,48 +1,45 @@
-<div id="map"></div>
+<div id="map" class="mx-auto w-100 w-md-75"></div>
 
 @if (selectedStation) {
-  <div
-    class="modal fade"
-    id="reservationModal"
-    tabindex="-1"
-    aria-labelledby="reservationModalLabel"
-    aria-hidden="true">
-
-    <div class="modal-dialog">
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <div>
-            <h1 class="modal-title" id="reservationModalLabel">
-              Réserver {{ selectedStation.stationName }}
-            </h1>
-          </div>
-
-          <div>
-            <h2>Located at:</h2>
-            <p>{{ selectedStation.latitude }}, {{ selectedStation.longitude }}</p>
-          </div>
-
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close">
-          </button>
+<div
+  class="modal fade"
+  id="reservationModal"
+  tabindex="-1"
+  aria-labelledby="reservationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h1 class="modal-title" id="reservationModalLabel">
+            Réserver {{ selectedStation.stationName }}
+          </h1>
         </div>
 
-        <div class="modal-body">
-          <p>Price: {{ selectedStation.priceRate }}</p>
-          <p>Total: {{ selectedStation.priceRate }}</p>
+        <div>
+          <h2>Located at:</h2>
+          <p>{{ selectedStation.latitude }}, {{ selectedStation.longitude }}</p>
         </div>
 
-        <div class="modal-footer">
-          <app-reservation-form
-            [station]="selectedStation">
-          </app-reservation-form>
-        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
 
+      <div class="modal-body">
+        <p>Price: {{ selectedStation.priceRate }}</p>
+        <p>Total: {{ selectedStation.priceRate }}</p>
+      </div>
+
+      <div class="modal-footer">
+        <app-reservation-form [station]="selectedStation">
+        </app-reservation-form>
       </div>
     </div>
   </div>
+</div>
 }

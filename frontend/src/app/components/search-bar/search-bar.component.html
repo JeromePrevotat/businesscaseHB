@@ -1,44 +1,88 @@
-<div>
-  <form [formGroup]="searchForm" action="" class="search-form">
-    <div class="input-container mb-3">
-      <label for="adress-input">Adress</label>
-      <input type="text" placeholder="Adress..." name="adress-input" class="form-control" formControlName="adress"/>
+<div class="container-fluid px-4 py-3">
+  <form
+    [formGroup]="searchForm"
+    class="row g-3 align-items-end justify-content-center"
+  >
+    <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+      <label for="adress-input" class="form-label">Adress</label>
+      <input
+        type="text"
+        placeholder="Adress..."
+        name="adress-input"
+        class="form-control"
+        formControlName="adress"
+      />
     </div>
 
-    <div class="input-container mb-3">
-      <label for="radius-input">Radius (km)</label>
-      <input type="number" placeholder="Radius (km)..." name="radius-input" class="form-control" formControlName="radius"/>
+    <div class="col-6 col-sm-6 col-md-4 col-lg-1">
+      <label for="radius-input" class="form-label">Radius (km)</label>
+      <input
+        type="number"
+        placeholder="Radius..."
+        name="radius-input"
+        class="form-control"
+        formControlName="radius"
+      />
     </div>
 
-    <div class="input-container mb-3">
-      <label for="date-input">Day</label>
-      <input type="date" placeholder="Day..." name="date-input" class="form-control" formControlName="date"/>
+    <div class="col-6 col-sm-6 col-md-4 col-lg-2">
+      <label for="date-input" class="form-label">Day</label>
+      <input
+        type="date"
+        name="date-input"
+        class="form-control"
+        formControlName="date"
+      />
     </div>
-      
-    <div class="input-container mb-3">
-      <label for="start-time-input">Start Time</label>
-      <input type="time" placeholder="Start Time..." name="start-time-input" class="form-control" formControlName="startTime"/>
+
+    <div class="col-6 col-sm-6 col-md-4 col-lg-1">
+      <label for="start-time-input" class="form-label">Start Time</label>
+      <input
+        type="time"
+        name="start-time-input"
+        class="form-control"
+        formControlName="startTime"
+      />
     </div>
-    
-    <div class="input-container mb-3">
-      <label for="end-time-input">End Time</label>
-      <input type="time" placeholder="End Time..." name="end-time-input" class="form-control" formControlName="endTime"/>
+
+    <div class="col-6 col-sm-6 col-md-4 col-lg-1">
+      <label for="end-time-input" class="form-label">End Time</label>
+      <input
+        type="time"
+        name="end-time-input"
+        class="form-control"
+        formControlName="endTime"
+      />
     </div>
-      
-    <div class="input-container mb-3" id="price-input-container">
-      <label for="price-input">Maximum Price</label>
-      <input type="range" placeholder="Price..." name="price-input" id="price-input" class="form-control"
+
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-2 d-flex flex-column align-items-center"
+    >
+      <label for="price-input" class="form-label">Maximum Price</label>
+      <input
+        type="range"
+        name="price-input"
+        id="price-input"
+        class="form-range w-100"
         (input)="updatePriceDisplay($event)"
         min="0"
         max="20"
         step="0.1"
         formControlName="maxPrice"
-        />
-      <output id="num">{{ displayPrice === '-' ? '-' : (displayPrice | currency:'EUR')}}</output>
+      />
+      <output class="small">{{
+        displayPrice === "-" ? "-" : (displayPrice | currency : "EUR")
+      }}</output>
     </div>
 
-    <div class="input-container mb-3">
-      <button type="submit" class="btn btn-primary" (click)="submitSearch()">Chercher</button>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-1">
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        (click)="submitSearch()"
+      >
+        Chercher
+      </button>
     </div>
   </form>
 </div>
