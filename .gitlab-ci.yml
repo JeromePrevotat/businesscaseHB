@@ -93,7 +93,7 @@ sonar-backend:
     image: maven:3.9.11-eclipse-temurin-21
     script:
         - cd backend
-        - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.login=${SONAR_TOKEN} -Dsonar.modules=backend -Dsonar.projectBaseDir=. -U
+        - mvn -B -DskipTests clean verify sonar:sonar -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.login=${SONAR_TOKEN} -Dsonar.modules=backend -U
     cache:
         key:
             files:
@@ -108,7 +108,7 @@ sonar-frontend:
     stage: sonarqube
     image: sonarsource/sonar-scanner-cli:latest
     script:
-        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.login=${SONAR_TOKEN} -Dsonar.modules=frontend -Dsonar.projectBaseDir=.
+        - sonar-scanner -Dsonar.projectKey=jeromeprevotat_businesscasehb -Dsonar.organization=jeromeprevotat -Dsonar.login=${SONAR_TOKEN} -Dsonar.modules=frontend -Dsonar.projectBaseDir=..
     rules:
     - changes:
         - frontend/**/*
