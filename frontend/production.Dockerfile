@@ -1,9 +1,30 @@
-Stage build = Node (bullseye recommandé pour Angular).
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-Stage run = Nginx (alpine).
+FROM nginx:alpine
 
-Environnements = fichiers src/environments/* + angular.json (fileReplacements).
+# Supprimer la config nginx par défaut
+RUN rm -rf /usr/share/nginx/html/* && \
+  rm /etc/nginx/conf.d/default.conf
 
-Choix de l’environnement = --configuration=xxx (production, preprod…).
+# Copier les fichiers Angular buildés depuis le dossier browser
+COPY --from=build /app/dist/business-case-front/browser/ /usr/share/nginx/html
 
-Pipeline CI/CD = passe un --build-arg au docker build pour activer le bon environnement.
+# Copier la configuration nginx custom
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Définir les permissions correctes
+RUN chmod -R 755 /usr/share/nginx/html && \
+  chown -R nginx:nginx /usr/share/nginx/html
+
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost/health || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
