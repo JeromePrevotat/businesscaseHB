@@ -11,7 +11,8 @@
   padding: 8px;
   border-right: solid var(--color-border-light) 1px;
   border-bottom: solid var(--color-border-light) 1px;
-  border-bottom-right-radius: 5px;
+  /* border-bottom-right-radius: 5px; */
+  border-radius: 5px;
   background-color: var(--color-tertiary);
   color: var(--color-text-main);
 }
@@ -29,6 +30,6 @@
 .profile-content {
   flex: 1;
   color: var(--color-text-main);
-  padding: 8px;
   background-color: #ffffff;
+  margin-left: 8px;
 }

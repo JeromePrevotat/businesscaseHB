@@ -1,5 +1,6 @@
 .form-container {
     max-width: 600px;
+    background-color: var(--color-tertiary);
     margin: 16px auto;
     padding: 20px;
     border: 1px solid #ccc;

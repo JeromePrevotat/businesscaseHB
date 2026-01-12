@@ -1,5 +1,6 @@
 .form-container {
   padding: 20px;
+  background-color: var(--color-tertiary);
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 100%;

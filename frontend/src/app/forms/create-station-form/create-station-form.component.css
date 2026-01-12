@@ -1,4 +1,5 @@
 .form-container {
+    background-color: var(--color-tertiary);
     max-width: 600px;
     margin: 16px auto;
     padding: 20px;
