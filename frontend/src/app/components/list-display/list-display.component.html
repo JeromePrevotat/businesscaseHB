@@ -1,4 +1,4 @@
-<div class="list-display" [class.row-layout]="layout === 'row'" [class.column-layout]="layout === 'column-layout'">
+<div class="list-display" [class.row-layout]="layout === 'row-layout'" [class.column-layout]="layout === 'column-layout'">
     @for(item of (items$ | async); track item){
       <ng-container
       *ngComponentOutlet="cardComponent; inputs: {item: item}"

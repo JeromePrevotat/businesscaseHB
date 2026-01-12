@@ -1,25 +1,27 @@
-<div class="reservation-card m-4">
+<div class="reservation-card m-2 m-md-4">
   @if (item) {
-      <h2>Reservation #{{ item.id }}</h2>
-      <div class="reservation-details d-flex gap-4 mx-3">
-        <p class="reservation-card-label">Status:</p>
-        <p>{{ item.state }}</p>
-      </div>
-      <div class="reservation-details d-flex gap-4">
-        <div class="d-flex gap-4 mx-3">
-          <p class="reservation-card-label">Start Date:</p>
-          <p>{{ item.startDate | date:'medium' }}</p>
-          <p class="reservation-card-label">End Date:</p>
-          <p>{{ item.endDate | date:'medium' }}</p>
-        </div>
-      </div>
-      <div class="reservation-details d-flex gap-4">
-        <div class="d-flex gap-4 mx-3">
-          <p class="reservation-card-label">Hourly Rate:</p>
-          <p>{{ item.hourlyRateLog | currency:'EUR'}}</p>
-          <p class="reservation-card-label">Total Price:</p>
-          <p>{{ item | totalPrice | currency:'EUR' }}</p>
-        </div>
-      </div>
+  <h2 class="text-center text-md-start">Reservation #{{ item.id }}</h2>
+  <div
+    class="reservation-details d-flex flex-column flex-md-row gap-2 gap-md-4 mx-3"
+  >
+    <p class="reservation-card-label">Status:</p>
+    <p>{{ item.state }}</p>
+  </div>
+  <div class="reservation-details d-flex gap-2 gap-md-4">
+    <div class="d-flex flex-column flex-md-row gap-2 gap-md-4 mx-3">
+      <p class="reservation-card-label">Start Date:</p>
+      <p>{{ item.startDate | date : "medium" }}</p>
+      <p class="reservation-card-label">End Date:</p>
+      <p>{{ item.endDate | date : "medium" }}</p>
+    </div>
+  </div>
+  <div class="reservation-details d-flex gap-2 gap-md-4">
+    <div class="d-flex flex-column flex-md-row gap-2 gap-md-4 mx-3">
+      <p class="reservation-card-label">Hourly Rate:</p>
+      <p>{{ item.hourlyRateLog | currency : "EUR" }}</p>
+      <p class="reservation-card-label">Total Price:</p>
+      <p>{{ item | totalPrice | currency : "EUR" }}</p>
+    </div>
+  </div>
   }
 </div>

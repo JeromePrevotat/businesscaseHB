@@ -1,25 +1,36 @@
-<div class="station-card">
+<div class="station-card w-100 w-md-auto">
   @if (item) {
-      <h2>{{ item.stationName }}</h2>
-      <img src="images/station.jpeg"/>
-      <p>Location: {{ item.latitude }}, {{ item.longitude }}</p>
-      <p>Price Rate: {{ item.priceRate }}</p>
-      <p>Power Output: {{ item.powerOutput }}</p>
+  <h2 class="text-center">{{ item.stationName }}</h2>
+  <img class="img-fluid w-100 w-md-auto" src="images/station.jpeg" />
+  <p>Location: {{ item.latitude }}, {{ item.longitude }}</p>
+  <p>Price Rate: {{ item.priceRate }}</p>
+  <p>Power Output: {{ item.powerOutput }}</p>
 
-      <p>State: {{ item.state }}</p>
+  <p>State: {{ item.state }}</p>
 
-      <p>Grounded: {{ item.grounded }}</p>
-      <p>Busy: {{ item.busy }}</p>
-      <p>Wired: {{ item.wired }}</p>
-      @if (item.spot_id) {
-        <p>Spot ID: {{ item.spot_id }}</p>
-      }
-      @if (item.plugTypeList && item.plugTypeList.length > 0) {
-        <p>Plug Types: {{ item.plugTypeList.join(', ') }}</p>
-      }
-      <div class="d-flex gap-2">
-        <button type="button" class="btn btn-primary" (click)="navigateToEdit(item!)">Edit</button>
-        <button type="button" class="btn btn-danger" (click)="deleteStation(item!)">Delete</button>
-      </div>
+  <p>Grounded: {{ item.grounded }}</p>
+  <p>Busy: {{ item.busy }}</p>
+  <p>Wired: {{ item.wired }}</p>
+  @if (item.spot_id) {
+  <p>Spot ID: {{ item.spot_id }}</p>
+  } @if (item.plugTypeList && item.plugTypeList.length > 0) {
+  <p>Plug Types: {{ item.plugTypeList.join(", ") }}</p>
+  }
+  <div class="d-flex flex-column flex-sm-row gap-2 w-100">
+    <button
+      type="button"
+      class="btn btn-primary flex-grow-1 flex-sm-grow-0"
+      (click)="navigateToEdit(item!)"
+    >
+      Edit
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger flex-grow-1 flex-sm-grow-0"
+      (click)="deleteStation(item!)"
+    >
+      Delete
+    </button>
+  </div>
   }
 </div>
