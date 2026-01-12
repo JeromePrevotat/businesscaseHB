@@ -15,7 +15,8 @@ import { ReservationCardComponent } from '../reservation-card/reservation-card.c
 export class ListDisplayComponent<T> implements OnInit {
   @Input() items$!: Observable<T[]>;
   @Input() type!: ListType;
-  
+  @Input() layout: string = 'row';
+
   items: T[] = [];
   cardComponent: any;
 

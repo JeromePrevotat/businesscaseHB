@@ -17,7 +17,9 @@
       @if (item.plugTypeList && item.plugTypeList.length > 0) {
         <p>Plug Types: {{ item.plugTypeList.join(', ') }}</p>
       }
-      <button type="button" class="btn btn-primary" (click)="navigateToEdit(item!)">Edit</button>
-      <button type="button" class="btn btn-danger" (click)="deleteStation(item!)">Delete</button>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary" (click)="navigateToEdit(item!)">Edit</button>
+        <button type="button" class="btn btn-danger" (click)="deleteStation(item!)">Delete</button>
+      </div>
   }
 </div>

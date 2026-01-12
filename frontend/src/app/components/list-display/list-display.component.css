@@ -3,7 +3,17 @@
     margin-left: 8px;
     margin-right: 8px;
     display: flex;
-    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-evenly;
+}
+
+.row-layout{
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.column-layout{
+    flex-direction: column;
+    gap: 16px;
 }

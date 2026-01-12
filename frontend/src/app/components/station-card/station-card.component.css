@@ -4,7 +4,7 @@
     align-items: flex-start;
     justify-content: space-evenly;
     border: 1px solid var(--color-border-light);
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 16px;
     margin-bottom: 16px;
     background-color: var(--color-tertiary);

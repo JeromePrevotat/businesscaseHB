@@ -1,0 +1,14 @@
+.reservation-card {
+  width: 100%;
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+
+  background-color: var(--color-tertiary);
+  color: var(--color-text-main);
+
+  padding: 16px;
+}
+
+.reservation-card-label {
+  font-weight: bold;
+}
