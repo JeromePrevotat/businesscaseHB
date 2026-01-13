@@ -8,6 +8,7 @@ import { Station } from '../../models/station';
 import { inject } from '@angular/core';
 import { StationService } from '../../services/station.service';
 import { ReservationFormComponent } from "../../forms/reservation-form/reservation-form.component";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-map',
@@ -39,15 +40,18 @@ export class MapComponent implements AfterViewInit{
     this.selectedStation = null;
     // Subscribe to coordinates to recenter on change
     this.mapService.coords$.pipe(
-      distinctUntilChanged((prev, curr) => prev?.latitude === curr?.latitude && prev?.longitude === curr?.longitude))
-      .subscribe(async coords => {
+      distinctUntilChanged((prev, curr) => prev?.latitude === curr?.latitude && prev?.longitude === curr?.longitude),
+      takeUntilDestroyed()
+    ).subscribe(async coords => {
         if (coords && this.map && this.L) {
             this.currentCoords = coords;
             this.mapService.setMapLocation(this.map, coords.latitude, coords.longitude);
         }
       });
     // Subscribe to radius changes to update circle
-    this.mapService.radius$.subscribe(async radius => {
+    this.mapService.radius$.pipe(
+      takeUntilDestroyed()
+    ).subscribe(async radius => {
       if (this.map && this.L && this.currentCoords) {
         if (this.currentCircle) this.map.removeLayer(this.currentCircle);
         this.currentCircle = await this.mapService.addCircleToMap(this.L, this.map, this.currentCoords.latitude, this.currentCoords.longitude, radius ?? 5000);

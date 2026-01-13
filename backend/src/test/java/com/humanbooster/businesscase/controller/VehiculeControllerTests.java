@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.businesscase.dto.VehiculeDTO;
+import com.humanbooster.businesscase.mapper.ReservationMapper;
 import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.mapper.UserMapper;
 import com.humanbooster.businesscase.mapper.VehiculeMapper;
@@ -48,6 +49,7 @@ import com.humanbooster.businesscase.repository.UserRepository;
 import com.humanbooster.businesscase.security.JwtAuthFilter;
 import com.humanbooster.businesscase.security.SecurityConfig;
 import com.humanbooster.businesscase.service.RefreshTokenService;
+import com.humanbooster.businesscase.service.ReservationService;
 import com.humanbooster.businesscase.service.StationService;
 import com.humanbooster.businesscase.service.UserService;
 import com.humanbooster.businesscase.service.VehiculeService;
@@ -81,6 +83,10 @@ public class VehiculeControllerTests {
     private StationMapper stationMapper;
     @MockitoBean
     private VehiculeMapper vehiculeMapper;
+    @MockitoBean
+    private ReservationService reservationService;
+    @MockitoBean
+    private ReservationMapper reservationMapper;
     @Autowired
     private ObjectMapper objectMapper;
 

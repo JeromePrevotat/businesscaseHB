@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.businesscase.dto.SpotDTO;
+import com.humanbooster.businesscase.mapper.ReservationMapper;
 import com.humanbooster.businesscase.mapper.SpotMapper;
 import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.mapper.UserMapper;
@@ -39,6 +40,7 @@ import com.humanbooster.businesscase.repository.MediaRepository;
 import com.humanbooster.businesscase.security.JwtAuthFilter;
 import com.humanbooster.businesscase.security.SecurityConfig;
 import com.humanbooster.businesscase.service.RefreshTokenService;
+import com.humanbooster.businesscase.service.ReservationService;
 import com.humanbooster.businesscase.service.SpotService;
 import com.humanbooster.businesscase.service.StationService;
 import com.humanbooster.businesscase.service.UserService;
@@ -70,6 +72,10 @@ public class SpotControllerTests {
     private StationService stationService;
     @MockitoBean
     private StationMapper stationMapper;
+    @MockitoBean
+    private ReservationService reservationService;
+    @MockitoBean
+    private ReservationMapper reservationMapper;
 
     @MockitoBean
     private SpotMapper spotMapper;

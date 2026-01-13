@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ListType } from '../../models/listType';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ReservationCardComponent } from '../reservation-card/reservation-card.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-list-display',
@@ -21,7 +22,7 @@ export class ListDisplayComponent<T> implements OnInit {
   cardComponent: any;
 
   ngOnInit() {
-    this.items$.subscribe(items => this.items = items);
+    this.items$.pipe(takeUntilDestroyed()).subscribe(items => this.items = items);
     this.setCardComponent();
   }
 

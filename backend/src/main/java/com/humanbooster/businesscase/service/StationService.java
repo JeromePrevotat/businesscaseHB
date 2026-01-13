@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.humanbooster.businesscase.model.Station;
+import com.humanbooster.businesscase.model.User;
 import com.humanbooster.businesscase.repository.StationRepository;
 import com.humanbooster.businesscase.utils.ModelUtil;
 import com.humanbooster.businesscase.utils.StationsUtils;
@@ -144,5 +145,15 @@ public class StationService{
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return stationRepository.existsById(id);
+    }
+
+    /**
+     * Retrieves all Stations owned by a specific user.
+     * @param owner the User who owns the stations
+     * @return a list of Stations owned by the user
+     */
+    @Transactional(readOnly = true)
+    public List<Station> getStationsByOwner(User owner) {
+        return stationRepository.findByOwner(owner);
     }
 }

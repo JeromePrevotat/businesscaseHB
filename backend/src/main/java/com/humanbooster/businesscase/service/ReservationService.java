@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.humanbooster.businesscase.model.Reservation;
+import com.humanbooster.businesscase.model.User;
 import com.humanbooster.businesscase.repository.ReservationRepository;
 import com.humanbooster.businesscase.utils.ModelUtil;
 
@@ -87,5 +88,15 @@ public class ReservationService{
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return reservationRepository.existsById(id);
+    }
+
+    /**
+     * Retrieves all Reservations for a specific user.
+     * @param user the User who made the reservations
+     * @return a list of Reservations for the user
+     */
+    @Transactional(readOnly = true)
+    public List<Reservation> getReservationsByUser(User user) {
+        return reservationRepository.findByUser(user);
     }
 }

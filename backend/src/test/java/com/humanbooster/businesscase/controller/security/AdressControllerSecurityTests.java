@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humanbooster.businesscase.controller.AdressController;
 import com.humanbooster.businesscase.mapper.AdressMapper;
+import com.humanbooster.businesscase.mapper.ReservationMapper;
 import com.humanbooster.businesscase.mapper.StationMapper;
 import com.humanbooster.businesscase.mapper.UserMapper;
 import com.humanbooster.businesscase.repository.UserRepository;
@@ -22,6 +23,7 @@ import com.humanbooster.businesscase.security.JwtAuthFilter;
 import com.humanbooster.businesscase.security.SecurityConfig;
 import com.humanbooster.businesscase.service.AdressService;
 import com.humanbooster.businesscase.service.RefreshTokenService;
+import com.humanbooster.businesscase.service.ReservationService;
 import com.humanbooster.businesscase.service.StationService;
 import com.humanbooster.businesscase.service.UserService;
 
@@ -52,6 +54,10 @@ public class AdressControllerSecurityTests {
     private UserMapper userMapper;
     @MockitoBean
     private StationMapper stationMapper;
+    @MockitoBean
+    private ReservationService reservationService;
+    @MockitoBean
+    private ReservationMapper reservationMapper;
 
     @Autowired
     private ObjectMapper objectMapper;

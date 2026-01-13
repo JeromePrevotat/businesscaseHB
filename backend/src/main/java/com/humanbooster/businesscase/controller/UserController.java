@@ -30,9 +30,9 @@ import com.humanbooster.businesscase.mapper.UserMapper;
 import com.humanbooster.businesscase.model.Reservation;
 import com.humanbooster.businesscase.model.Station;
 import com.humanbooster.businesscase.model.User;
-import com.humanbooster.businesscase.repository.ReservationRepository;
-import com.humanbooster.businesscase.repository.StationRepository;
 import com.humanbooster.businesscase.service.RefreshTokenService;
+import com.humanbooster.businesscase.service.ReservationService;
+import com.humanbooster.businesscase.service.StationService;
 import com.humanbooster.businesscase.service.UserService;
 
 import jakarta.validation.Valid;
@@ -50,8 +50,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
-    private final StationRepository stationRepository;
-    private final ReservationRepository reservationRepository;
+    private final StationService stationService;
+    private final ReservationService reservationService;
     private final StationMapper stationMapper;
     private final ReservationMapper reservationMapper;
     private final UserMapper mapper;
@@ -120,7 +120,7 @@ public class UserController {
 
         User user = userOpt.get();
 
-        List<Station> stations = stationRepository.findByOwner(user);
+        List<Station> stations = stationService.getStationsByOwner(user);
 
         List<StationDTO> stationDTOs = stations.stream()
                                             .map(stationMapper::toDTO)
@@ -147,7 +147,7 @@ public class UserController {
 
         User user = userOpt.get();
 
-        List<Reservation> reservations = reservationRepository.findByUser(user);
+        List<Reservation> reservations = reservationService.getReservationsByUser(user);
 
         List<ReservationDTO> reservationDTOs = reservations.stream()
                                             .map(reservationMapper::toDTO)
