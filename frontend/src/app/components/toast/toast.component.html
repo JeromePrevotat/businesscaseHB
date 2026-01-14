@@ -1,0 +1,17 @@
+<div class="toast-container">
+  @for (toast of toasts$ | async; track toast.id) {
+    <div class="toast show" [ngClass]="getToastClass(toast.type)">
+      <div class="toast-header">
+        <strong class="me-auto">
+          @if (toast.type === 'success') { Success }
+          @if (toast.type === 'error') { Error }
+          @if (toast.type === 'info') { Info }
+        </strong>
+        <button type="button" class="btn-close" (click)="removeToast(toast.id)"></button>
+      </div>
+      <div class="toast-body">
+        {{ toast.message }}
+      </div>
+    </div>
+  }
+</div>

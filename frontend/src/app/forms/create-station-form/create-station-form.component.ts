@@ -4,6 +4,7 @@ import { FormService } from '../../services/form.service';
 import { StationState } from '../../models/StationState';
 import { Station } from '../../models/station';
 import { StationService } from '../../services/station.service';
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../utils/routeMapping';
 
@@ -16,6 +17,7 @@ import { ROUTE_PATHS } from '../../utils/routeMapping';
 })
 export class StationFormComponent {
   StationService = inject(StationService);
+  userService = inject(UserService);
   createStationForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
@@ -47,6 +49,7 @@ export class StationFormComponent {
           this.createStationForm.reset();
           this.isLoading = false;
           this.isSubmitted = false;
+          this.userService.refreshUserStations();
           // Redirection to station list
           this.router.navigate([ROUTE_PATHS.stations]);
         },

@@ -7,6 +7,7 @@ import { ValidateTypeDate } from '../../validators/validateTypeDate';
 import { ReservationService } from '../../services/reservation.service';
 import { AuthService } from '../../services/auth.service';
 import { Station } from '../../models/station';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -20,6 +21,7 @@ export class ReservationFormComponent {
   @Input() station: Station | null = null;
   reservationService = inject(ReservationService);
   authService = inject(AuthService);
+  toastService = inject(ToastService);
   reservationForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
@@ -62,9 +64,12 @@ export class ReservationFormComponent {
           this.isSubmitted = false;
           this.isLoading = false;
           this.reservationForm.reset();
+          this.toastService.success('Réservation confirmée avec succès !');
+          this.closeModal();
         },
         error: (error) => {
           console.error('Error creating reservation', error);
+          this.toastService.error('Erreur lors de la réservation. Veuillez réessayer.');
           this.isLoading = false;
         }
       });
@@ -83,5 +88,15 @@ export class ReservationFormComponent {
 
   getFieldError(fieldName: string): string {
     return FormService.getFieldError(this.reservationForm, fieldName);
+  }
+
+  private closeModal(): void {
+    const modalElement = document.getElementById('reservationModal');
+    if (modalElement) {
+      import('bootstrap').then(({ Modal }) => {
+        const modal = Modal.getInstance(modalElement);
+        modal?.hide();
+      });
+    }
   }
 }

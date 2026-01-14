@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { StationCardComponent } from "../station-card/station-card.component";
 import { Observable } from 'rxjs';
 import { ListType } from '../../models/listType';
@@ -18,11 +18,12 @@ export class ListDisplayComponent<T> implements OnInit {
   @Input() type!: ListType;
   @Input() layout: string = 'row-layout';
 
+  private destroyRef = inject(DestroyRef);
   items: T[] = [];
   cardComponent: any;
 
   ngOnInit() {
-    this.items$.pipe(takeUntilDestroyed()).subscribe(items => this.items = items);
+    this.items$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(items => this.items = items);
     this.setCardComponent();
   }
 
