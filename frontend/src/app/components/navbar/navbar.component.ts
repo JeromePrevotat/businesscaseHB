@@ -16,6 +16,7 @@ export class NavbarComponent {
   readonly ROUTE_PATHS = ROUTE_PATHS;
   public authService = inject(AuthService);
   currentUser: User | null = null;
+  isMenuOpen = false;
 
   constructor() {
     this.authService.user$
@@ -25,5 +26,9 @@ export class NavbarComponent {
       .subscribe(user =>{
         this.currentUser = user;
     })
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }
