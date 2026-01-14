@@ -46,12 +46,11 @@ export class SearchBarComponent {
         if (coords) {
           this.mapService.updateCoords(coords);
         }
-        if (formData.radius) {
-          this.mapService.updateRadius(formData.radius * 1000);
-        }
+        const radiusInMeters = formData.radius ? formData.radius * 1000 : 5000;
+        this.mapService.updateRadius(radiusInMeters);
         // Call station service to search stations
         this.stationService.searchStation(
-          formData.radius ? formData.radius * 1000 : 5000,
+          radiusInMeters,
           coords ? coords.latitude : 0,
           coords ? coords.longitude : 0,
           formData.maxPrice ? formData.maxPrice : 20,

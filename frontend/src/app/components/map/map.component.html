@@ -6,7 +6,7 @@
   id="reservationModal"
   tabindex="-1"
   aria-labelledby="reservationModalLabel"
-  aria-hidden="true"
+  data-bs-focus="false"
 >
   <div class="modal-dialog">
     <div class="modal-content">
@@ -31,14 +31,11 @@
       </div>
 
       <div class="modal-body">
-        <p>Price: {{ selectedStation.priceRate }}</p>
-        <p>Total: {{ selectedStation.priceRate }}</p>
-      </div>
-
-      <div class="modal-footer">
         <app-reservation-form [station]="selectedStation">
         </app-reservation-form>
       </div>
+
+      <div class="modal-footer"></div>
     </div>
   </div>
 </div>

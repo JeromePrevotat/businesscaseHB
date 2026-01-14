@@ -38,6 +38,28 @@ export class ReservationFormComponent {
     });
   }
 
+  getTotalPrice(): number {
+    const startDate = this.reservationForm.get('startDate')?.value;
+    const endDate = this.reservationForm.get('endDate')?.value;
+    const priceRate = this.station?.priceRate ?? 0;
+
+    if (!startDate || !endDate || !priceRate) {
+      return priceRate;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+
+    if (duration <= 0) {
+      return priceRate;
+    }
+
+    const total = duration * priceRate;
+    // Round to 2 decimal places
+    return Math.round(total * 100) / 100;
+  }
+
   submitReservation(){
     this.isSubmitted = true;
     if (this.reservationForm.valid) {
