@@ -20,7 +20,11 @@ export class FormService {
     const field = form.get(fieldName);
     if (field && field.errors) {
       if (field.errors['server']) return field.errors['server'];
-      if (field.errors['required']) return `${toTitleCase(fieldName)} is required`;
+      if (field.errors['required']) {
+        if (fieldName === 'cgu') return 'You must accept the Terms and Conditions';
+        
+        return `${toTitleCase(fieldName)} is required`;
+      }
       if (field.errors['minlength']) return `Minimum ${field.errors['minlength'].requiredLength} characters`;
       if (field.errors['maxlength']) return `Maximum ${field.errors['maxlength'].requiredLength} characters`;
       if (field.errors['email']) return `Invalid email format`;
@@ -51,28 +55,4 @@ export class FormService {
     });
     
   }
-
-  // Claude suggestions
-  // // Méthode bonus pour valider tout le formulaire
-  // static getFormErrors(form: FormGroup | null): string[] {
-  //   // Vérification si le formulaire est null ou undefined
-  //   if (!form) return [];
-    
-  //   const errors: string[] = [];
-  //   Object.keys(form.controls).forEach(key => {
-  //     const error = this.getFieldError(form, key);
-  //     if (error) errors.push(error);
-  //   });
-  //   return errors;
-  // }
-
-  // // Méthode utilitaire pour vérifier si un formulaire est valide
-  // static isFormValid(form: FormGroup | null): boolean {
-  //   return form ? form.valid : false;
-  // }
-
-  // // Méthode utilitaire pour vérifier si un formulaire a été touché
-  // static isFormTouched(form: FormGroup | null): boolean {
-  //   return form ? form.touched : false;
-  // }
 }

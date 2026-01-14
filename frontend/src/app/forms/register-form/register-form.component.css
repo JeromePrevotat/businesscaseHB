@@ -1,62 +1,77 @@
 .form-container {
-    max-width: 600px;
-    margin: 16px auto;
-    padding: 20px;
-    border: 1px solid var(--color-border-light);
-    border-radius: 5px;
-    background-color: var(--color-tertiary);
+  max-width: 600px;
+  margin: 16px auto;
+  padding: 20px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 5px;
+  background-color: var(--color-tertiary);
 }
 
-form{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 form h2 {
-    margin-bottom: 16px;
-    align-self: center;
-    color: var(--color-text-main);
-    font-family: "Inter", sans-serif;
+  margin-bottom: 16px;
+  align-self: center;
+  color: var(--color-text-main);
+  font-family: "Inter", sans-serif;
 }
 
-.form-field{
-    width: 100%;
-    margin-bottom: 16px;
+.form-field {
+  width: 100%;
+  margin-bottom: 16px;
 }
 
 input,
 select,
 textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid var(--color-border-light);
-    border-radius: 5px;
-    color: var(--color-text-main);
-    font-family: "Inter", sans-serif;
-    background-color: #fff;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid var(--color-border-light);
+  border-radius: 5px;
+  color: var(--color-text-main);
+  font-family: "Inter", sans-serif;
+  background-color: #fff;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-field input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.checkbox-field label {
+  white-space: nowrap;
 }
 
 .submit-btn {
-    margin-top: 16px;
-    align-self: center;
-    background-color: var(--color-secondary);
-    color: var(--color-text-inverse);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: "Inter", sans-serif;
-    font-weight: 600;
-    font-size: 16px;
+  margin-top: 16px;
+  align-self: center;
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .submit-btn:hover {
-    background-color: var(--color-secondary-hover);
+  background-color: var(--color-secondary-hover);
 }
 
 .form-validation-message {
-    color: var(--color-error);
-    font-family: "Inter", sans-serif;
+  color: var(--color-error);
+  font-family: "Inter", sans-serif;
 }

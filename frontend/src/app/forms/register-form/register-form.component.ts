@@ -32,6 +32,7 @@ export class RegisterFormComponent {
       birthdate: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
+      cgu: [false, [Validators.requiredTrue]],
     }, { validators: this.passwordMatchValidator });
   }
 

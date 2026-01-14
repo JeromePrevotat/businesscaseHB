@@ -1,70 +1,123 @@
 <div class="form-container">
-    <form [formGroup]="registerForm" action="">
-        <h2>Register</h2>
-        <div class="form-field">
-            <label for="name">Username: </label>
-            <input id="name" type="text" formControlName="username" [class.border-red-500]="isFieldInvalid('username')"/>
-            @if (isFieldInvalid('username')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('username') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="firstname">First Name: </label>
-            <input id="firstname" type="text" formControlName="firstname" [class.border-red-500]="isFieldInvalid('firstname')"/>
-            @if (isFieldInvalid('firstname')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('firstname') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="lastname">Last Name: </label>
-            <input id="lastname" type="text" formControlName="lastname" [class.border-red-500]="isFieldInvalid('lastname')"/>
-            @if (isFieldInvalid('lastname')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('lastname') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="email">Email: </label>
-            <input id="email" type="email" formControlName="email" [class.border-red-500]="isFieldInvalid('email')"/>
-            @if (isFieldInvalid('email')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('email') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="birthdate">Birthdate: </label>
-            <input id="birthdate" type="date" formControlName="birthdate" [class.border-red-500]="isFieldInvalid('birthdate')"/>
-            @if (isFieldInvalid('birthdate')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('birthdate') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="password">Password: </label>
-            <input id="password" type="password" formControlName="password" [class.border-red-500]="isFieldInvalid('password')"/>
-            @if (isFieldInvalid('password')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('password') }}
-                </div>
-            }
-        </div>
-        <div class="form-field">
-            <label for="confirmPassword">Confirm Password: </label>
-            <input id="confirmPassword" type="password" formControlName="confirmPassword" [class.border-red-500]="isFieldInvalid('confirmPassword')"/>
-            @if (isFieldInvalid('confirmPassword')) {
-                <div class="form-validation-message">
-                    {{ getFieldError('confirmPassword') }}
-                </div>
-            }
-        </div>
+  <form [formGroup]="registerForm" action="">
+    <h2>Register</h2>
+    <div class="form-field">
+      <label for="name">Username: </label>
+      <input
+        id="name"
+        type="text"
+        formControlName="username"
+        [class.border-red-500]="isFieldInvalid('username')"
+      />
+      @if (isFieldInvalid('username')) {
+      <div class="form-validation-message">
+        {{ getFieldError("username") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="firstname">First Name: </label>
+      <input
+        id="firstname"
+        type="text"
+        formControlName="firstname"
+        [class.border-red-500]="isFieldInvalid('firstname')"
+      />
+      @if (isFieldInvalid('firstname')) {
+      <div class="form-validation-message">
+        {{ getFieldError("firstname") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="lastname">Last Name: </label>
+      <input
+        id="lastname"
+        type="text"
+        formControlName="lastname"
+        [class.border-red-500]="isFieldInvalid('lastname')"
+      />
+      @if (isFieldInvalid('lastname')) {
+      <div class="form-validation-message">
+        {{ getFieldError("lastname") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="email">Email: </label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        [class.border-red-500]="isFieldInvalid('email')"
+      />
+      @if (isFieldInvalid('email')) {
+      <div class="form-validation-message">
+        {{ getFieldError("email") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="birthdate">Birthdate: </label>
+      <input
+        id="birthdate"
+        type="date"
+        formControlName="birthdate"
+        [class.border-red-500]="isFieldInvalid('birthdate')"
+      />
+      @if (isFieldInvalid('birthdate')) {
+      <div class="form-validation-message">
+        {{ getFieldError("birthdate") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="password">Password: </label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        [class.border-red-500]="isFieldInvalid('password')"
+      />
+      @if (isFieldInvalid('password')) {
+      <div class="form-validation-message">
+        {{ getFieldError("password") }}
+      </div>
+      }
+    </div>
+    <div class="form-field">
+      <label for="confirmPassword">Confirm Password: </label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        [class.border-red-500]="isFieldInvalid('confirmPassword')"
+      />
+      @if (isFieldInvalid('confirmPassword')) {
+      <div class="form-validation-message">
+        {{ getFieldError("confirmPassword") }}
+      </div>
+      }
+    </div>
+    <div class="form-field checkbox-field flex-nowrap flex-sm-wrap">
+      <label for="cgu" class="text-nowrap text-sm-wrap"
+        >I have read and accept the Terms and Conditions</label
+      >
+      <input
+        id="cgu"
+        type="checkbox"
+        formControlName="cgu"
+        [class.border-red-500]="isFieldInvalid('cgu')"
+      />
+      @if (isFieldInvalid('cgu')) {
+      <div class="form-validation-message">
+        {{ getFieldError("cgu") }}
+      </div>
+      }
+    </div>
 
-        <button type="submit" class="submit-btn" (click)="submitCreateUser()">Register</button>
-    </form>
+    <button type="submit" class="submit-btn" (click)="submitCreateUser()">
+      Register
+    </button>
+  </form>
 </div>
