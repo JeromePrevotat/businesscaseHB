@@ -20,7 +20,7 @@ INSERT INTO users (
     'admin',
     'Admin',
     'Admin',
-    '$2y$10$V74dRsCZ9dQSroSgVNZIIem5m6dYib.tMdYHmGUiWg1aeLnKAdXoC',
+    '$2a$12$TlLljHRhlpQkaBk.Y.JGO.UMpUcMRTvlGw.yRWDcbBQhR9JtJGT7q',
     'admin@example.com',
     '1990-01-01',
     '2025-06-10 10:00:00',
