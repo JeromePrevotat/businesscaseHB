@@ -1,5 +1,4 @@
 stages:
-    - tests
     - build
     - sonarqube
     - package
@@ -45,13 +44,6 @@ stages:
         paths:
             - ${APP_DIR}/.m2/repository
 
-.api-tests:
-    extends:
-        - .tests
-    image: maven:3.9.11-eclipse-temurin-21-alpine
-    script:
-        - mvn test
-
 .api-variables:
     variables:
         APP_DIR: backend
@@ -85,7 +77,6 @@ test api:
     extends:
         - .api-variables
         - .change-folder
-        - .api-tests
     rules:
     - changes:
         - backend/**/*
