@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ import com.humanbooster.businesscase.mapper.UserMapper;
 import com.humanbooster.businesscase.model.Reservation;
 import com.humanbooster.businesscase.model.Station;
 import com.humanbooster.businesscase.model.User;
-import com.humanbooster.businesscase.service.RefreshTokenService;
 import com.humanbooster.businesscase.service.ReservationService;
 import com.humanbooster.businesscase.service.StationService;
 import com.humanbooster.businesscase.service.UserService;
@@ -44,18 +42,59 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RestControllerAdvice
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
     private final StationService stationService;
     private final ReservationService reservationService;
     private final StationMapper stationMapper;
     private final ReservationMapper reservationMapper;
     private final UserMapper mapper;
+    
+    /**
+     * Save a new user.
+     * POST /api/users
+     * @param user The user entity to be saved
+     * @return ResponseEntity with the saved user and 201 Created status
+     */
+    @PostMapping
+    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
+        User newUser = mapper.toEntity(userRegisterDTO);
+        User savedUser = userService.saveUser(newUser);
+        UserDTO savedUserDTO = mapper.toDTO(savedUser);
+        // Conform RESTful practices, we should return a URI to the created resource.
+        // URI location = URI.create("/api/users/" + savedUser.getId());
+        // return ResponseEntity.created(location).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
+    }
 
+    /**
+     * Get all stations belonging to the user.
+     * GET /api/users/my-stations
+     * @return ResponseEntity with the user's stations if found
+     */
+    @GetMapping("/my-stations")
+    public ResponseEntity<List<StationDTO>> getUserStations(@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    
+        Optional<User> userOpt = userService.getUserByUsername(userDetails.getUsername());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userOpt.get();
+
+        List<Station> stations = stationService.getStationsByOwner(user);
+
+        List<StationDTO> stationDTOs = stations.stream()
+                                            .map(stationMapper::toDTO)
+                                            .toList();
+
+        return ResponseEntity.ok(stationDTOs);
+    }
 
     /**
      * Get all users.
@@ -103,33 +142,6 @@ public class UserController {
     }
     
     /**
-     * Get all stations belonging to the user.
-     * GET /api/users/my-stations
-     * @return ResponseEntity with the user's stations if found
-     */
-    @GetMapping("/my-stations")
-    public ResponseEntity<List<StationDTO>> getUserStations(@AuthenticationPrincipal UserDetails userDetails){
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    
-        Optional<User> userOpt = userService.getUserByUsername(userDetails.getUsername());
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        User user = userOpt.get();
-
-        List<Station> stations = stationService.getStationsByOwner(user);
-
-        List<StationDTO> stationDTOs = stations.stream()
-                                            .map(stationMapper::toDTO)
-                                            .toList();
-
-        return ResponseEntity.ok(stationDTOs);
-    }
-    
-    /**
      * Get all reservations belonging to the user.
      * GET /api/users/my-reservations
      * @return ResponseEntity with the user's reservations if found
@@ -154,25 +166,6 @@ public class UserController {
                                             .toList();
 
         return ResponseEntity.ok(reservationDTOs);
-    }
-
-
-
-    /**
-     * Save a new user.
-     * POST /api/users
-     * @param user The user entity to be saved
-     * @return ResponseEntity with the saved user and 201 Created status
-     */
-    @PostMapping
-    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO){
-        User newUser = mapper.toEntity(userRegisterDTO);
-        User savedUser = userService.saveUser(newUser);
-        UserDTO savedUserDTO = mapper.toDTO(savedUser);
-        // Conform RESTful practices, we should return a URI to the created resource.
-        // URI location = URI.create("/api/users/" + savedUser.getId());
-        // return ResponseEntity.created(location).body(savedUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
     }
 
     /**
