@@ -1,12 +1,23 @@
 stages:
+    - tests
     - build
     - sonarqube
     - package
     - deploy
 
-.tests:
+.tests-api:
     stage: tests
+    image: maven:3.9.11-eclipse-temurin-21-alpine
     interruptible: true
+    script:
+        - mvn test -Dtest=*Controller*
+    artifacts:
+        when: always
+        reports:
+            junit:
+                - backend/target/surefire-reports/*.xml
+        paths:
+        - backend/target/surefire-reports/
 
 .build:
     stage: build
@@ -77,6 +88,7 @@ test api:
     extends:
         - .api-variables
         - .change-folder
+        - .tests-api
     rules:
     - changes:
         - backend/**/*
